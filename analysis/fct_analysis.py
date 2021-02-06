@@ -21,8 +21,8 @@ if __name__=="__main__":
 	# For example, here we list two CC: 1. HPCC-PINT with utgt=95,AI=50Mbps,pint_log_base=1.05,pint_prob=1; 2. HPCC with utgt=95,ai=50Mbps.
 	# For the exact naming, please check ../simulation/mix/fct_*.txt output by the simulation.
 	CCs = [
-		'hpccPint95ai50log1.050p1.000',
-		'hp95ai50',
+		'hpccPint95ai50log1.050p1.000', # HPCC-PINT
+		'hp95ai50', # HPCC
 	]
 
 	step = int(args.step)
@@ -44,22 +44,26 @@ if __name__=="__main__":
 			output = subprocess.check_output(cmd, shell=True)
 
 		# up to here, `output` should be a string of multiple lines, each line is: fct, size
+		output = output.decode()
 		a = output.split('\n')[:-2]
 		n = len(a)
 		for i in range(0,100,step):
-			l = i * n / 100
-			r = (i+step) * n / 100
-			d = map(lambda x: [float(x.split()[0]), int(x.split()[1])], a[l:r])
+			l = int(i * n / 100)
+			r = int((i+step) * n / 100)
+			d = list(map(lambda x: [float(x.split()[0]), int(x.split()[1])], a[l:r]))
+			if len(d) == 0:
+			    break
 			fct=sorted(map(lambda x: x[0], d))
-			res[i/step].append(d[-1][1]) # flow size
-			#res[i/step].append(sum(fct) / len(fct)) # avg fct
-			res[i/step].append(get_pctl(fct, 0.5)) # mid fct
-			res[i/step].append(get_pctl(fct, 0.95)) # 95-pct fct
-			res[i/step].append(get_pctl(fct, 0.99)) # 99-pct fct
+			idx = int(i/step)
+			res[idx].append(d[-1][1]) # flow size
+			#res[idx].append(sum(fct) / len(fct)) # avg fct
+			res[idx].append(get_pctl(fct, 0.5)) # mid fct
+			res[idx].append(get_pctl(fct, 0.95)) # 95-pct fct
+			res[idx].append(get_pctl(fct, 0.99)) # 99-pct fct
 	for item in res:
 		line = "%.3f %d"%(item[0], item[1])
-		i = 1
+		i = 0
 		for cc in CCs:
 			line += "\t%.3f %.3f %.3f"%(item[i+1], item[i+2], item[i+3])
 			i += 4
-		print line
+		print(line)
