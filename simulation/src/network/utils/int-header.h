@@ -93,7 +93,7 @@ public:
 		};
 		uint64_t ts;
 		union {
-			uint16_t power;
+			uint16_t power; // In DINT, if power == 0, it means 1 bit for invalid status (Written by Siyuan Sheng)
 			struct{
 				uint8_t power_lo8, power_hi8;
 			};

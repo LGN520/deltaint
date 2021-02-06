@@ -1040,12 +1040,26 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
        uint32_t ack_seq = ch.ack.seq;
        if (rand() % 65536 >= pint_smpl_thresh)
                return;
-       // update rate
-       if (ack_seq > qp->hpccPint.m_lastUpdateSeq){ // if full RTT feedback is ready, do full update
-               UpdateRateHpPint(qp, p, ch, false);
-       }else{ // do fast react
-               UpdateRateHpPint(qp, p, ch, true);
-       }
+
+	   // Written by Siyuan Sheng
+	   IntHeader &ih = ch.ack.ih;
+	   total_pktnum += 1;
+	   if (ih.GetPower() == 0) {
+		   save_pktnum += 1;
+	   }
+	   else {
+		   // update rate
+		   if (ack_seq > qp->hpccPint.m_lastUpdateSeq){ // if full RTT feedback is ready, do full update
+				   UpdateRateHpPint(qp, p, ch, false);
+		   }else{ // do fast react
+				   UpdateRateHpPint(qp, p, ch, true);
+		   }
+	   }
+
+	   if (qp->IsFinished()) {
+		   printf("Host [%d]: save: %d, total: %d, save ratio: %lf\n", m_node->GetId(), save_pktnum, total_pktnum, \
+				   double(save_pktnum*(IntHeader::pint_bytes*8-1))/double(total_pktnum*IntHeader::pint_bytes*8));
+	   }
 }
 
 void RdmaHw::UpdateRateHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader &ch, bool fast_react){

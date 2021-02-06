@@ -57,6 +57,10 @@ SwitchNode::SwitchNode(){
 		m_lastPktSize[i] = m_lastPktTs[i] = 0;
 	for (uint32_t i = 0; i < pCnt; i++)
 		m_u[i] = 0;
+
+	uint32_t width = SwitchNode::DINT_sketch_bytes / (4+4) / SwitchNode::DINT_hashnum;
+	prev_inputs.resize(width * SwitchNode::DINT_hashnum, 0);
+	prev_outputs.resize(width * SwitchNode::DINT_hashnum, 0);
 }
 
 int SwitchNode::GetOutDev(Ptr<const Packet> p, CustomHeader &ch){
@@ -291,11 +295,83 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 				/************************
 				 * update PINT header
 				 ***********************/
-				uint16_t power = Pint::encode_u(newU);
-				if (power > ih->GetPower())
-					ih->SetPower(power);
+				//uint16_t power = Pint::encode_u(newU);
+				//if (power > ih->GetPower())
+				//	ih->SetPower(power);
 
+				uint16_t power = Pint::encode_u(newU);
 				m_u[ifIndex] = newU;
+
+				// Written by Siyuan Sheng
+				if (1) { // DINT
+					// Calculate flowkey
+					uint32_t* srcip = (uint32_t *)&buf[PppHeader::GetStaticSize() + 12];
+					uint32_t* dstip = (uint32_t *)&buf[PppHeader::GetStaticSize() + 16];
+					uint64_t flowkey = uint64_t(*srcip) << 32 | uint64_t(*dstip);
+
+					// Calculate hash indexes for sketch
+					uint32_t hashidx[SwitchNode::DINT_hashnum];
+					for (uint32_t i = 0; i < SwitchNode::DINT_hashnum; i++) {
+						hashidx[i] = EcmpHash((uint8_t*)&flowkey, 8, i) % (prev_inputs.size() / SwitchNode::DINT_hashnum);	
+					}
+
+					// Calculate max power
+					uint16_t cur_input = 0;
+					if (ih->GetPower() != 0) { // Valid input
+						cur_input = ih->GetPower();
+					}
+					else { // Invalid input, choose minimum previous input (TODO: maybe median is better)
+						for (uint32_t i = 0; i < SwitchNode::DINT_hashnum; i++) {
+							if (i == 0) {
+								cur_input = prev_inputs[hashidx[i]];
+								continue;
+							}
+							if (prev_inputs[hashidx[i]] < cur_input) {
+								cur_input = prev_inputs[hashidx[i]];
+							}
+						}
+					}
+					uint16_t cur_status = power;
+					uint16_t max_power = (cur_input>cur_status)?cur_input:cur_status;
+
+					if (ih->GetPower() != 0) { // INT data has been added before, save space is meaningless
+						ih->SetPower(max_power);
+						for (uint32_t i = 0; i < SwitchNode::DINT_hashnum; i++) {
+							prev_inputs[hashidx[i]] = ih->GetPower();
+							prev_outputs[hashidx[i]] = max_power;
+						}
+						//printf("Switch [%d]: input %d status %d maxpower %d\n", m_id, ih->GetPower(), cur_status, max_power);
+					}
+					else {
+						// Judge whether to set power in INT header
+						uint16_t prev_output = 0; // Get minimum prev output (TODO: maybe median is better)
+						for (uint32_t i = 0; i < SwitchNode::DINT_hashnum; i++) {
+							if (i == 0) {
+								prev_output = prev_outputs[hashidx[i]];
+								continue;
+							}
+							if (prev_outputs[hashidx[i]] < prev_output) {
+								prev_output = prev_outputs[hashidx[i]];
+							}
+						}
+						uint16_t cur_diff = (max_power>prev_output)?(max_power-prev_output):(prev_output-max_power);
+						// printf("Switch [%d] [%ld]: prev input %d, prev output %d, max power %d, cur_diff %d\n", m_id, flowkey, cur_input, prev_output, max_power, cur_diff);
+						if (cur_diff > SwitchNode::DINT_diff) {
+							ih->SetPower(max_power);
+							for (uint32_t i = 0; i < SwitchNode::DINT_hashnum; i++) {
+								prev_outputs[hashidx[i]] = max_power;
+							}
+						}
+						else {
+							ih->SetPower(0); // Invalidate INT data
+						}
+
+					}
+				}
+				else { // PINT
+					if (power > ih->GetPower())
+						ih->SetPower(power);
+				}
 			}
 		}
 	}

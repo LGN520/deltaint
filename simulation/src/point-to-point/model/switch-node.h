@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 #include <ns3/node.h>
+#include <vector>
 #include "qbb-net-device.h"
 #include "switch-mmu.h"
 #include "pint.h"
@@ -14,6 +15,12 @@ class Packet;
 class SwitchNode : public Node{
 	static const uint32_t pCnt = 257;	// Number of ports used
 	static const uint32_t qCnt = 8;	// Number of queues/priorities used
+
+	// Written by Siyuan Sheng
+	static const uint32_t DINT_sketch_bytes = 1024 * 1024; // 1 MB 
+	static const uint32_t DINT_diff = 5; // Diff value
+	static const uint32_t DINT_hashnum = 1;
+
 	uint32_t m_ecmpSeed;
 	std::unordered_map<uint32_t, std::vector<int> > m_rtTable; // map from ip address (u32) to possible ECMP port (index of dev)
 
@@ -32,6 +39,10 @@ protected:
 	uint64_t m_maxRtt;
 
 	uint32_t m_ackHighPrio; // set high priority for ACK/NACK
+
+	// DINT (written by Siyuan Sheng)
+	std::vector<uint32_t> prev_inputs;
+	std::vector<uint32_t> prev_outputs;
 
 private:
 	int GetOutDev(Ptr<const Packet>, CustomHeader &ch);

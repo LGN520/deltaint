@@ -137,7 +137,7 @@ if __name__ == "__main__":
 		ai = 10 * bw / 10;
 		hai = 50 * bw / 10;
 		config = config_template.format(bw=bw, trace=trace, topo=topo, cc=args.cc, mode=7, t_alpha=1, t_dec=4, t_inc=300, g=0.00390625, ai=ai, hai=hai, dctcp_ai=1000, has_win=1, vwin=1, us=0, u_tgt=u_tgt, mi=mi, int_multi=1, pint_log_base=pint_log_base, pint_prob=pint_prob, ack_prio=1, link_down=args.down, failure=failure, kmax_map=kmax_map, kmin_map=kmin_map, pmax_map=pmax_map, buffer_size=bfsz, enable_tr=enable_tr)
-	elif args.cc == "hpccPint":
+	elif args.cc == "hpccPint" or args.cc == "hpccDint":
 		ai = 10 * bw / 25;
 		if args.hpai > 0:
 			ai = args.hpai

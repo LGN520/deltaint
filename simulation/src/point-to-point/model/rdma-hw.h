@@ -148,6 +148,12 @@ public:
 	void SetPintSmplThresh(double p);
 	void HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader &ch);
 	void UpdateRateHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader &ch, bool fast_react);
+
+	/*********************
+	 * HPCC-DINT
+	 ********************/
+	uint32_t save_pktnum = 0; // 1-bit
+	uint32_t total_pktnum = 0; // 8-bit or 16-bit
 };
 
 } /* namespace ns3 */
