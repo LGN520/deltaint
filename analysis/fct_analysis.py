@@ -22,8 +22,8 @@ if __name__=="__main__":
 	# For the exact naming, please check ../simulation/mix/fct_*.txt output by the simulation.
 	CCs = [
 		'hpccPint95ai50log1.050p1.000', # HPCC-PINT
-		#'hp95ai50', # HPCC
 		'hpccDint95ai50log1.050p1.000', # HPCC-DINT
+		'hp95ai50', # HPCC
 	]
 
 	step = int(args.step)
@@ -45,6 +45,7 @@ if __name__=="__main__":
 			output = subprocess.check_output(cmd, shell=True)
 
 		# up to here, `output` should be a string of multiple lines, each line is: fct, size
+                # fct is a normalized value which has divided the standalone_ft
 		output = output.decode()
 		a = output.split('\n')[:-2]
 		n = len(a)
@@ -65,6 +66,6 @@ if __name__=="__main__":
 		line = "%.3f %d"%(item[0], item[1])
 		i = 0
 		for cc in CCs:
-			line += "\t%.3f %.3f %.3f"%(item[i+1], item[i+2], item[i+3])
+			line += "\t%.3f %.3f %.3f"%(item[i+2], item[i+3], item[i+4])
 			i += 4
 		print(line)
