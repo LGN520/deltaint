@@ -4,6 +4,7 @@
 #include "ns3/buffer.h"
 #include <stdint.h>
 #include <cstdio>
+#include "ns3/header.h"
 
 namespace ns3 {
 
@@ -92,12 +93,16 @@ public:
 			uint16_t nhop;
 		};
 		uint64_t ts;
-		union {
-			uint16_t power; // In DINT, if power == 0, it means 1 bit for invalid status (Written by Siyuan Sheng)
-			struct{
-				uint8_t power_lo8, power_hi8;
-			};
-		}pint;
+		struct{
+			union {
+				uint16_t power; // In DINT, if power == 0, it means 1 bit for invalid status (Written by Siyuan Sheng)
+				struct{
+					uint8_t power_lo8, power_hi8;
+				};
+			}pint;
+			uint8_t dint_nhop;
+			uint8_t dint_nsave;
+		};
 	};
 
 	IntHeader();
@@ -108,6 +113,35 @@ public:
 	uint64_t GetTs(void);
 	uint16_t GetPower(void);
 	void SetPower(uint16_t);
+	void SetDintNhop();
+	uint8_t GetDintNhop();
+	void SetDintNsave();
+	uint8_t GetDintNsave();
+};
+
+class IntHeaderWrap : public Header 
+{
+public:
+
+  /**
+   * \brief Construct a INT header wrap.
+   */
+  IntHeaderWrap ();
+
+  /**
+   * \brief Destroy a INT header wrap.
+   */
+  virtual ~IntHeaderWrap ();
+
+  static TypeId GetTypeId (void);
+  virtual TypeId GetInstanceTypeId (void) const;
+  virtual void Print (std::ostream &os) const;
+  virtual void Serialize (Buffer::Iterator start) const;
+  virtual uint32_t Deserialize (Buffer::Iterator start);
+  virtual uint32_t GetSerializedSize (void) const;
+  static uint32_t GetStaticSize (void);
+
+  IntHeader ih;
 };
 
 }

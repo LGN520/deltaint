@@ -12,6 +12,7 @@
 #include "ppp-header.h"
 #include "qbb-header.h"
 #include "cn-header.h"
+//#include "ns3/int-header.h"
 
 namespace ns3{
 
@@ -307,6 +308,7 @@ int RdmaHw::ReceiveUdp(Ptr<Packet> p, CustomHeader &ch){
 		seqh.SetSport(ch.udp.dport);
 		seqh.SetDport(ch.udp.sport);
 		seqh.SetIntHeader(ch.udp.ih);
+		//printf("ReceiveUdp nhop: %u, nsave: %u\n", ch.udp.ih.dint_nhop, ch.udp.ih.dint_nsave);
 		if (ecnbits)
 			seqh.SetCnp();
 
@@ -531,7 +533,10 @@ Ptr<Packet> RdmaHw::GetNxtPacket(Ptr<RdmaQueuePair> qp){
 	if (m_mtu < payload_size)
 		payload_size = m_mtu;
 	Ptr<Packet> p = Create<Packet> (payload_size);
-	// add SeqTsHeader
+	// add INT Header wrap (Do not need it since seq-ts-header contains int-header)
+	//IntHeaderWrap ihw;
+	//p->AddHeader(ihw);	
+	// add SeqTsHeader (including an IntHeader)
 	SeqTsHeader seqTs;
 	seqTs.SetSeq (qp->snd_nxt);
 	seqTs.SetPG (qp->m_pg);
@@ -1042,12 +1047,16 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
                return;
 
 	   // Written by Siyuan Sheng
-	   IntHeader &ih = ch.ack.ih;
-	   total_pktnum += 1;
-	   if (ih.GetPower() == 0) {
+	   IntHeader &ih = ch.ack.ih; // Error when deserialize
+	   uint8_t* buf = p->GetBuffer();
+	   //printf("seq: %u, nhop: %u, nsave: %u power: %u\n", ch.ack.seq, ih.GetDintNhop(), ih.GetDintNsave(), ih.GetPower());
+	   total_pktnum += ih.dint_nhop;
+	   save_pktnum += ih.dint_nsave;
+	   //total_pktnum += 1;
+	   /*if (ih.dint_nhop == ih.dint_nsave) {
 		   save_pktnum += 1;
-	   }
-	   else {
+	   }*/
+	   if (ih.GetPower() != 0) {
 		   // update rate
 		   if (ack_seq > qp->hpccPint.m_lastUpdateSeq){ // if full RTT feedback is ready, do full update
 				   UpdateRateHpPint(qp, p, ch, false);
@@ -1057,8 +1066,10 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 	   }
 
 	   if (qp->IsFinished()) {
+		   //printf("Host [%d]: save: %d, total: %d, save ratio: %lf\n", m_node->GetId(), save_pktnum, total_pktnum, \
+				   1.0-double(save_pktnum*1+(total_pktnum-save_pktnum)*(IntHeader::pint_bytes*8+1))/double(total_pktnum*IntHeader::pint_bytes*8));
 		   printf("Host [%d]: save: %d, total: %d, save ratio: %lf\n", m_node->GetId(), save_pktnum, total_pktnum, \
-				   double(save_pktnum*(IntHeader::pint_bytes*8-1))/double(total_pktnum*IntHeader::pint_bytes*8));
+				   1.0-double(save_pktnum*0+(total_pktnum-save_pktnum)*(IntHeader::pint_bytes*8+0))/double(total_pktnum*IntHeader::pint_bytes*8));
 	   }
 }
 

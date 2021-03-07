@@ -19,7 +19,7 @@ class SwitchNode : public Node{
 	// Written by Siyuan Sheng
 	static const uint32_t DINT_sketch_bytes = 1024 * 1024; // 1 MB 
 	static const uint32_t DINT_diff = 5; // Diff value
-	static const uint32_t DINT_hashnum = 1;
+	static const uint32_t DINT_hashnum = 2;
 
 	uint32_t m_ecmpSeed;
 	std::unordered_map<uint32_t, std::vector<int> > m_rtTable; // map from ip address (u32) to possible ECMP port (index of dev)
@@ -43,6 +43,7 @@ protected:
 	// DINT (written by Siyuan Sheng)
 	std::vector<uint32_t> prev_inputs;
 	std::vector<uint32_t> prev_outputs;
+	std::vector<uint64_t> flowkeys;
 
 private:
 	int GetOutDev(Ptr<const Packet>, CustomHeader &ch);

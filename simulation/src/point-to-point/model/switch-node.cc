@@ -11,6 +11,7 @@
 #include "ppp-header.h"
 #include "ns3/int-header.h"
 #include <cmath>
+#include "ns3/seq-ts-header.h"
 
 namespace ns3 {
 
@@ -58,9 +59,16 @@ SwitchNode::SwitchNode(){
 	for (uint32_t i = 0; i < pCnt; i++)
 		m_u[i] = 0;
 
-	uint32_t width = SwitchNode::DINT_sketch_bytes / (4+4) / SwitchNode::DINT_hashnum;
+	// Without flowkey
+	/*uint32_t width = SwitchNode::DINT_sketch_bytes / (4+4) / SwitchNode::DINT_hashnum;
+	prev_inputs.resize(width * SwitchNode::DINT_hashnum, 0);
+	prev_outputs.resize(width * SwitchNode::DINT_hashnum, 0);*/
+
+	// With flowkey
+	uint32_t width = SwitchNode::DINT_sketch_bytes / (4+4+8) / SwitchNode::DINT_hashnum;
 	prev_inputs.resize(width * SwitchNode::DINT_hashnum, 0);
 	prev_outputs.resize(width * SwitchNode::DINT_hashnum, 0);
+	flowkeys.resize(width * SwitchNode::DINT_hashnum, 0);
 }
 
 int SwitchNode::GetOutDev(Ptr<const Packet> p, CustomHeader &ch){
@@ -220,13 +228,25 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 		CheckAndSendResume(inDev, qIndex);
 	}
 	if (1){
-		uint8_t* buf = p->GetBuffer();
-		if (buf[PppHeader::GetStaticSize() + 9] == 0x11){ // udp packet
-			IntHeader *ih = (IntHeader*)&buf[PppHeader::GetStaticSize() + 20 + 8 + 6]; // ppp, ip, udp, SeqTs, INT
+		//uint8_t* buf = p->GetBuffer();
+		PppHeader ppp;
+		Ipv4Header ipv4;
+		UdpHeader udp;
+		SeqTsHeader seqts;
+		//IntHeaderWrap ihw;
+		p->RemoveHeader(ppp);
+		p->RemoveHeader(ipv4);
+		// if (buf[PppHeader::GetStaticSize() + 9] == 0x11){ // udp packet
+		if (ipv4.GetProtocol() == 0x11) { // udp packet
+			p->RemoveHeader(udp);
+			p->RemoveHeader(seqts);
+			//p->RemoveHeader(ihw);
+			//IntHeader *ih = (IntHeader*)&buf[PppHeader::GetStaticSize() + 20 + 8 + 6]; // ppp, ip, udp, SeqTs
+			IntHeader *ih = &(seqts.ih);
 			Ptr<QbbNetDevice> dev = DynamicCast<QbbNetDevice>(m_devices[ifIndex]);
 			if (m_ccMode == 3){ // HPCC
 				ih->PushHop(Simulator::Now().GetTimeStep(), m_txBytes[ifIndex], dev->GetQueue()->GetNBytesTotal(), dev->GetDataRate().GetBitRate());
-			}else if (m_ccMode == 10){ // HPCC-PINT
+			}else if (m_ccMode == 10){ // HPCC-PINT or HPCC-DINT
 				uint64_t t = Simulator::Now().GetTimeStep();
 				uint64_t dt = t - m_lastPktTs[ifIndex];
 				if (dt > m_maxRtt)
@@ -302,12 +322,19 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 				uint16_t power = Pint::encode_u(newU);
 				m_u[ifIndex] = newU;
 
+				//printf("BEfore Switch nhop: %u nsave: %u\n", ihw.ih.dint_nhop, ihw.ih.dint_nsave);
+				ih->SetDintNhop();
+
 				// Written by Siyuan Sheng
 				if (1) { // DINT
 					// Calculate flowkey
-					uint32_t* srcip = (uint32_t *)&buf[PppHeader::GetStaticSize() + 12];
-					uint32_t* dstip = (uint32_t *)&buf[PppHeader::GetStaticSize() + 16];
-					uint64_t flowkey = uint64_t(*srcip) << 32 | uint64_t(*dstip);
+					//uint32_t* srcip = (uint32_t *)&buf[PppHeader::GetStaticSize() + 12];
+					//uint32_t* dstip = (uint32_t *)&buf[PppHeader::GetStaticSize() + 16];
+					//uint64_t flowkey = uint64_t(*srcip) << 32 | uint64_t(*dstip);
+					uint32_t srcip = ipv4.GetSource().Get();
+					uint32_t dstip = ipv4.GetDestination().Get();
+					//printf("srcip %u, dstip %u\n", srcip, dstip);
+					uint64_t flowkey = uint64_t(srcip) << 32 | uint64_t(dstip);
 
 					// Calculate hash indexes for sketch
 					uint32_t hashidx[SwitchNode::DINT_hashnum];
@@ -322,58 +349,81 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 					}
 					else { // Invalid input, choose minimum previous input (TODO: maybe median is better)
 						for (uint32_t i = 0; i < SwitchNode::DINT_hashnum; i++) {
-							if (i == 0) {
+							/*if (i == 0) {
 								cur_input = prev_inputs[hashidx[i]];
 								continue;
 							}
 							if (prev_inputs[hashidx[i]] < cur_input) {
 								cur_input = prev_inputs[hashidx[i]];
+							}*/
+							if (flowkeys[hashidx[i]] == flowkey) {
+								cur_input = prev_inputs[hashidx[i]];
+								break;
 							}
 						}
 					}
 					uint16_t cur_status = power;
 					uint16_t max_power = (cur_input>cur_status)?cur_input:cur_status;
 
-					if (ih->GetPower() != 0) { // INT data has been added before, save space is meaningless
+					/*if (ih->GetPower() != 0) { // INT data has been added before, save space is meaningless
 						ih->SetPower(max_power);
 						for (uint32_t i = 0; i < SwitchNode::DINT_hashnum; i++) {
-							prev_inputs[hashidx[i]] = ih->GetPower();
 							prev_outputs[hashidx[i]] = max_power;
 						}
 						//printf("Switch [%d]: input %d status %d maxpower %d\n", m_id, ih->GetPower(), cur_status, max_power);
 					}
 					else {
-						// Judge whether to set power in INT header
-						uint16_t prev_output = 0; // Get minimum prev output (TODO: maybe median is better)
-						for (uint32_t i = 0; i < SwitchNode::DINT_hashnum; i++) {
-							if (i == 0) {
-								prev_output = prev_outputs[hashidx[i]];
-								continue;
-							}
-							if (prev_outputs[hashidx[i]] < prev_output) {
-								prev_output = prev_outputs[hashidx[i]];
-							}
-						}
-						uint16_t cur_diff = (max_power>prev_output)?(max_power-prev_output):(prev_output-max_power);
-						// printf("Switch [%d] [%ld]: prev input %d, prev output %d, max power %d, cur_diff %d\n", m_id, flowkey, cur_input, prev_output, max_power, cur_diff);
-						if (cur_diff > SwitchNode::DINT_diff) {
-							ih->SetPower(max_power);
-							for (uint32_t i = 0; i < SwitchNode::DINT_hashnum; i++) {
-								prev_outputs[hashidx[i]] = max_power;
-							}
-						}
-						else {
-							ih->SetPower(0); // Invalidate INT data
-						}
+					}*/
 
+					// Judge whether to set power in INT header
+					uint16_t prev_output = 0; // Get minimum prev output (TODO: maybe median is better)
+					for (uint32_t i = 0; i < SwitchNode::DINT_hashnum; i++) {
+						/*if (i == 0) {
+							prev_output = prev_outputs[hashidx[i]];
+							continue;
+						}
+						if (prev_outputs[hashidx[i]] < prev_output) {
+							prev_output = prev_outputs[hashidx[i]];
+						}*/
+						if (flowkeys[hashidx[i]] == flowkey) {
+							prev_output = prev_outputs[hashidx[i]];
+							break;
+						}
 					}
+					uint16_t cur_diff = (max_power>prev_output)?(max_power-prev_output):(prev_output-max_power);
+					// printf("Switch [%d] [%ld]: prev input %d, prev output %d, max power %d, cur_diff %d\n", m_id, flowkey, cur_input, prev_output, max_power, cur_diff);
+					if (cur_diff > SwitchNode::DINT_diff) {
+						ih->SetPower(max_power);
+						for (uint32_t i = 0; i < SwitchNode::DINT_hashnum; i++) {
+							flowkeys[hashidx[i]] = flowkey;
+							prev_inputs[hashidx[i]] = cur_input;
+							prev_outputs[hashidx[i]] = max_power;
+						}
+					}
+					else {
+						ih->SetPower(0); // Invalidate INT data
+						ih->SetDintNsave();
+						for (uint32_t i = 0; i < SwitchNode::DINT_hashnum; i++) {
+							flowkeys[hashidx[i]] = flowkey;
+							prev_inputs[hashidx[i]] = cur_input;
+							prev_outputs[hashidx[i]] = prev_output;
+						}
+					}
+
+					//printf("Switch nhop: %u nsave: %u\n", ihw.ih.dint_nhop, ihw.ih.dint_nsave);
+
 				}
 				else { // PINT
 					if (power > ih->GetPower())
 						ih->SetPower(power);
 				}
 			}
+			//p->AddHeader(ihw);
+			p->AddHeader(seqts);
+			p->AddHeader(udp);
 		}
+		p->AddHeader(ipv4);
+		p->AddHeader(ppp);
 	}
 	m_txBytes[ifIndex] += p->GetSize();
 	m_lastPktSize[ifIndex] = p->GetSize();

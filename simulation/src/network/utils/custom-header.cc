@@ -174,7 +174,7 @@ void CustomHeader::Serialize (Buffer::Iterator start) const{
 		  i.WriteU16(ack.flags);
 		  i.WriteU16(ack.pg);
 		  i.WriteU32(ack.seq);
-		  udp.ih.Serialize(i);
+		  ack.ih.Serialize(i);
 	  }else if (l3Prot == 0xFE){ // PFC
 		  i.WriteU32 (pfc.time);
 		  i.WriteU32 (pfc.qlen);
