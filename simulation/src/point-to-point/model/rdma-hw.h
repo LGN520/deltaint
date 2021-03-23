@@ -152,8 +152,9 @@ public:
 	/*********************
 	 * HPCC-DINT
 	 ********************/
-	uint32_t save_pktnum = 0; // 1-bit
-	uint32_t total_pktnum = 0; // 8-bit or 16-bit
+	uint32_t save_hopnum = 0; // 1-bit
+	uint32_t total_hopnum = 0; // 8-bit or 16-bit
+	uint32_t total_pktnum = 0;
 };
 
 } /* namespace ns3 */

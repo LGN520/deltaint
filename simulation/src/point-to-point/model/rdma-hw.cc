@@ -1050,11 +1050,12 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 	   IntHeader &ih = ch.ack.ih; // Error when deserialize
 	   uint8_t* buf = p->GetBuffer();
 	   //printf("seq: %u, nhop: %u, nsave: %u power: %u\n", ch.ack.seq, ih.GetDintNhop(), ih.GetDintNsave(), ih.GetPower());
-	   total_pktnum += ih.dint_nhop;
-	   save_pktnum += ih.dint_nsave;
-	   //total_pktnum += 1;
+	   total_hopnum += ih.dint_nhop;
+	   save_hopnum += ih.dint_nsave;
+	   total_pktnum += 1;
+	   //total_hopnum += 1;
 	   /*if (ih.dint_nhop == ih.dint_nsave) {
-		   save_pktnum += 1;
+		   save_hopnum += 1;
 	   }*/
 	   if (ih.GetPower() != 0) {
 		   // update rate
@@ -1066,10 +1067,10 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 	   }
 
 	   if (qp->IsFinished()) {
-		   //printf("Host [%d]: save: %d, total: %d, save ratio: %lf\n", m_node->GetId(), save_pktnum, total_pktnum, \
-				   1.0-double(save_pktnum*1+(total_pktnum-save_pktnum)*(IntHeader::pint_bytes*8+1))/double(total_pktnum*IntHeader::pint_bytes*8));
-		   printf("Host [%d]: save: %d, total: %d, save ratio: %lf\n", m_node->GetId(), save_pktnum, total_pktnum, \
-				   1.0-double(save_pktnum*0+(total_pktnum-save_pktnum)*(IntHeader::pint_bytes*8+0))/double(total_pktnum*IntHeader::pint_bytes*8));
+		   //printf("Host [%d]: save: %d, total: %d, save ratio: %lf\n", m_node->GetId(), save_hopnum, total_hopnum, \
+				   1.0-double(save_hopnum*1+(total_hopnum-save_hopnum)*(IntHeader::pint_bytes*8+1))/double(total_hopnum*IntHeader::pint_bytes*8));
+		   printf("Host [%d]: save: %d, total: %d, pktnum: %d, ratio: %lf\n", m_node->GetId(), save_hopnum, total_hopnum, total_pktnum, \
+				   1.0-double(save_hopnum*0+(total_hopnum-save_hopnum)*(IntHeader::pint_bytes*8+0))/double(total_hopnum*IntHeader::pint_bytes*8));
 	   }
 }
 
