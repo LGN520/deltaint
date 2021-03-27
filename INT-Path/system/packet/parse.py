@@ -3,6 +3,8 @@ import socket
 import redis
 import sys
 
+from scapy.all import get_if_hwaddr
+
 class parse():
 
     def filter(self, pkt_raw):
@@ -10,28 +12,32 @@ class parse():
         # !: Network (Big-endian), 14s: 14-byte string, pkt_len-14 char
         pkt = struct.unpack("!14s%ds" % (pkt_len-14), pkt_raw)
         ethernet = self.parse_ethernet(pkt[0])
-        print("dst mac: %s, src mac: %s" % (ethernet[0], ethernet[1]))
-        if ethernet[2] == 0x0800: # ipv4
+        ownmac = get_if_hwaddr("eth0")
+        if ethernet[2] == 0x0800 and ethernet[1] != ownmac: # ipv4 and not TX packet
             pkt = struct.unpack("!20s%ds" % (len(pkt[1])-20), pkt[1])
             ipv4 = self.parse_ipv4(pkt[0])
-            print("src ip: %s, dst ip: %s" % (ipv4[10]. ipv4[11]))
             if ipv4[8] == 0x11: # udp
                 pkt = struct.unpack("!8s%ds" % (len(pkt[1])-8), pkt[1])
                 udp = self.parse_udp(pkt[0])
-                print("src port: %s, dst port: %s" % (udp[0], udp[1]))
                 if udp[1] == 2222: # INT-packet
-                    pkt = struct.unpack("!64s%ds4s" % (len(pkt[1]-64-4)), pkt[1]) # 512-bit source routing, int metadata, 32-bit actId
-                    data = self.int_process(pkt[1])
-                    return data
+                    print("dst mac: %s, src mac: %s" % (ethernet[0], ethernet[1]), flush=True)
+                    print("src ip: %s, dst ip: %s" % (ipv4[10], ipv4[11]), flush=True)
+                    print("src port: %s, dst port: %s" % (udp[0], udp[1]), flush=True)
+                    print("udp len: {}, remaining bytes: {}".format(udp[2], len(pkt[1])), flush=True)
+                    pkt = struct.unpack("!64s%dsI" % (len(pkt[1])-64-4), pkt[1]) # 512-bit source routing, int metadata, 32-bit actId
+                    print("source route: {}, act id: {}".format(pkt[0], pkt[2]), flush=True)
+                    int_headers = self.int_process(pkt[1])
+                    return ipv4[10], ethernet[1], int_headers
         return None
 
     def int_process(self, pkt):
         pkt_len = len(pkt)
         int_header_size = 22
-        int_num = pkt_len / int_header_size
+        int_num = int(pkt_len / int_header_size)
         if pkt_len != int_num * int_header_size:
             print("[Error] invalid pkt_len %d which should be %d * %d" % (pkt_len, int_num, int_header_size))
             exit(-1)
+        print("Int num: {}".format(int_num), flush=True)
 
         int_headers = []
         for i in range(int_num):
@@ -52,8 +58,10 @@ class parse():
             deq_timedelta = ((tmp_int_bytes[15] & 0x7) << 29) | (tmp_int_bytes[16] << 21) | (tmp_int_bytes[17] << 13) | \
                     (tmp_int_bytes[18] << 5) | ((tmp_int_bytes[19] >> 3) & 0x1f) # 32-bit deq_timedelta
             deq_qdepth = ((tmp_int_bytes[19] & 0x7) << 16) | (tmp_int_bytes[20] << 8) | tmp_int_bytes[21] # 19-bit deq_qdepth
+            print("INT data [{}]:".format(i))
             print([device_no, ingress_port, egress_port, ingress_global_timestamp, enq_timestamp, enq_qdepth, deq_timedelta, deq_qdepth], flush=True)
-            exit(0)
+            int_headers.append((device_no, ingress_port, egress_port))
+        return int_headers
 
     # B: unsigned char 1B; H: unsigned short 2B; I: unsigned int 4B
 

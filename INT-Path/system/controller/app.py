@@ -16,6 +16,7 @@ import copy
 import socket
 import json
 import time
+import subprocess
 
 
 _ = float('inf')
@@ -268,7 +269,7 @@ class Ctrl(object):
         switchPath = '/home/ssy/behavioral-model/targets/simple_switch/simple_switch'
         jsonPath = '{}/p4app/app.json'.format(sysdir)
         self.topoMaker = TopoMaker(switchPath, jsonPath, self)
-        self.topoMaker.cleanMn()
+        #self.topoMaker.cleanMn()
         self.topoMaker.genMnTopo()
         for i, switch in enumerate(self.switches):
             qdepth = 1024*1024 # 1M pkts
@@ -330,7 +331,7 @@ class Ctrl(object):
             return True
         return False
 
-    def traversePaths(self, paths, sendTimes=1):
+    def traversePaths(self, paths, sendTimes=3):
         """
         Traverse all path using source routing to get all information in network use INT
         generate traverse info and send it to host by socket link
@@ -468,7 +469,7 @@ class Ctrl(object):
                 self.traversePaths(paths, times)
             else:
                 self.traversePaths(paths)
-            time.sleep(10)
+            #time.sleep(10)
             #rewardMatrix = self.dbParser.parser(self.nowActId)
 
         #return rewardMatrix
@@ -486,12 +487,30 @@ if __name__ == '__main__':
     # only support one host per switch
     hostList = [1, 1, 1, 0, 1, 1]
 
-    #paths = [[0, 1, 2]]
+    print("*********** START ***********")
     app = Ctrl(graph, hostList)
     app.start()
+
+    #os.system("python3 detector.py >detector.log 2>&1 &")
+    fd = open("detector.log", "w")
+    proc = subprocess.Popen(["python3", "detector.py", "&"], stdout=fd, stderr=fd, shell=False)
+    time.sleep(1)
+
     #paths = [[0, 1, 2], [0, 2, 3]]
     #app.update(-1, paths)
-    paths = [[0, 1, 2]]
+    paths = [[0, 1, 3, 5], [0, 2, 4, 5], [1, 2, 3, 4]]
+    #paths = [[0,1,2]]
 
-    app.update(0, paths)
-    print('end')
+    app.update(0, paths, 20) # Enable source hosts to send INT-packets continuously within 20 s
+    time.sleep(2)
+    snode_name = app.switches[0].name
+    dnode_name = app.switches[1].name
+    print("Cut down link between {} and {}".format(snode_name, dnode_name), flush=True)
+    app.topoMaker.net.configLinkStatus(snode_name, dnode_name, "down")
+    time.sleep(5)
+
+    print("*********** END ***********")
+    print("Clear OVS Switch, Mininet, Controller, and Detector...")
+    app.topoMaker.cleanMn()
+    proc.terminate()
+    fd.close()

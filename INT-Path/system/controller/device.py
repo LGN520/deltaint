@@ -39,7 +39,7 @@ class Device(object):
         self.portSum = 0
 
     def addLink(self, deviceName):
-        self.portSum = self.portSum + 1
+        self.portSum = self.portSum + 1 # Start from 1
         port = Port(self.portSum, deviceName)
         self.ports.append(port)
 

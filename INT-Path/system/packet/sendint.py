@@ -52,7 +52,6 @@ class PacketSender(object):
         while True:
             data = conn.recv(4096).decode('utf-8')
             #pkt = self.s.recv(4096)
-            print("Receive Packet!", flush=True)
             #_, port, data = struct.unpack("!12sH{}s".format(len(pkt)-4), pkt)
             #if port == self.port and data: # 8888
             if data:
@@ -60,17 +59,8 @@ class PacketSender(object):
                 dataType = dataJson.get('type')
                 dataInfo = dataJson.get('info')
 
+                print("Receive instruction from controller: type: {}, info: {}!".format(dataType, dataInfo), flush=True)
                 self.typeDict.get(dataType, self.doDefault)(dataInfo)
-
-        #curdir = os.path.dirname(os.path.abspath(__file__))
-        #sysdir = os.path.dirname(curdir)
-        #fd = open("{}/sourcerouting.json".format(sysdir), "r")
-        #dataJson = json.load(fd)
-        #print(dataJson)
-        # TODO
-        #exit()
-
-        #self.typeDict.get(dataType, self.doDefault)(dataInfo)
 
     def doDefault(self, info):
         """
@@ -123,7 +113,7 @@ class PacketSender(object):
             :param port: a switch port in route
             :returns: a prttied binary port string
             """
-            portOct = int(port) - 1
+            portOct = int(port) - 1 # Start from 0 <- Start from 1
             portBin = bin(portOct)[2:]
             portBinPretty = '0' * ((4 - int(len(portBin))) % 4) + portBin
             return portBinPretty
@@ -176,6 +166,7 @@ class PacketSender(object):
             portsList.reverse()
             for port in portsList:
                 byteRoute = byteRoute + addRoute(port)
+            print("byte route: {}, act id: {}".format(byteRoute, actId), flush=True)
             byteContent = byteDateToSend(byteRoute, actId)
 
             # send packet async

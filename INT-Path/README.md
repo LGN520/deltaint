@@ -136,3 +136,4 @@ You can change `graph`,`hostList` and `paths` in `app.py` to test your own netwo
 - Install controller (Mininet does not provide built-in controller though it provides built-in OVS)
 	+ Use `sudo apt-get install openvswitch-testcontroller`, `sudo ln /usr/bin/ovs-testcontroller /usr/bin/controller`, `sudo service openvswitch-testcontroller stop`, and `sudo update-rc.d openvswitch-testcontroller disable` to install OVS controller for mininet
 	+ Or, use `sudo pip3 install ryu` to install ryu controller for mininet
+- Usage: sudo python3 app.py
