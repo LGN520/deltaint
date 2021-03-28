@@ -1,4 +1,5 @@
 import redis
+import time
 
 r = redis.Redis(unix_socket_path='/var/run/redis/redis.sock')
 pubsub=r.pubsub()
@@ -12,12 +13,13 @@ while(True):
         if(data!=1):
             port_list=data.decode().split("+")[4:]
             # print(port_list)
-            if error==None:
-                error=port_list
-            else:
-                error=list(set(error).intersection(set(port_list)))
-        print(message, flush=True)
-        print(error, flush=True)
+            #if error==None:
+            #    error=port_list
+            #else:
+            #    error=list(set(error).intersection(set(port_list)))
+            error = port_list
+        #print(message, flush=True)
+        print("ERROR {} TIME {}".format(error, time.time()), flush=True)
                 
                     
 

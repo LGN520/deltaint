@@ -144,7 +144,7 @@ class Ctrl(object):
         """
         for i in range(self.vertexNum):
             for j in range(i + 1, self.vertexNum):
-                if self.graph[i][j] != _:
+                if self.graph[i][j] == 1:
                     self.switches[i].addLink('s' + str(j))
                     self.switches[j].addLink('s' + str(i))
 
@@ -363,40 +363,6 @@ class Ctrl(object):
                 'sendTimes': sendTimes
             })
 
-    def dumpPaths(self):
-        paths = self.paths
-        startNodeDict = {}
-        for path in paths:
-            startNodeDict[path[0]] = {
-                'portsLists': [],
-                'addressList': []
-            }
-        for path in paths:
-            portsList = [self.getDevPortByName(
-                's' + str(path[i]), 's' + str(path[i + 1])) for i in range(len(path) - 1)]
-            portsList.append(self.getDevPortByName(
-                's' + str(path[len(path) - 1]), 'h' + str(path[len(path) - 1])))
-            # print('path', path)
-            # print('portsList', portsList)
-            address = self.hosts[path[len(path) - 1]].ipAddress
-            startNode = path[0]
-            startNodeDict[startNode]['portsLists'].append(portsList)
-            startNodeDict[startNode]['addressList'].append(address)
-        jsonobj = {}
-        for key, sendObj in startNodeDict.items():
-            # print('portslists', key, sendObj['portsLists'])
-            jsonobj[key] = {
-                'portsLists': sendObj['portsLists'],
-                'addressList': sendObj['addressList'],
-                'actId': self.nowActId
-            }
-        curdir = os.path.dirname(os.path.abspath(__file__))
-        sysdir = os.path.dirname(curdir)
-        fd = open("{}/sourcerouting.json".format(sysdir), "w")
-        json.dump(jsonobj, fd)
-        fd.flush()
-        fd.close()
-
     def start(self):
         """
         Use the given topo and hosts start the experiment envirnoment
@@ -476,41 +442,59 @@ class Ctrl(object):
 
 
 if __name__ == '__main__':
-    graph = [
-        [0, 1, 1, _, _, _],
-        [1, 0, 1, 1, _, _],
-        [1, 1, 0, 1, 1, _],
-        [_, 1, 1, 0, 1, 1],
-        [_, _, 1, 1, 0, 1],
-        [_, _, _, 1, 1, 0],
-    ]
+    #graph = [
+    #    [0, 1, 1, _, _, _],
+    #    [1, 0, 1, 1, _, _],
+    #    [1, 1, 0, 1, 1, _],
+    #    [_, 1, 1, 0, 1, 1],
+    #    [_, _, 1, 1, 0, 1],
+    #    [_, _, _, 1, 1, 0],
+    #]
     # only support one host per switch
-    hostList = [1, 1, 1, 0, 1, 1]
+    #hostList = [1, 1, 1, 0, 1, 1]
 
     print("*********** START ***********")
+
+    print("\nLoad topology...")
+    fd = open("../../topology.json", "r")
+    jsonobj = json.load(fd)
+    fd.close()
+    graph = jsonobj["topoList"]
+    hostList = jsonobj["hostList"]
+    paths = jsonobj["pathList"]
+    #print("Graph: {}".format(graph))
+    #print("hostList: {}".format(hostList))
+    #print("pathList: {}".format(paths))
+
+    print("\nCreate topology...")
     app = Ctrl(graph, hostList)
     app.start()
 
+    print("\nOpen detector...")
     #os.system("python3 detector.py >detector.log 2>&1 &")
     fd = open("detector.log", "w")
     proc = subprocess.Popen(["python3", "detector.py", "&"], stdout=fd, stderr=fd, shell=False)
     time.sleep(1)
 
+    print("\nStart INT ...")
     #paths = [[0, 1, 2], [0, 2, 3]]
     #app.update(-1, paths)
-    paths = [[0, 1, 3, 5], [0, 2, 4, 5], [1, 2, 3, 4]]
+    #paths = [[0, 1, 3, 5], [0, 2, 4, 5], [1, 2, 3, 4]]
     #paths = [[0,1,2]]
-
-    app.update(0, paths, 20) # Enable source hosts to send INT-packets continuously within 20 s
+    app.update(0, paths, 10) # Enable source hosts to send INT-packets continuously within 10 s
     time.sleep(2)
     snode_name = app.switches[0].name
-    dnode_name = app.switches[1].name
-    print("Cut down link between {} and {}".format(snode_name, dnode_name), flush=True)
+    for j in range(len(graph[0])):
+        if graph[0][j] == 1:
+            break
+    dnode_name = app.switches[j].name
+    print("Cut down link between {} and {}, TIME {}".format(snode_name, dnode_name, time.time()), flush=True)
     app.topoMaker.net.configLinkStatus(snode_name, dnode_name, "down")
-    time.sleep(5)
+    time.sleep(10)
 
     print("*********** END ***********")
-    print("Clear OVS Switch, Mininet, Controller, and Detector...")
+
+    print("\nClear OVS Switch, Mininet, Controller, and Detector...")
     app.topoMaker.cleanMn()
     proc.terminate()
     fd.close()

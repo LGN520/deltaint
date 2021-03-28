@@ -3,6 +3,8 @@ import parse
 # import processor
 import redis
 import sys
+import time
+import os
 
 from scapy.all import get_if_addr, get_if_list, get_if_hwaddr
 
@@ -19,6 +21,9 @@ class receive():
         ownmac = get_if_hwaddr("eth0")
         parse1 = parse.parse()
 
+        INTPATH_BW = 0 # Bandwidth usage
+        curdir = os.path.dirname(os.path.abspath(__file__))
+        fd = open("{}/tmp/h{}_INTPATH_BW.txt".format(curdir, sys.argv[1]), "w")
         while True:
             data = s.recv(2048)
             if not data:
@@ -29,12 +34,16 @@ class receive():
                 # Convert each element in port_list into str
                 for i in range(len(rs[2])):
                     rs[2][i] = "s{}-{}-{}".format(rs[2][i][0], rs[2][i][1], rs[2][i][2])
+                    INTPATH_BW += (i+1) * (8+9+9) # bits of all links
+                    fd.write("INTPATH_BW {} TIME {}\n".format(INTPATH_BW, time.time()))
+                    fd.flush()
                 fmt = [ownip, ownmac, rs[0], rs[1]] + rs[2]
                 key = "+".join(fmt)
                 value = 0
                 print("{}, {}".format(key, value))
                 r.set(key,value)
                 r.pexpire(key,3000)
+        fd.close()
         s.close()
 
 
