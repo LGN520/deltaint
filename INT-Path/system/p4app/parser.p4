@@ -47,7 +47,11 @@ control DeparserImpl(packet_out packet, in headers hdr) {
         packet.emit(hdr.ipv4);
         packet.emit(hdr.udp);
         packet.emit(hdr.sr);
-        packet.emit(hdr.inthdr);
+	    packet.emit(hdr.intbitmap);
+	    packet.emit(hdr.intdeviceno);
+	    packet.emit(hdr.intiport);
+	    packet.emit(hdr.inteport);
+        //packet.emit(hdr.inthdr);
 }
 }
 
