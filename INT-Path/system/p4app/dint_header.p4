@@ -87,13 +87,14 @@ header intiport_t {
 	bit<8> ingress_port;
 }
 
-headerinteport_t {
+header inteport_t {
 	bit<8> egress_port;
 }
 
 struct dint_metadata_t {
 	bit<32> index;
 	bit<128> register_value;
+	//bit<32> register_value;
 	bit<32> srcAddr;
 	bit<32> dstAddr;
 	bit<16> srcPort;

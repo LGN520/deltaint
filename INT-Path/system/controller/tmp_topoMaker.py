@@ -29,7 +29,7 @@ class MakeSwitchTopo(Topo):
         Topo.__init__(self, **opts)
 
         self.switchSum = len(app_topo.switches)
-        self.hostSum = len(app_topo.hosts)
+        self.hostSum = len(app_topo.hosts) # k=33 -> hostSum=99
 
         self.mn_switches = []
         self.mn_hosts = []
@@ -94,15 +94,31 @@ class TopoMaker(object):
         c = self.net.addController('mycontroller', controller=RemoteController, ip='0.0.0.0', port=6633)
         c.checkListening()
         controller_list.append(c)
-        ovs = self.net.addSwitch('s999', cls=OVSSwitch)
+
+        # NOTE: At most 50 internal ports in each bridge of OVSSwitch, besides 1 lo port for localhost, 1 normal port (s-ens38) for ARP
+        ovs_list = []
+        hostnum = len(self.net.hosts) # k=33 -> hostnum=66
+        ovsid = 999
+        MAX_NPORT = 50 
+        while True:
+            ovs = self.net.addSwitch('s{}'.format(ovsid), cls=OVSSwitch)
+            hostnum -= MAX_NPORT # Connect at most 50 switches
+            ovsid -= 1
+            ovs_list.append(ovs)
+            if hostnum > 0:
+                hostnum += 1 # Connect 49 switches and 1 OVSSwitch
+            else:
+                break
 
         hostIpList = [
             host.ipAddress for host in self.topoObj.hosts if host is not None]
 
-        j = 0
+        j = 0 # number of hosts without None
+        ovs_idx = 0
         #ovslinks = []
-        for i in range(self.topo.hostSum):
+        for i in range(self.topo.hostSum): # number of hostIds including None
             if self.topo.mn_hosts[i] != None:
+                ovs = ovs_list[ovs_idx]
                 #ovslinks.append(self.net.addLink(self.net.hosts[j], ovs))
                 self.net.addLink(self.net.hosts[j], ovs)
                 self.net.hosts[j].cmd(
@@ -117,6 +133,9 @@ class TopoMaker(object):
                 action = "ip addr add {}/24 broadcast 192.168.8.255 dev {}-eth1".format(ipAddr, name)
                 self.net.hosts[j].cmd(action)
                 self.net.hosts[j].cmd('ifconfig')
+                if (ovs_idx != (len(ovs_list) - 1)) and ((j+1)%(MAX_NPORT-1) == 0):
+                    self.net.addLink(ovs, ovs_list[ovs_idx+1])
+                    ovs_idx += 1
                 j = j + 1
 
         # Use ovs-vsctl to add-br, add-port (between hosts and OVS switch), and set controller

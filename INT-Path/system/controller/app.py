@@ -9,7 +9,8 @@ sys.path.append("/home/ssy/behavioral-model/targets/simple_switch")
 from device import Switch, Host
 #from routeFinding import RouteFinding
 #from switchRuntime import SwitchRuntime
-from topoMaker import TopoMaker
+#from topoMaker import TopoMaker
+from tmp_topoMaker import TopoMaker # Support large network scale
 #from dBParser import DBParser
 
 import copy
@@ -17,6 +18,7 @@ import socket
 import json
 import time
 import subprocess
+from mininet.cli import CLI
 
 
 _ = float('inf')
@@ -208,7 +210,7 @@ class Ctrl(object):
         the device number is used to indicate the switch itself
         """
         for id, switch in enumerate(self.switches):
-            tableItem = ('setmetadata', 'setdeviceno', '', id)
+            tableItem = ('setmetadata', 'setdeviceno', '', id+1) # Start from 1
             switch.tables.append(tableItem)
 
     def getTableInfo(self):
@@ -267,7 +269,8 @@ class Ctrl(object):
         curdir = os.path.dirname(os.path.abspath(__file__))
         sysdir = os.path.dirname(curdir)
         switchPath = '/home/ssy/behavioral-model/targets/simple_switch/simple_switch'
-        jsonPath = '{}/p4app/app.json'.format(sysdir)
+        #jsonPath = '{}/p4app/app.json'.format(sysdir)
+        jsonPath = '{}/p4app/dint_app.json'.format(sysdir)
         self.topoMaker = TopoMaker(switchPath, jsonPath, self)
         #self.topoMaker.cleanMn()
         self.topoMaker.genMnTopo()
@@ -286,8 +289,8 @@ class Ctrl(object):
             socketLink = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             socketLink.connect((host.ovsIpAddress, self.socketPort))
             return socketLink
-        except:
-            print('socket gen failed', host.name)
+        except socket.error as e:
+            print('socket gen failedL {}'.format(e), host.name)
             return None
 
     def genSocketLinkToHosts(self):
@@ -456,7 +459,7 @@ if __name__ == '__main__':
     print("*********** START ***********")
 
     print("\nLoad topology...")
-    fd = open("../../topology.json", "r")
+    fd = open("./topology.json", "r")
     jsonobj = json.load(fd)
     fd.close()
     graph = jsonobj["topoList"]
@@ -470,12 +473,6 @@ if __name__ == '__main__':
     app = Ctrl(graph, hostList)
     app.start()
 
-    print("\nOpen detector...")
-    #os.system("python3 detector.py >detector.log 2>&1 &")
-    fd = open("detector.log", "w")
-    proc = subprocess.Popen(["python3", "detector.py", "&"], stdout=fd, stderr=fd, shell=False)
-    time.sleep(1)
-
     print("\nStart INT ...")
     #paths = [[0, 1, 2], [0, 2, 3]]
     #app.update(-1, paths)
@@ -483,18 +480,31 @@ if __name__ == '__main__':
     #paths = [[0,1,2]]
     app.update(0, paths, 10) # Enable source hosts to send INT-packets continuously within 10 s
     time.sleep(2)
-    snode_name = app.switches[0].name
-    for j in range(len(graph[0])):
-        if graph[0][j] == 1:
-            break
-    dnode_name = app.switches[j].name
-    print("Cut down link between {} and {}, TIME {}".format(snode_name, dnode_name, time.time()), flush=True)
-    app.topoMaker.net.configLinkStatus(snode_name, dnode_name, "down")
-    time.sleep(10)
+
+    is_detect = False
+    if is_detect: # Skip this block when testing bandwidth overhead
+        print("\nOpen detector...")
+        #os.system("python3 detector.py >detector.log 2>&1 &")
+        fd = open("detector.log", "w")
+        proc = subprocess.Popen(["python3", "detector.py", "&"], stdout=fd, stderr=fd, shell=False)
+        time.sleep(1)
+
+        print("\nSimulate link down ...")
+        snode_name = app.switches[0].name
+        for j in range(len(graph[0])):
+            if graph[0][j] == 1:
+                break
+        dnode_name = app.switches[j].name
+        print("Cut down link between {} and {}, TIME {}".format(snode_name, dnode_name, time.time()), flush=True)
+        app.topoMaker.net.configLinkStatus(snode_name, dnode_name, "down")
+
+    #time.sleep(20)
+    CLI(app.topoMaker.net)
 
     print("*********** END ***********")
 
     print("\nClear OVS Switch, Mininet, Controller, and Detector...")
     app.topoMaker.cleanMn()
-    proc.terminate()
-    fd.close()
+    if is_detect:
+        proc.terminate()
+        fd.close()

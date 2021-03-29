@@ -111,7 +111,7 @@ if __name__ == '__main__':
     jsonobj["hostList"] = hostList
     jsonobj["pathList"] = pathList
     #print(jsonobj)
-    fd = open("topology.json", "w")
+    fd = open("./topology.json", "w")
     json.dump(jsonobj, fd)
     fd.close()
 

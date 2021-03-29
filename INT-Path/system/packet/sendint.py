@@ -32,6 +32,7 @@ class PacketSender(object):
             'TraversePath': self.doTraversePath,
             'Test': self.doTest
         }
+        self.socket_list = {}
 
     def startSocket(self):
         """
@@ -83,12 +84,18 @@ class PacketSender(object):
             """
             Send traverse path via UDP
 
-            :param content: traverse route content
+            :param content: traverse route content (512-bit source routing + 32-bit act ID)
             :param address: traverse target address
             """
-            udpLink = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            # Remember socket for each path
+            if content not in self.socket_list.keys():
+                udpLink = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                self.socket_list[content] = udpLink
+            else:
+                udpLink = self.socket_list[content]
             addr = (address, 2222)
             udpLink.sendto(content, addr)
+            print("Send packet along {} to {}".format(content, addr), flush=True)
 
         def byteDateToSend(byteRoute, actId):
             """
@@ -113,9 +120,10 @@ class PacketSender(object):
             :param port: a switch port in route
             :returns: a prttied binary port string
             """
-            portOct = int(port) - 1 # Start from 0 <- Start from 1
-            portBin = bin(portOct)[2:]
-            portBinPretty = '0' * ((4 - int(len(portBin))) % 4) + portBin
+            portOct = int(port) - 1 # Start from 0 <- Start from eth-1
+            portBin = bin(portOct)[2:] # Skip '0b'
+            #portBinPretty = '0' * ((4 - int(len(portBin))) % 4) + portBin
+            portBinPretty = '0' * ((8 - int(len(portBin))) % 8) + portBin # Use 8-bit to support large network scale
             return portBinPretty
 
         def sendPacketByTimes(sendTimes, byteContent, address):
@@ -147,7 +155,7 @@ class PacketSender(object):
                 sendUDP(byteContent, address)
                 i = i + 1
 
-                sleepTime = 0.1
+                sleepTime = 0.1 # Epoch length
                 time.sleep(sleepTime)
                 times = times + 1
             endTime = time.time()
