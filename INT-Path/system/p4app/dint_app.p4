@@ -15,16 +15,13 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
         mark_to_drop(standard_metadata);
     }
 
-	// 1 MB space: 104-bit flowkey, 8-bit deviceno, 8-bit iport, 8-bit eport
-	register<bit<128>>(65536) dint_register;
-
-	// 1 MB space: 8-bit rsvd, 8-bit egress port, 8-bit deviceno, 8-bit iport (sketch simplification)
-	// register<bit<32>>(262144) dint_register;
+	// 1 MB space: 104-bit flowkey, 8-bit deviceno, 8-bit iport, 8-bit eport, 32-bit timedelta
+	register<bit<128>>(52428) dint_register;
+	register<bit<32>>(52428) timedelta_register;
 
 	@name("dint_hash")
 	action dint_hash() {
-		hash(meta.dint_metadata.index, HashAlgorithm.crc16, (bit<32>)0, {hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.udp.srcPort, hdr.udp.dstPort, hdr.ipv4.protocol}, 32w65536);
-		//hash(meta.dint_metadata.index, HashAlgorithm.identity, (bit<32>)0, {standard_metadata.egress_port}, 32w262144);
+		hash(meta.dint_metadata.index, HashAlgorithm.crc16, (bit<32>)0, {hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.udp.srcPort, hdr.udp.dstPort, hdr.ipv4.protocol}, 32w52428);
 	}
 	@name("dint_hash_tbl")
 	table dint_hash_tbl {
@@ -39,6 +36,7 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 	@name("read_register")
 	action read_register() {
 		dint_register.read(meta.dint_metadata.register_value, meta.dint_metadata.index);
+		timedelta_register.read(meta.dint_metadata.prev_timedelta, meta.dint_metadata.index);
 	}
 	@name("read_register_tbl")
 	table read_register_tbl {
@@ -60,9 +58,6 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 		meta.dint_metadata.prev_deviceno = (bit<8>)(meta.dint_metadata.register_value >> 16);
 		meta.dint_metadata.prev_iport = (bit<8>)(meta.dint_metadata.register_value >> 8);
 		meta.dint_metadata.prev_eport = (bit<8>)(meta.dint_metadata.register_value);
-		//meta.dint_metadata.prev_eport = (bit<8>)(meta.dint_metadata.register_value >> 16);
-		//meta.dint_metadata.prev_deviceno = (bit<8>)(meta.dint_metadata.register_value >> 8);
-		//meta.dint_metadata.prev_iport = (bit<8>)(meta.dint_metadata.register_value);
 	}
 	@name("parse_register_tbl")
 	table parse_register_tbl {
@@ -101,6 +96,15 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 			hdr.intbitmap.eport_bit = 1;
 			meta.dint_metadata.output_eport = (bit<8>)(standard_metadata.egress_port);
 		}
+		if ((meta.dint_metadata.prev_timedelta >= standard_metadata.deq_timedelta) && ((meta.dint_metadata.prev_timedelta - standard_metadata.deq_timedelta) <= 100) || \
+				(meta.dint_metadata.prev_timedelta < standard_metadata.deq_timedelta) && ((standard_metadata.deq_timedelta - meta.dint_metadata.prev_timedelta) <= 100)) {
+			hdr.intbitmap.timedelta_bit = 0;
+			meta.dint_metadata.output_timedelta = meta.dint_metadata.prev_timedelta;
+		}
+		else {
+			hdr.intbitmap.timedelta_bit = 1;
+			meta.dint_metadata.output_timedelta = standard_metadata.deq_timedelta;
+		}
 		hdr.udp.len = hdr.udp.len+16w1;
 		hdr.udp.hdrChecksum = 16w0;
 		hdr.ipv4.totalLen  = hdr.ipv4.totalLen+16w1;
@@ -114,6 +118,26 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 		key = {}
 		size = 1024;
 		default_action = delta_calc();
+	}
+
+	action set_bitmap() {
+		hdr.intbitmap.setValid();
+		hdr.intbitmap.device_bit = 1;
+		meta.dint_metadata.output_deviceno = meta.int_metadata.device_no;
+		hdr.intbitmap.iport_bit = 1;
+		meta.dint_metadata.output_iport = (bit<8>)(standard_metadata.ingress_port);
+		hdr.intbitmap.eport_bit = 1;
+		meta.dint_metadata.output_eport = (bit<8>)(standard_metadata.egress_port);
+		hdr.intbitmap.timedelta_bit = 1;
+		meta.dint_metadata.output_timedelta = standard_metadata.deq_timedelta;
+	}
+	table set_bitmap_tbl {
+		actions = {
+			set_bitmap;
+		}
+		key = {}
+		size = 1024;
+		default_action = set_bitmap();
 	}
 
 	action do_deviceno() {
@@ -200,16 +224,41 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 		default_action = donot_eport();
 	}
 
+	action do_timedelta() {
+		hdr.inttimedelta.setValid();
+		hdr.inttimedelta.timedelta = standard_metadata.deq_timedelta;
+		hdr.udp.len = hdr.udp.len+16w4;
+		hdr.ipv4.totalLen  = hdr.ipv4.totalLen+16w4;
+		hdr.ipv4.hdrChecksum = hdr.ipv4.hdrChecksum-16w4;
+	}
+	table do_timedelta_tbl {
+		actions = {
+			do_timedelta;
+		}
+		key = {}
+		size = 1024;
+		default_action = do_timedelta();
+	}
+	
+	action donot_timedelta() {
+		hdr.inttimedelta.setInvalid();
+	}
+	table donot_timedelta_tbl {
+		actions = {
+			donot_timedelta;
+		}
+		key = {}
+		size = 1024;
+		default_action = donot_timedelta();
+	}
+
 	action update_register() {
 		dint_register.write(meta.dint_metadata.index, \
 				((bit<128>)(hdr.ipv4.srcAddr)<<96) | ((bit<128>)(hdr.ipv4.dstAddr)<<64) | \
 				((bit<128>)(hdr.udp.srcPort)<<48) | ((bit<128>)(hdr.udp.dstPort)<<32) | \
 				((bit<128>)(hdr.ipv4.protocol)<<24) | ((bit<128>)(meta.dint_metadata.output_deviceno)<<16) | \
 				((bit<128>)(meta.dint_metadata.output_iport)<<8) | (bit<128>)(meta.dint_metadata.output_eport));
-		/*dint_register.write(meta.dint_metadata.index, \
-				((bit<32>)(meta.dint_metadata.output_eport)<<16) | \
-				((bit<32>)(meta.dint_metadata.output_deviceno)<<8) | \
-				(bit<32>)(meta.dint_metadata.output_iport));*/
+		timedelta_register.write(meta.dint_metadata.index, meta.dint_metadata.output_timedelta);
 	}
 	table update_register_tbl {
 		actions = {
@@ -219,8 +268,22 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 		size = 1024;
 		default_action = update_register();
 	}
+
+	action set_timedelta(bit<32> timedelta) {
+		standard_metadata.deq_timedelta = timedelta;
+	}
+	table set_timedelta_tbl {
+		actions = {
+			set_timedelta;	
+		}
+		key = {
+			standard_metadata.egress_port:exact;
+		}
+		size = 1024;
+	}
 	
     apply {
+		set_timedelta_tbl.apply();
         egress_counter.count((bit<32>)standard_metadata.egress_port);
         if (hdr.sr.isValid()) {
 			dint_hash_tbl.apply();
@@ -228,17 +291,13 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 			parse_register_tbl.apply();
 			if (hdr.ipv4.srcAddr == meta.dint_metadata.srcAddr && hdr.ipv4.dstAddr == meta.dint_metadata.dstAddr && hdr.ipv4.protocol == meta.dint_metadata.protocol && hdr.udp.srcPort == meta.dint_metadata.srcPort && hdr.udp.dstPort == meta.dint_metadata.dstPort) {
 				// If flowkey matches, keep loaded prev metadata
+				// Delta calculation (set bitmap according to delta)
+				delta_calc_tbl.apply();
 			}
-			//if ((bit<8>)(standard_metadata.egress_port) == meta.dint_metadata.prev_eport) {
-				// If egress port matches, keep loaded prev metadata
-			//}
 			else {
-				// Set bitmap as <1, 1, 1> in delta_calc
-				meta.dint_metadata.prev_deviceno = 0;
-				meta.dint_metadata.prev_iport = 0;
-				meta.dint_metadata.prev_eport = 0;
+				// Set bitmap as <1, 1, 1>
+				set_bitmap_tbl.apply();
 			}
-			delta_calc_tbl.apply();
 			if (hdr.intbitmap.device_bit == 1) {
 				do_deviceno_tbl.apply();
 			}
@@ -256,6 +315,12 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 			}
 			else {
 				donot_eport_tbl.apply();
+			}
+			if (hdr.intbitmap.timedelta_bit == 1) {
+				do_timedelta_tbl.apply();
+			}
+			else {
+				donot_timedelta_tbl.apply();
 			}
 			update_register_tbl.apply();
         }

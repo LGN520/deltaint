@@ -51,6 +51,7 @@ control DeparserImpl(packet_out packet, in headers hdr) {
 	    packet.emit(hdr.intdeviceno);
 	    packet.emit(hdr.intiport);
 	    packet.emit(hdr.inteport);
+	    packet.emit(hdr.inttimedelta);
 }
 }
 

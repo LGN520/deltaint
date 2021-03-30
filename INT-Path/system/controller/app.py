@@ -10,7 +10,7 @@ from device import Switch, Host
 #from routeFinding import RouteFinding
 #from switchRuntime import SwitchRuntime
 #from topoMaker import TopoMaker
-from tmp_topoMaker import TopoMaker # Support large network scale
+from topoMaker import TopoMaker # Support large network scale
 #from dBParser import DBParser
 
 import copy
@@ -247,7 +247,7 @@ class Ctrl(object):
                 rule_filename = "{}/tmp/{}_clear.txt".format(curdir, switch.name)
             else:
                 rule_filename = "{}/tmp/{}.txt".format(curdir, switch.name)
-            rule_fd = open(rule_filename, "w")
+            rule_fd = open(rule_filename, "w+")
             if doClear:
                 #switch.runtime.table_clear('dotrans')
                 rule_fd.write('table_clear dotrans\n')
@@ -269,8 +269,8 @@ class Ctrl(object):
         curdir = os.path.dirname(os.path.abspath(__file__))
         sysdir = os.path.dirname(curdir)
         switchPath = '/home/ssy/behavioral-model/targets/simple_switch/simple_switch'
-        #jsonPath = '{}/p4app/app.json'.format(sysdir)
         jsonPath = '{}/p4app/dint_app.json'.format(sysdir)
+        #jsonPath = '{}/p4app/simple_dint_app.json'.format(sysdir) # with sketch simplification
         self.topoMaker = TopoMaker(switchPath, jsonPath, self)
         #self.topoMaker.cleanMn()
         self.topoMaker.genMnTopo()
@@ -481,22 +481,40 @@ if __name__ == '__main__':
     app.update(0, paths, 10) # Enable source hosts to send INT-packets continuously within 10 s
     time.sleep(2)
 
-    is_detect = False
+    is_detect = True
     if is_detect: # Skip this block when testing bandwidth overhead
         print("\nOpen detector...")
         #os.system("python3 detector.py >detector.log 2>&1 &")
-        fd = open("detector.log", "w")
+        fd = open("detector.log", "w+")
         proc = subprocess.Popen(["python3", "detector.py", "&"], stdout=fd, stderr=fd, shell=False)
         time.sleep(1)
 
-        print("\nSimulate link down ...")
-        snode_name = app.switches[0].name
-        for j in range(len(graph[0])):
-            if graph[0][j] == 1:
-                break
-        dnode_name = app.switches[j].name
-        print("Cut down link between {} and {}, TIME {}".format(snode_name, dnode_name, time.time()), flush=True)
-        app.topoMaker.net.configLinkStatus(snode_name, dnode_name, "down")
+        is_linkdown = False
+        if is_linkdown:
+            print("\nSimulate link down ...")
+            snode_name = app.switches[0].name
+            for j in range(len(graph[0])):
+                if graph[0][j] == 1:
+                    break
+            dnode_name = app.switches[j].name
+            print("Cut down link between {} and {}, TIME {}".format(snode_name, dnode_name, time.time()), flush=True)
+            app.topoMaker.net.configLinkStatus(snode_name, dnode_name, "down")
+        else:
+            print("\nSimulate latency ...")
+            curdir = os.path.dirname(os.path.abspath(__file__))
+            for i in range(len(app.hosts)):
+                if app.hosts[i] is not None:
+                    break
+            node_name = app.hosts[i].name
+            eport = 1
+            timedelta = 10000 # 10ms
+            rule_filename = "{}/tmp/simulate_latency.txt".format(curdir)
+            fd = open(rule_filename, "w+")
+            fd.write("table_add set_timedelta_tbl set_timedelta {} => {}\n".format(eport, timedelta))
+            fd.flush()
+            fd.close()
+            print("Simluate latency in switch {} egress port {}, TIME {}".format(app.switches[i].name, eport, time.time()), flush=True)
+            os.system("sudo {}/simple_switch_CLI --thrift-port {} < {} >/dev/null 2>&1".format(curdir, app.switches[i].thriftPort, rule_filename))
 
     #time.sleep(20)
     CLI(app.topoMaker.net)

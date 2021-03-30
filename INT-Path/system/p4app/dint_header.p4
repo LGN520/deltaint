@@ -76,7 +76,8 @@ header intbitmap_t {
 	bit<1> device_bit;
 	bit<1> iport_bit;
 	bit<1> eport_bit;
-	bit<5> rsvd;
+	bit<1> timedelta_bit;
+	bit<4> rsvd;
 }
 
 header intdeviceno_t {
@@ -91,6 +92,10 @@ header inteport_t {
 	bit<8> egress_port;
 }
 
+header inttimedelta_t {
+	bit<32> timedelta;
+}
+
 struct dint_metadata_t {
 	bit<32> index;
 	bit<128> register_value;
@@ -103,9 +108,11 @@ struct dint_metadata_t {
 	bit<8> prev_deviceno;
 	bit<8> prev_iport;
 	bit<8> prev_eport;
+	bit<32> prev_timedelta;
 	bit<8> output_deviceno;
 	bit<8> output_iport;
 	bit<8> output_eport;
+	bit<32> output_timedelta;
 }
 
 struct metadata {
@@ -140,6 +147,8 @@ struct headers {
 	intiport_t intiport;
 	@name("inteport")
 	inteport_t inteport;
+	@name("inttimedelta")
+	inttimedelta_t inttimedelta;
 }
 
 #endif // __HEADER_H__

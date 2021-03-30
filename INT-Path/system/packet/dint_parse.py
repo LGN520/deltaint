@@ -48,7 +48,10 @@ class parse():
             eport_bit = bitmap>>5 & 0x1
             if eport_bit == 1:
                 meta_num += 1
-            print("bitmap {} device bit {} iport bit {} eport bit {}".format(bitmap, device_bit, iport_bit, eport_bit), flush=True)
+            timedelta_bit = bitmap>>4 & 0x1
+            if timedelta_bit == 1:
+                meta_num += 1
+            print("bitmap {} device bit {} iport bit {} eport bit {} timedelta bit {}".format(bitmap, device_bit, iport_bit, eport_bit, timedelta_bit), flush=True)
             if len(pkt) < meta_num*1:
                 print("ERROR: pktlen {} < {}".format(len(pkt), meta_num*1), flush=True)
                 exit(-1)
@@ -63,9 +66,12 @@ class parse():
             egress_port = None
             if eport_bit == 1:
                 egress_port, pkt = struct.unpack("!B%ds" % (len(pkt)-1), pkt)
+            timedelta = None
+            if timedelta_bit == 1:
+                timedelta, pkt = struct.unpack("!I%ds" % (len(pkt)-4), pkt)
 
-            print("INT data [{}]: deviceno {}, iport {}, eport {}".format(i, device_no, ingress_port, egress_port))
-            int_headers.append([device_no, ingress_port, egress_port])
+            print("INT data [{}]: deviceno {}, iport {}, eport {}, timedelta {}".format(i, device_no, ingress_port, egress_port, timedelta))
+            int_headers.append([device_no, ingress_port, egress_port, timedelta])
             i += 1
         return int_headers
 
