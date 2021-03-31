@@ -155,7 +155,7 @@ class PacketSender(object):
                 sendUDP(byteContent, address)
                 i = i + 1
 
-                sleepTime = 0.1 # Epoch length
+                sleepTime = 0.01 # Epoch length
                 time.sleep(sleepTime)
                 times = times + 1
             endTime = time.time()

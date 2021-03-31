@@ -179,8 +179,9 @@ class TopoMaker(object):
 
                 log_filename = "{}/packet/tmp/h{}_recv.txt".format(sysdir, i)
                 ##intReceiver = '~/P4_DC/packet/receiveint ' + str(i) + ' >/dev/null &'
-                intReceiver = 'python3 {}/packet/receive.py {} >{} 2>&1 &'.format(sysdir, i, log_filename)
-                #intReceiver = 'python3 {}/packet/receive.py {} >/dev/null 2>&1 &'.format(sysdir, i)
+                #intReceiver = 'python3 {}/packet/dint_receive.py {} >{} 2>&1 &'.format(sysdir, i, log_filename) # DINT
+                #intReceiver = 'python3 {}/packet/dint_receive.py {} >/dev/null 2>&1 &'.format(sysdir, i) # DINT
+                intReceiver = 'python3 {}/packet/receive.py {} >{} 2>&1 &'.format(sysdir, i, log_filename) # INT-Path
                 self.net.hosts[j].cmd(intReceiver)
                 j = j + 1
 

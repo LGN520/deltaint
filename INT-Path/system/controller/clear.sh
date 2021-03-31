@@ -25,6 +25,15 @@ sudo ifconfig s-ens38 down
 rm -rf /etc/openvswitch/conf.db
 #service openvswitch start
 
-pid=$(sudo ps -aux | grep ryu | awk 'NR==1{print $2}')
-sudo kill -9 $pid
+pids=($(sudo ps -aux | grep ryu | awk '{print $2}'))
+for i in $(seq 0 $[${#pids[*]-1}])
+do
+	sudo kill -9 ${pids[i]}
+done
+
+pids=($(sudo ps -aux | grep detector | awk '{print $2}'))
+for i in $(seq 0 $[${#pids[*]-1}])
+do
+	sudo kill -9 ${pids[i]}
+done
 

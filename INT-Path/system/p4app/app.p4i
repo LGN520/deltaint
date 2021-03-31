@@ -943,13 +943,17 @@ header sr_t { //source routing header
 
 header inthdr_t {
     bit<8> device_no;
-    bit<9> ingress_port;
-    bit<9> egress_port;
+ bit<8> ingress_port;
+ bit<8> egress_port;
+ bit<32> deq_timedelta;
+
+    /*bit<9>  ingress_port;
+    bit<9>  egress_port;
     bit<48> ingress_global_timestamp;
     bit<32> enq_timestamp;
     bit<19> enq_qdepth;
     bit<32> deq_timedelta;
-    bit<19> deq_qdepth;
+    bit<19> deq_qdepth; */
 }
 
 struct metadata {
@@ -1059,13 +1063,14 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
         hdr.ipv4.hdrChecksum=hdr.ipv4.hdrChecksum-16w22;
         hdr.inthdr.setValid();
         hdr.inthdr.device_no = meta.int_metadata.device_no;
-        hdr.inthdr.ingress_port = standard_metadata.ingress_port;
-        hdr.inthdr.egress_port = standard_metadata.egress_port;
-        hdr.inthdr.ingress_global_timestamp = standard_metadata.ingress_global_timestamp;
+        hdr.inthdr.ingress_port = (bit<8>)standard_metadata.ingress_port;
+        hdr.inthdr.egress_port = (bit<8>)standard_metadata.egress_port;
+        hdr.inthdr.deq_timedelta = standard_metadata.deq_timedelta;
+
+  /*hdr.inthdr.ingress_global_timestamp = standard_metadata.ingress_global_timestamp;
         hdr.inthdr.enq_timestamp = standard_metadata.enq_timestamp;
         hdr.inthdr.enq_qdepth = standard_metadata.enq_qdepth;
-        hdr.inthdr.deq_timedelta = standard_metadata.deq_timedelta;
-        hdr.inthdr.deq_qdepth = standard_metadata.deq_qdepth;
+        hdr.inthdr.deq_qdepth = standard_metadata.deq_qdepth;*/
     }
     @name("udp_int")
     table udp_int {
@@ -1131,8 +1136,8 @@ control ingress(inout headers hdr, inout metadata meta, inout standard_metadata_
     action srrouting() {
         // read 4 bit from routingList use listPosition
         // and set it to egress metadata
-        bit<4> port=(bit<4>)hdr.sr.routingList;
-        hdr.sr.routingList=hdr.sr.routingList>>4;
+        bit<8> port=(bit<8>)hdr.sr.routingList;
+        hdr.sr.routingList=hdr.sr.routingList>>8;
         standard_metadata.egress_spec = (bit<9>)port+9w1; // 0 -> eth1
         standard_metadata.egress_port = (bit<9>)port+9w1;
     }

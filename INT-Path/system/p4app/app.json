@@ -9,7 +9,7 @@
         ["tmp_1", 32, false],
         ["result_0", 32, false],
         ["tempip_0", 32, false],
-        ["port_1", 4, false],
+        ["port_1", 8, false],
         ["userMetadata._ingress_metadata_nhop_ipv40", 32, false],
         ["userMetadata._intrinsic_metadata_ingress_global_timestamp1", 48, false],
         ["userMetadata._intrinsic_metadata_lf_field_list2", 32, false],
@@ -21,8 +21,7 @@
         ["userMetadata._queueing_metadata_enq_qdepth8", 16, false],
         ["userMetadata._queueing_metadata_deq_timedelta9", 32, false],
         ["userMetadata._queueing_metadata_deq_qdepth10", 16, false],
-        ["userMetadata._int_metadata_device_no11", 8, false],
-        ["_padding_0", 4, false]
+        ["userMetadata._int_metadata_device_no11", 8, false]
       ]
     },
     {
@@ -112,13 +111,9 @@
       "id" : 7,
       "fields" : [
         ["device_no", 8, false],
-        ["ingress_port", 9, false],
-        ["egress_port", 9, false],
-        ["ingress_global_timestamp", 48, false],
-        ["enq_timestamp", 32, false],
-        ["enq_qdepth", 19, false],
-        ["deq_timedelta", 32, false],
-        ["deq_qdepth", 19, false]
+        ["ingress_port", 8, false],
+        ["egress_port", 8, false],
+        ["deq_timedelta", 32, false]
       ]
     }
   ],
@@ -399,7 +394,7 @@
       "id" : 0,
       "source_info" : {
         "filename" : "./app.p4",
-        "line" : 52,
+        "line" : 53,
         "column" : 39,
         "source_fragment" : "ingress_counter"
       },
@@ -615,15 +610,28 @@
               "value" : ["inthdr", "ingress_port"]
             },
             {
-              "type" : "field",
-              "value" : ["standard_metadata", "ingress_port"]
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["standard_metadata", "ingress_port"]
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xff"
+                  }
+                }
+              }
             }
           ],
           "source_info" : {
             "filename" : "./app.p4",
             "line" : 25,
             "column" : 8,
-            "source_fragment" : "hdr.inthdr.ingress_port = standard_metadata.ingress_port"
+            "source_fragment" : "hdr.inthdr.ingress_port = (bit<8>)standard_metadata.ingress_port"
           }
         },
         {
@@ -634,72 +642,28 @@
               "value" : ["inthdr", "egress_port"]
             },
             {
-              "type" : "field",
-              "value" : ["standard_metadata", "egress_port"]
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["standard_metadata", "egress_port"]
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xff"
+                  }
+                }
+              }
             }
           ],
           "source_info" : {
             "filename" : "./app.p4",
             "line" : 26,
             "column" : 8,
-            "source_fragment" : "hdr.inthdr.egress_port = standard_metadata.egress_port"
-          }
-        },
-        {
-          "op" : "assign",
-          "parameters" : [
-            {
-              "type" : "field",
-              "value" : ["inthdr", "ingress_global_timestamp"]
-            },
-            {
-              "type" : "field",
-              "value" : ["standard_metadata", "ingress_global_timestamp"]
-            }
-          ],
-          "source_info" : {
-            "filename" : "./app.p4",
-            "line" : 27,
-            "column" : 8,
-            "source_fragment" : "hdr.inthdr.ingress_global_timestamp = standard_metadata.ingress_global_timestamp"
-          }
-        },
-        {
-          "op" : "assign",
-          "parameters" : [
-            {
-              "type" : "field",
-              "value" : ["inthdr", "enq_timestamp"]
-            },
-            {
-              "type" : "field",
-              "value" : ["standard_metadata", "enq_timestamp"]
-            }
-          ],
-          "source_info" : {
-            "filename" : "./app.p4",
-            "line" : 28,
-            "column" : 8,
-            "source_fragment" : "hdr.inthdr.enq_timestamp = standard_metadata.enq_timestamp"
-          }
-        },
-        {
-          "op" : "assign",
-          "parameters" : [
-            {
-              "type" : "field",
-              "value" : ["inthdr", "enq_qdepth"]
-            },
-            {
-              "type" : "field",
-              "value" : ["standard_metadata", "enq_qdepth"]
-            }
-          ],
-          "source_info" : {
-            "filename" : "./app.p4",
-            "line" : 29,
-            "column" : 8,
-            "source_fragment" : "hdr.inthdr.enq_qdepth = standard_metadata.enq_qdepth"
+            "source_fragment" : "hdr.inthdr.egress_port = (bit<8>)standard_metadata.egress_port"
           }
         },
         {
@@ -716,34 +680,15 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 30,
+            "line" : 27,
             "column" : 8,
             "source_fragment" : "hdr.inthdr.deq_timedelta = standard_metadata.deq_timedelta"
-          }
-        },
-        {
-          "op" : "assign",
-          "parameters" : [
-            {
-              "type" : "field",
-              "value" : ["inthdr", "deq_qdepth"]
-            },
-            {
-              "type" : "field",
-              "value" : ["standard_metadata", "deq_qdepth"]
-            }
-          ],
-          "source_info" : {
-            "filename" : "./app.p4",
-            "line" : 31,
-            "column" : 8,
-            "source_fragment" : "hdr.inthdr.deq_qdepth = standard_metadata.deq_qdepth"
           }
         }
       ]
     },
     {
-      "name" : "app43",
+      "name" : "app44",
       "id" : 1,
       "runtime_data" : [],
       "primitives" : [
@@ -774,7 +719,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 43,
+            "line" : 44,
             "column" : 29,
             "source_fragment" : "(bit<32>)standard_metadata.egress_port"
           }
@@ -793,7 +738,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 43,
+            "line" : 44,
             "column" : 8,
             "source_fragment" : "egress_counter.count((bit<32>)standard_metadata.egress_port)"
           }
@@ -848,7 +793,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 60,
+            "line" : 61,
             "column" : 8,
             "source_fragment" : "standard_metadata.egress_spec = port"
           }
@@ -867,7 +812,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 61,
+            "line" : 62,
             "column" : 8,
             "source_fragment" : "standard_metadata.egress_port = port"
           }
@@ -935,7 +880,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 66,
+            "line" : 67,
             "column" : 27,
             "source_fragment" : "(bit<32>)(routeNum-2w1)"
           }
@@ -958,7 +903,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 66,
+            "line" : 67,
             "column" : 8,
             "source_fragment" : "random(result,32w0,(bit<32>)(routeNum-2w1))"
           }
@@ -1132,7 +1077,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 76,
+            "line" : 77,
             "column" : 20,
             "source_fragment" : "(bit<9>)((bit<4>)data); ..."
           }
@@ -1306,7 +1251,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 76,
+            "line" : 77,
             "column" : 20,
             "source_fragment" : "(bit<9>)((bit<4>)data); ..."
           }
@@ -1337,7 +1282,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 82,
+            "line" : 83,
             "column" : 8,
             "source_fragment" : "standard_metadata.egress_spec = standard_metadata.ingress_port"
           }
@@ -1356,7 +1301,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 83,
+            "line" : 84,
             "column" : 8,
             "source_fragment" : "standard_metadata.egress_port = standard_metadata.ingress_port"
           }
@@ -1375,7 +1320,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 84,
+            "line" : 85,
             "column" : 8,
             "source_fragment" : "hdr.ethernet.srcAddr=repmac"
           }
@@ -1394,7 +1339,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 85,
+            "line" : 86,
             "column" : 8,
             "source_fragment" : "hdr.ethernet.dstAddr=hdr.arp.arpSha"
           }
@@ -1413,7 +1358,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 87,
+            "line" : 88,
             "column" : 8,
             "source_fragment" : "tempip=hdr.arp.arpSpa"
           }
@@ -1432,7 +1377,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 88,
+            "line" : 89,
             "column" : 8,
             "source_fragment" : "hdr.arp.arpSpa=hdr.arp.arpTpa"
           }
@@ -1451,7 +1396,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 89,
+            "line" : 90,
             "column" : 8,
             "source_fragment" : "hdr.arp.arpTpa=tempip"
           }
@@ -1470,7 +1415,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 90,
+            "line" : 91,
             "column" : 8,
             "source_fragment" : "hdr.arp.arpTha=hdr.arp.arpSha"
           }
@@ -1489,7 +1434,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 91,
+            "line" : 92,
             "column" : 8,
             "source_fragment" : "hdr.arp.arpSha=repmac"
           }
@@ -1520,7 +1465,7 @@
                   },
                   "right" : {
                     "type" : "hexstr",
-                    "value" : "0x0f"
+                    "value" : "0xff"
                   }
                 }
               }
@@ -1528,9 +1473,9 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 97,
+            "line" : 98,
             "column" : 8,
-            "source_fragment" : "bit<4> port=(bit<4>)hdr.sr.routingList;"
+            "source_fragment" : "bit<8> port=(bit<8>)hdr.sr.routingList;"
           }
         },
         {
@@ -1556,7 +1501,7 @@
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0x4"
+                        "value" : "0x8"
                       }
                     }
                   },
@@ -1570,9 +1515,9 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 98,
+            "line" : 99,
             "column" : 8,
-            "source_fragment" : "hdr.sr.routingList=hdr.sr.routingList>>4"
+            "source_fragment" : "hdr.sr.routingList=hdr.sr.routingList>>8"
           }
         },
         {
@@ -1622,7 +1567,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 99,
+            "line" : 100,
             "column" : 8,
             "source_fragment" : "standard_metadata.egress_spec = (bit<9>)port+9w1"
           }
@@ -1674,7 +1619,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 100,
+            "line" : 101,
             "column" : 8,
             "source_fragment" : "standard_metadata.egress_port = (bit<9>)port+9w1"
           }
@@ -1705,7 +1650,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 104,
+            "line" : 105,
             "column" : 8,
             "source_fragment" : "meta.int_metadata.device_no=device_no"
           }
@@ -1713,7 +1658,7 @@
       ]
     },
     {
-      "name" : "app176",
+      "name" : "app177",
       "id" : 11,
       "runtime_data" : [],
       "primitives" : [
@@ -1744,7 +1689,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 176,
+            "line" : 177,
             "column" : 30,
             "source_fragment" : "(bit<32>)standard_metadata.ingress_port"
           }
@@ -1763,7 +1708,7 @@
           ],
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 176,
+            "line" : 177,
             "column" : 8,
             "source_fragment" : "ingress_counter.count((bit<32>)standard_metadata.ingress_port)"
           }
@@ -1777,7 +1722,7 @@
       "id" : 0,
       "source_info" : {
         "filename" : "./app.p4",
-        "line" : 50,
+        "line" : 51,
         "column" : 8,
         "source_fragment" : "ingress"
       },
@@ -1788,7 +1733,7 @@
           "id" : 0,
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 155,
+            "line" : 156,
             "column" : 10,
             "source_fragment" : "setmetadata"
           },
@@ -1818,7 +1763,7 @@
           "id" : 1,
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 146,
+            "line" : 147,
             "column" : 10,
             "source_fragment" : "dosr"
           },
@@ -1831,9 +1776,9 @@
           "direct_meters" : null,
           "action_ids" : [9],
           "actions" : ["ingress.srrouting"],
-          "base_default_next" : "tbl_app176",
+          "base_default_next" : "tbl_app177",
           "next_tables" : {
-            "ingress.srrouting" : "tbl_app176"
+            "ingress.srrouting" : "tbl_app177"
           },
           "default_entry" : {
             "action_id" : 9,
@@ -1847,7 +1792,7 @@
           "id" : 2,
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 108,
+            "line" : 109,
             "column" : 10,
             "source_fragment" : "dotrans"
           },
@@ -1890,7 +1835,7 @@
           "id" : 3,
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 121,
+            "line" : 122,
             "column" : 10,
             "source_fragment" : "dosocket"
           },
@@ -1910,10 +1855,10 @@
           "direct_meters" : null,
           "action_ids" : [6, 3],
           "actions" : ["ingress.l2setmetadata", "NoAction"],
-          "base_default_next" : "tbl_app176",
+          "base_default_next" : "tbl_app177",
           "next_tables" : {
-            "ingress.l2setmetadata" : "tbl_app176",
-            "NoAction" : "tbl_app176"
+            "ingress.l2setmetadata" : "tbl_app177",
+            "NoAction" : "tbl_app177"
           },
           "default_entry" : {
             "action_id" : 3,
@@ -1927,7 +1872,7 @@
           "id" : 4,
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 133,
+            "line" : 134,
             "column" : 10,
             "source_fragment" : "doarp"
           },
@@ -1947,10 +1892,10 @@
           "direct_meters" : null,
           "action_ids" : [8, 4],
           "actions" : ["ingress.arpreply", "NoAction"],
-          "base_default_next" : "tbl_app176",
+          "base_default_next" : "tbl_app177",
           "next_tables" : {
-            "ingress.arpreply" : "tbl_app176",
-            "NoAction" : "tbl_app176"
+            "ingress.arpreply" : "tbl_app177",
+            "NoAction" : "tbl_app177"
           },
           "default_entry" : {
             "action_id" : 4,
@@ -1960,11 +1905,11 @@
           }
         },
         {
-          "name" : "tbl_app176",
+          "name" : "tbl_app177",
           "id" : 5,
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 176,
+            "line" : 177,
             "column" : 8,
             "source_fragment" : "ingress_counter.count((bit<32>)standard_metadata.ingress_port)"
           },
@@ -1976,10 +1921,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [11],
-          "actions" : ["app176"],
+          "actions" : ["app177"],
           "base_default_next" : null,
           "next_tables" : {
-            "app176" : null
+            "app177" : null
           },
           "default_entry" : {
             "action_id" : 11,
@@ -1996,7 +1941,7 @@
           "id" : 0,
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 166,
+            "line" : 167,
             "column" : 12,
             "source_fragment" : "hdr.ipv4.isValid()"
           },
@@ -2019,7 +1964,7 @@
           "id" : 1,
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 167,
+            "line" : 168,
             "column" : 15,
             "source_fragment" : "hdr.sr.isValid()"
           },
@@ -2042,7 +1987,7 @@
           "id" : 2,
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 173,
+            "line" : 174,
             "column" : 18,
             "source_fragment" : "hdr.arp.isValid()"
           },
@@ -2058,7 +2003,7 @@
             }
           },
           "true_next" : "ingress.doarp",
-          "false_next" : "tbl_app176"
+          "false_next" : "tbl_app177"
         }
       ]
     },
@@ -2071,14 +2016,14 @@
         "column" : 8,
         "source_fragment" : "egress"
       },
-      "init_table" : "tbl_app43",
+      "init_table" : "tbl_app44",
       "tables" : [
         {
-          "name" : "tbl_app43",
+          "name" : "tbl_app44",
           "id" : 6,
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 43,
+            "line" : 44,
             "column" : 8,
             "source_fragment" : "egress_counter.count((bit<32>)standard_metadata.egress_port)"
           },
@@ -2090,10 +2035,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [1],
-          "actions" : ["app43"],
+          "actions" : ["app44"],
           "base_default_next" : "node_14",
           "next_tables" : {
-            "app43" : "node_14"
+            "app44" : "node_14"
           },
           "default_entry" : {
             "action_id" : 1,
@@ -2107,7 +2052,7 @@
           "id" : 7,
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 34,
+            "line" : 35,
             "column" : 10,
             "source_fragment" : "udp_int"
           },
@@ -2139,7 +2084,7 @@
           "id" : 3,
           "source_info" : {
             "filename" : "./app.p4",
-            "line" : 44,
+            "line" : 45,
             "column" : 12,
             "source_fragment" : "hdr.sr.isValid()"
           },

@@ -269,8 +269,9 @@ class Ctrl(object):
         curdir = os.path.dirname(os.path.abspath(__file__))
         sysdir = os.path.dirname(curdir)
         switchPath = '/home/ssy/behavioral-model/targets/simple_switch/simple_switch'
-        jsonPath = '{}/p4app/dint_app.json'.format(sysdir)
-        #jsonPath = '{}/p4app/simple_dint_app.json'.format(sysdir) # with sketch simplification
+        jsonPath = '{}/p4app/app.json'.format(sysdir) # INT-Path
+        #jsonPath = '{}/p4app/dint_app.json'.format(sysdir) # DINT
+        #jsonPath = '{}/p4app/simple_dint_app.json'.format(sysdir) # DINT with sketch simplification
         self.topoMaker = TopoMaker(switchPath, jsonPath, self)
         #self.topoMaker.cleanMn()
         self.topoMaker.genMnTopo()
@@ -489,7 +490,7 @@ if __name__ == '__main__':
         proc = subprocess.Popen(["python3", "detector.py", "&"], stdout=fd, stderr=fd, shell=False)
         time.sleep(1)
 
-        is_linkdown = False
+        is_linkdown = True
         if is_linkdown:
             print("\nSimulate link down ...")
             snode_name = app.switches[0].name
@@ -507,7 +508,7 @@ if __name__ == '__main__':
                     break
             node_name = app.hosts[i].name
             eport = 1
-            timedelta = 10000 # 10ms
+            timedelta = 100000 # 100ms
             rule_filename = "{}/tmp/simulate_latency.txt".format(curdir)
             fd = open(rule_filename, "w+")
             fd.write("table_add set_timedelta_tbl set_timedelta {} => {}\n".format(eport, timedelta))
@@ -516,8 +517,8 @@ if __name__ == '__main__':
             print("Simluate latency in switch {} egress port {}, TIME {}".format(app.switches[i].name, eport, time.time()), flush=True)
             os.system("sudo {}/simple_switch_CLI --thrift-port {} < {} >/dev/null 2>&1".format(curdir, app.switches[i].thriftPort, rule_filename))
 
-    #time.sleep(20)
-    CLI(app.topoMaker.net)
+    time.sleep(20)
+    #CLI(app.topoMaker.net)
 
     print("*********** END ***********")
 
