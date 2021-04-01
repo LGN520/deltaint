@@ -70,7 +70,7 @@ class parse():
             if timedelta_bit == 1:
                 timedelta, pkt = struct.unpack("!I%ds" % (len(pkt)-4), pkt)
 
-            print("INT data [{}]: deviceno {}, iport {}, eport {}, timedelta {}".format(i, device_no, ingress_port, egress_port, timedelta))
+            print("original INT data [{}]: deviceno {}, iport {}, eport {}, timedelta {}".format(i, device_no, ingress_port, egress_port, timedelta))
             int_headers.append([device_no, ingress_port, egress_port, timedelta])
             i += 1
         return int_headers

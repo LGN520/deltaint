@@ -1,0 +1,9 @@
+{
+	"method": "DeltaINT",
+	"epoch_len": "0.01",
+	"aging_time": "3",
+	"latency_threshold": "100",
+	"is_detect": "1",
+	"is_linkdown": "1",
+	"is_debug": "1"
+}

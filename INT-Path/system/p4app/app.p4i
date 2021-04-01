@@ -1081,7 +1081,22 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
         size = 1024;
         default_action = do_int();
     }
+
+ action set_timedelta(bit<32> timedelta) {
+  standard_metadata.deq_timedelta = timedelta;
+ }
+ table set_timedelta_tbl {
+  actions = {
+   set_timedelta;
+  }
+  key = {
+   standard_metadata.egress_port:exact;
+  }
+  size = 1024;
+ }
+
     apply {
+  set_timedelta_tbl.apply();
         egress_counter.count((bit<32>)standard_metadata.egress_port);
         if (hdr.sr.isValid()) {
             udp_int.apply();

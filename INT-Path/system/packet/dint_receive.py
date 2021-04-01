@@ -7,11 +7,15 @@ import sys
 import time
 import os
 import struct
+import json
 
 from scapy.all import get_if_addr, get_if_list, get_if_hwaddr
 
 #ifs = get_if_list()
 #print(ifs, flush=True)
+
+with open("../config.json", "r") as f:
+    receive_config = json.load(f)
 
 class receive():
     def sniff(self):
@@ -33,8 +37,9 @@ class receive():
         eport_map = {}
         timedelta_map = {}
         ToR_deviceno, ToR_eport, ToR_timedelta = None, None, None # Though the link between ToR and host is overlapping, it is consistent for this application
-        latency_threshold = 100000 # 100000us = 100ms
-        aging_time = 3000 # 3000ms
+
+        latency_threshold = int(receive_config["latency_threshold"])*1000 # 100000us = 100ms
+        aging_time = int(receive_config["aging_time"])*1000 # 3000ms
         while True:
             linkdown_detection_list = []
             grayfailure_detection_list = []
@@ -113,6 +118,7 @@ class receive():
                             ToR_timedelta = intlist[i][3]
                         timedelta_map[tmpkey] = intlist[i][3]
                         dint_prevbw += 32
+                    print("recovered INT data [{}]: deviceno {}, iport {}, eport {}, timedelta {}".format(i, intlist[i][0], intlist[i][1], intlist[i][2], intlist[i][3]))
                     linkdown_detection_list.append("s{}-{}-{}".format(intlist[i][0], intlist[i][1], intlist[i][2]))
                     if intlist[i][3] < latency_threshold:
                         grayfailure_detection_list.append("s{}-{}-ok".format(intlist[i][0], intlist[i][2]))
@@ -127,7 +133,7 @@ class receive():
                 fmt = [ownip, ownmac, srcip, srcmac] + linkdown_detection_list
                 key = "+".join(fmt)
                 value = 0
-                print("{}, {}".format(key, value))
+                #print("{}, {}".format(key, value))
                 r.set(key,value)
                 r.pexpire(key, aging_time)
 

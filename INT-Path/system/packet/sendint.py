@@ -8,7 +8,10 @@ import time
 import threading
 import struct
 import os
+import json
 
+with open("../config.json", "r") as f:
+    sendint_config = json.load(f)
 
 class PacketSender(object):
     """
@@ -155,7 +158,7 @@ class PacketSender(object):
                 sendUDP(byteContent, address)
                 i = i + 1
 
-                sleepTime = 0.01 # Epoch length
+                sleepTime = float(sendint_config["epoch_len"]) # Epoch length
                 time.sleep(sleepTime)
                 times = times + 1
             endTime = time.time()

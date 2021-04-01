@@ -10,8 +10,12 @@ from p4_mininet import P4Switch, P4Host
 import os
 import copy
 import time
+import json
 import subprocess
 
+
+with open("../config.json", "r") as f:
+    topoMaker_config = json.load(f)
 
 class MakeSwitchTopo(Topo):
     """
@@ -172,16 +176,25 @@ class TopoMaker(object):
             os.mkdir('{}/packet/tmp'.format(sysdir))
         for i in range(self.topo.hostSum):
             if self.topo.mn_hosts[i] != None:
-                log_filename = "{}/packet/tmp/h{}_send.txt".format(sysdir, i)
+                if topoMaker_config["is_debug"] == "1":
+                    log_filename = "{}/packet/tmp/h{}_send.txt".format(sysdir, i)
+                else:
+                    log_filename = "/dev/null"
                 packetSender = 'python3 {}/packet/sendint.py {} >{} 2>&1 &'.format(sysdir, i, log_filename)
-                #packetSender = 'python3 {}/packet/sendint.py {} >/dev/null 2>&1 &'.format(sysdir, i)
                 self.net.hosts[j].cmd(packetSender)
 
-                log_filename = "{}/packet/tmp/h{}_recv.txt".format(sysdir, i)
+                if topoMaker_config["is_debug"] == "1":
+                    log_filename = "{}/packet/tmp/h{}_recv.txt".format(sysdir, i)
+                else:
+                    log_filename = "/dev/null"
                 ##intReceiver = '~/P4_DC/packet/receiveint ' + str(i) + ' >/dev/null &'
-                #intReceiver = 'python3 {}/packet/dint_receive.py {} >{} 2>&1 &'.format(sysdir, i, log_filename) # DINT
-                #intReceiver = 'python3 {}/packet/dint_receive.py {} >/dev/null 2>&1 &'.format(sysdir, i) # DINT
-                intReceiver = 'python3 {}/packet/receive.py {} >{} 2>&1 &'.format(sysdir, i, log_filename) # INT-Path
+                if topoMaker_config["method"] == "INT-Path":
+                    intReceiver = 'python3 {}/packet/receive.py {} >{} 2>&1 &'.format(sysdir, i, log_filename) # INT-Path
+                elif topoMaker_config["method"] == "DeltaINT":
+                    intReceiver = 'python3 {}/packet/dint_receive.py {} >{} 2>&1 &'.format(sysdir, i, log_filename) # DINT
+                else:
+                    print("Invalid method name {} which should be INT-Path or DeltaINT".format(topoMaker_config["method"]), flush=True)
+                    exit(-1)
                 self.net.hosts[j].cmd(intReceiver)
                 j = j + 1
 

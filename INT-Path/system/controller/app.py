@@ -23,6 +23,8 @@ from mininet.cli import CLI
 
 _ = float('inf')
 
+with open("../config.json", "r") as f:
+    app_config = json.load(f)
 
 class Ctrl(object):
     """
@@ -269,9 +271,14 @@ class Ctrl(object):
         curdir = os.path.dirname(os.path.abspath(__file__))
         sysdir = os.path.dirname(curdir)
         switchPath = '/home/ssy/behavioral-model/targets/simple_switch/simple_switch'
-        jsonPath = '{}/p4app/app.json'.format(sysdir) # INT-Path
-        #jsonPath = '{}/p4app/dint_app.json'.format(sysdir) # DINT
-        #jsonPath = '{}/p4app/simple_dint_app.json'.format(sysdir) # DINT with sketch simplification
+        if app_config["method"] == "INT-Path":
+            jsonPath = '{}/p4app/app.json'.format(sysdir) # INT-Path
+        elif app_config["method"] == "DeltaINT":
+            jsonPath = '{}/p4app/dint_app.json'.format(sysdir) # DINT
+            #jsonPath = '{}/p4app/simple_dint_app.json'.format(sysdir) # DINT with sketch simplification
+        else:
+            print("Invalid method in config.json {} which should be INT-Path or DeltaINT".format(app_config["method"]), flush=True)
+            exit(-1)
         self.topoMaker = TopoMaker(switchPath, jsonPath, self)
         #self.topoMaker.cleanMn()
         self.topoMaker.genMnTopo()
@@ -482,16 +489,14 @@ if __name__ == '__main__':
     app.update(0, paths, 10) # Enable source hosts to send INT-packets continuously within 10 s
     time.sleep(2)
 
-    is_detect = True
-    if is_detect: # Skip this block when testing bandwidth overhead
+    if app_config["is_detect"] == "1": # Skip this block when testing bandwidth overhead
         print("\nOpen detector...")
         #os.system("python3 detector.py >detector.log 2>&1 &")
         fd = open("detector.log", "w+")
         proc = subprocess.Popen(["python3", "detector.py", "&"], stdout=fd, stderr=fd, shell=False)
         time.sleep(1)
 
-        is_linkdown = True
-        if is_linkdown:
+        if app_config["is_linkdown"] == "1":
             print("\nSimulate link down ...")
             snode_name = app.switches[0].name
             for j in range(len(graph[0])):
@@ -508,7 +513,7 @@ if __name__ == '__main__':
                     break
             node_name = app.hosts[i].name
             eport = 1
-            timedelta = 100000 # 100ms
+            timedelta = int(app_config["latency_threshold"])*1000 # 100ms
             rule_filename = "{}/tmp/simulate_latency.txt".format(curdir)
             fd = open(rule_filename, "w+")
             fd.write("table_add set_timedelta_tbl set_timedelta {} => {}\n".format(eport, timedelta))
@@ -524,6 +529,6 @@ if __name__ == '__main__':
 
     print("\nClear OVS Switch, Mininet, Controller, and Detector...")
     app.topoMaker.cleanMn()
-    if is_detect:
+    if app_config["is_detect"] == "1":
         proc.terminate()
         fd.close()
