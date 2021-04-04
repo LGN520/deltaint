@@ -23,7 +23,7 @@ if __name__=="__main__":
 	CCs = [
 		'hpccPint95ai50log1.050p1.000', # HPCC-PINT
 		'hpccDint95ai50log1.050p1.000', # HPCC-DINT
-		'hp95ai50', # HPCC
+		#'hp95ai50', # HPCC
 	]
 
 	step = int(args.step)

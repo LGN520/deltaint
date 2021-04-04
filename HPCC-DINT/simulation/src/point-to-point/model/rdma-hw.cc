@@ -1053,10 +1053,9 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 	   total_hopnum += ih.dint_nhop;
 	   save_hopnum += ih.dint_nsave;
 	   total_pktnum += 1;
-	   //total_hopnum += 1;
-	   /*if (ih.dint_nhop == ih.dint_nsave) {
-		   save_hopnum += 1;
-	   }*/
+	   if (ih.dint_nhop == ih.dint_nsave) {
+		   dint_pktnum += 1;
+	   }
 	   if (ih.GetPower() != 0) {
 		   // update rate
 		   if (ack_seq > qp->hpccPint.m_lastUpdateSeq){ // if full RTT feedback is ready, do full update
@@ -1069,7 +1068,7 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 	   if (qp->IsFinished()) {
 		   //printf("Host [%d]: save: %d, total: %d, save ratio: %lf\n", m_node->GetId(), save_hopnum, total_hopnum, \
 				   1.0-double(save_hopnum*1+(total_hopnum-save_hopnum)*(IntHeader::pint_bytes*8+1))/double(total_hopnum*IntHeader::pint_bytes*8));
-		   printf("Host [%d]: save: %d, total: %d, pktnum: %d, ratio: %lf\n", m_node->GetId(), save_hopnum, total_hopnum, total_pktnum, \
+		   printf("Host [%d]: save hopnum: %d, total hopnum: %d, total pktnum: %d, dint pktnum: %d, ratio: %lf\n", m_node->GetId(), save_hopnum, total_hopnum, total_pktnum, dint_pktnum, \
 				   1.0-double(save_hopnum*0+(total_hopnum-save_hopnum)*(IntHeader::pint_bytes*8+0))/double(total_hopnum*IntHeader::pint_bytes*8));
 	   }
 }

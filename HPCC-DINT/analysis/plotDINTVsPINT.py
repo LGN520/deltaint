@@ -38,13 +38,13 @@ PINT_99 = [float(line.split()[4]) for line in open(datfile).readlines()[0:]]    
 DINT_50 = [float(line.split()[5]) for line in open(datfile).readlines()[0:]]    # web search
 DINT_95 = [float(line.split()[6]) for line in open(datfile).readlines()[0:]]    # web search
 DINT_99 = [float(line.split()[7]) for line in open(datfile).readlines()[0:]]    # web search
-HPCC_50 = [float(line.split()[8]) for line in open(datfile).readlines()[0:]]    # web search
-HPCC_95 = [float(line.split()[9]) for line in open(datfile).readlines()[0:]]    # web search
-HPCC_99 = [float(line.split()[10]) for line in open(datfile).readlines()[0:]]    # web search
+#HPCC_50 = [float(line.split()[8]) for line in open(datfile).readlines()[0:]]    # web search
+#HPCC_95 = [float(line.split()[9]) for line in open(datfile).readlines()[0:]]    # web search
+#HPCC_99 = [float(line.split()[10]) for line in open(datfile).readlines()[0:]]    # web search
 
 x_axis = [int(line.split()[1]) for line in open(datfile).readlines()[0:]] # wb flow sizes
 
-plt.plot(np.linspace(0, 10, num=20),HPCC_95, color='black', linestyle='-.', label='HPCC',linewidth=4.0)
+#plt.plot(np.linspace(0, 10, num=20),HPCC_95, color='black', linestyle='-.', label='HPCC',linewidth=4.0)
 plt.plot(np.linspace(0, 10, num=20),PINT_95, color='red', linestyle='-', label='HPCC(PINT)',linewidth=4.0)
 plt.plot(np.linspace(0, 10, num=20),DINT_95, color='blue', linestyle='--', label='HPCC(DINT)',linewidth=4.0)
 plt.ylim([1,11])

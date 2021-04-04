@@ -15,6 +15,38 @@
 
 namespace ns3 {
 
+bool Flowkey::operator == (Flowkey& other) const {
+	return (this->srcip == other.srcip) && (this->dstip == other.dstip) && (this->srcport == other.srcport) && (this->dstport == other.dstport) && (this->protocol == other.protocol);
+}
+
+Flowkey::Flowkey() {
+	Flowkey(0, 0, 0, 0, 0);
+}
+
+Flowkey::Flowkey(uint32_t srcip, uint32_t dstip, uint16_t srcport, uint16_t dstport, uint8_t protocol) {
+	this->srcip = srcip;
+	this->dstip = dstip;
+	this->srcport = srcport;
+	this->dstport = dstport;
+	this->protocol = protocol;
+}
+
+void Flowkey::GetBytes(uint8_t* output) {
+	output[0] = (uint8_t)(srcip>>24);
+	output[1] = (uint8_t)(srcip>>16);
+	output[2] = (uint8_t)(srcip>>8);
+	output[3] = (uint8_t)(srcip);
+	output[4] = (uint8_t)(dstip>>24);
+	output[5] = (uint8_t)(dstip>>16);
+	output[6] = (uint8_t)(dstip>>8);
+	output[7] = (uint8_t)(dstip);
+	output[8] = (uint8_t)(srcport>>8);
+	output[9] = (uint8_t)(srcport);
+	output[10] = (uint8_t)(dstport>>8);
+	output[11] = (uint8_t)(dstport);
+	output[12] = (uint8_t)(protocol);
+}
+
 TypeId SwitchNode::GetTypeId (void)
 {
   static TypeId tid = TypeId ("ns3::SwitchNode")
@@ -65,10 +97,10 @@ SwitchNode::SwitchNode(){
 	prev_outputs.resize(width * SwitchNode::DINT_hashnum, 0);*/
 
 	// With flowkey
-	uint32_t width = SwitchNode::DINT_sketch_bytes / (4+4+8) / SwitchNode::DINT_hashnum;
+	uint32_t width = SwitchNode::DINT_sketch_bytes / (1+1+13) / SwitchNode::DINT_hashnum;
 	prev_inputs.resize(width * SwitchNode::DINT_hashnum, 0);
 	prev_outputs.resize(width * SwitchNode::DINT_hashnum, 0);
-	flowkeys.resize(width * SwitchNode::DINT_hashnum, 0);
+	flowkeys.resize(width * SwitchNode::DINT_hashnum, Flowkey());
 }
 
 int SwitchNode::GetOutDev(Ptr<const Packet> p, CustomHeader &ch){
@@ -333,13 +365,18 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 					//uint64_t flowkey = uint64_t(*srcip) << 32 | uint64_t(*dstip);
 					uint32_t srcip = ipv4.GetSource().Get();
 					uint32_t dstip = ipv4.GetDestination().Get();
-					//printf("srcip %u, dstip %u\n", srcip, dstip);
-					uint64_t flowkey = uint64_t(srcip) << 32 | uint64_t(dstip);
+					uint16_t srcport = udp.GetSourcePort();
+					uint16_t dstport = udp.GetDestinationPort();
+					uint8_t protocol = ipv4.GetProtocol();
+					//uint64_t flowkey = uint64_t(srcip) << 32 | uint64_t(dstip);
+					Flowkey flowkey(srcip, dstip, srcport, dstport, protocol);
 
 					// Calculate hash indexes for sketch
 					uint32_t hashidx[SwitchNode::DINT_hashnum];
+					uint8_t tmpbytes[13];
+					flowkey.GetBytes(tmpbytes);
 					for (uint32_t i = 0; i < SwitchNode::DINT_hashnum; i++) {
-						hashidx[i] = EcmpHash((uint8_t*)&flowkey, 8, i) % (prev_inputs.size() / SwitchNode::DINT_hashnum);	
+						hashidx[i] = EcmpHash(tmpbytes, 13, i) % (prev_inputs.size() / SwitchNode::DINT_hashnum);	
 					}
 
 					// Calculate max power
