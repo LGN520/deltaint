@@ -136,7 +136,7 @@ void ScheduleFlowInputs(){
 	while (flow_input.idx < flow_num && Seconds(flow_input.start_time) == Simulator::Now()){
 		uint32_t port = portNumder[flow_input.src][flow_input.dst]++; // get a new port number 
 		RdmaClientHelper clientHelper(flow_input.pg, serverAddress[flow_input.src], serverAddress[flow_input.dst], port, flow_input.dport, flow_input.maxPacketCount, has_win?(global_t==1?maxBdp:pairBdp[n.Get(flow_input.src)][n.Get(flow_input.dst)]):0, global_t==1?maxRtt:pairRtt[flow_input.src][flow_input.dst]);
-		ApplicationContainer appCon = clientHelper.Install(n.Get(flow_input.src));
+		ApplicationContainer appCon = clientHelper.Install(n.Get(flow_input.src)); // Launch an app called rdma-client -> add a queuepair in rdma-driver (rdma-hw)
 		appCon.Start(Time(0));
 
 		// get the next flow input
@@ -704,9 +704,9 @@ int main(int argc, char *argv[])
 	}
 	for (uint32_t i = 0; i < node_num; i++){
 		if (node_type[i] == 0)
-			n.Add(CreateObject<Node>());
+			n.Add(CreateObject<Node>()); // Add Node with QbbNetDevice (bind with a rdma-driver binding with a rdma-hw)
 		else{
-			Ptr<SwitchNode> sw = CreateObject<SwitchNode>();
+			Ptr<SwitchNode> sw = CreateObject<SwitchNode>(); // Add SwitchNode with QbbNetDevice
 			n.Add(sw);
 			sw->SetAttribute("EcnEnabled", BooleanValue(enable_qcn));
 		}

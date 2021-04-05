@@ -1065,7 +1065,7 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 		   }
 	   }
 
-	   if (qp->IsFinished()) {
+	   if (qp->IsFinished()) { // One flow in current host ends
 		   //printf("Host [%d]: save: %d, total: %d, save ratio: %lf\n", m_node->GetId(), save_hopnum, total_hopnum, \
 				   1.0-double(save_hopnum*1+(total_hopnum-save_hopnum)*(IntHeader::pint_bytes*8+1))/double(total_hopnum*IntHeader::pint_bytes*8));
 		   printf("Host [%d]: save hopnum: %d, total hopnum: %d, total pktnum: %d, dint pktnum: %d, ratio: %lf\n", m_node->GetId(), save_hopnum, total_hopnum, total_pktnum, dint_pktnum, \
