@@ -45,20 +45,23 @@ DINT_99 = [float(line.split()[7]) for line in open(datfile).readlines()[0:]]    
 x_axis = [int(line.split()[1]) for line in open(datfile).readlines()[0:]] # wb flow sizes
 
 #plt.plot(np.linspace(0, 10, num=20),HPCC_95, color='black', linestyle='-.', label='HPCC',linewidth=4.0)
-plt.plot(np.linspace(0, 10, num=20),PINT_95, color='red', linestyle='-', label='HPCC(PINT)',linewidth=4.0)
-plt.plot(np.linspace(0, 10, num=20),DINT_95, color='blue', linestyle='--', label='HPCC(DINT)',linewidth=4.0)
+plt.plot(np.linspace(0, 10, num=20),PINT_95, color='#00008B', linestyle='-', label='PINT',linewidth=4.0)
+plt.plot(np.linspace(0, 10, num=20),DINT_95, color='#FF4500', linestyle='--', label='DeltaINT',linewidth=4.0)
 plt.ylim([1,11])
 ax.set_xticks(range(1,11))
 ax.set_xticklabels([str(x) if x < 1000 else str(int(x/1000. + .5)) + 'K' if x < 1000.**2 else str(int(x/1000.**2 + .5)) + 'M' for x in x_axis[1::2]])
 
 
-plt.legend(loc='upper left',prop={'size':24},ncol=1)
-plt.tick_params(axis='both', which='major', labelsize=18)
-plt.tick_params(axis='y', which='major', labelsize=28)
-plt.ylabel(r'Slowdown', fontsize=28)    
-plt.xlabel('Flow Size [Bytes]', fontsize=28)
+plt.legend(loc='upper left',prop={'weight':'normal', 'size':25},frameon=False,ncol=1)
+plt.tick_params(axis='both', which='major', labelsize=25)
+plt.tick_params(axis='y', which='major', labelsize=25)
+plt.ylabel(r'Slowdown', fontsize=30)    
+plt.xlabel('Flow Size [Bytes]', fontsize=30)
 #plt.xlim([0, maxPkts])
 plt.tight_layout()
 plt.savefig('{}_95p.pdf'.format(args.dataset))
 plt.savefig('{}_95p.png'.format(args.dataset))
 
+os.system("ps2pdf -dPDFSETTINGS=/prepress {}_95p.pdf tmp.out".format(args.dataset))
+os.system("rm {}_95p.pdf".format(args.dataset))
+os.system("mv tmp.out {}_95p.pdf".format(args.dataset))
