@@ -42,7 +42,7 @@ class  KLL:
         for h in range(len(self.compactors)):
             if len(self.compactors[h]) >= self.capacity(h):
                 if h+1 >= self.H: self.grow()
-                self.compactors[h+1].extend(self.compactors[h].compact())
+                self.compactors[h+1].extend(self.compactors[h].compact()) # Compact items in h-layer into (h+1)-layer
                 self.size = sum(len(c) for c in self.compactors)
                 if(self.lazy):
                     break
@@ -101,7 +101,7 @@ class Compactor(list):
         if (self.numCompaction%2==1 and self.alternate):
             self.offset = 1 - self.offset
         else:
-            self.offset = int(random() < 0.5)
+            self.offset = int(random() < 0.5) # Even or odd
 
         self.sort()
 

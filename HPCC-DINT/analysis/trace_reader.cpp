@@ -29,7 +29,7 @@ int main(int argc, char** argv){
 	// first read SimSetting
 	SimSetting sim_setting;
 	sim_setting.Deserialize(file);
-	#if 1
+	#if 0
 	// print sim_setting
 	for (auto i : sim_setting.port_speed)
 		for (auto j : i.second)

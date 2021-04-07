@@ -69,6 +69,7 @@ class parse():
             timedelta = None
             if timedelta_bit == 1:
                 timedelta, pkt = struct.unpack("!I%ds" % (len(pkt)-4), pkt)
+                timedelta = timedelta * 100
 
             print("original INT data [{}]: deviceno {}, iport {}, eport {}, timedelta {}".format(i, device_no, ingress_port, egress_port, timedelta))
             int_headers.append([device_no, ingress_port, egress_port, timedelta])

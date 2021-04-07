@@ -54,8 +54,21 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 		size = 1024;
 	}
 
+	action remove_softhard_diff() {
+		standard_metadata.deq_timedelta = standard_metadata.deq_timedelta>>7; // /100
+	}
+	table remove_softhard_diff_tbl {
+		actions = {
+			remove_softhard_diff;
+		}
+		key = {}
+		size = 1024;
+		default_action = remove_softhard_diff();
+	}
+
     apply {
-		set_timedelta_tbl.apply();
+		set_timedelta_tbl.apply(); // Simulate heavy latency
+		remove_softhard_diff_tbl.apply(); // Remove difference between software simulation and hardware environment
         egress_counter.count((bit<32>)standard_metadata.egress_port);
         if (hdr.sr.isValid()) {
             udp_int.apply();
