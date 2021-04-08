@@ -513,7 +513,7 @@ if __name__ == '__main__':
                     break
             node_name = app.hosts[i].name
             eport = 1
-            timedelta = int(app_config["latency_threshold"])*100
+            timedelta = int(app_config["latency_threshold"])*128
             rule_filename = "{}/tmp/simulate_latency.txt".format(curdir)
             fd = open(rule_filename, "w+")
             fd.write("table_add set_timedelta_tbl set_timedelta {} => {}\n".format(eport, timedelta))

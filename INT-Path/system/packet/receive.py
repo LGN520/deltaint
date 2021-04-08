@@ -26,7 +26,7 @@ class receive():
         ownmac = get_if_hwaddr("eth0")
         parse1 = parse.parse()
 
-        latency_threshold = int(receive_config["latency_threshold"])*100
+        latency_threshold = int(receive_config["latency_threshold"])*128
         aging_time = int(receive_config["aging_time"])*1000 # 3000ms
         while True:
             linkdown_detection_list = []

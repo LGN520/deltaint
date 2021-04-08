@@ -38,7 +38,7 @@ class receive():
         timedelta_map = {}
         ToR_deviceno, ToR_eport, ToR_timedelta = None, None, None # Though the link between ToR and host is overlapping, it is consistent for this application
 
-        latency_threshold = int(receive_config["latency_threshold"])*1000 # 100000us = 100ms
+        latency_threshold = int(receive_config["latency_threshold"])*128
         aging_time = int(receive_config["aging_time"])*1000 # 3000ms
         while True:
             linkdown_detection_list = []
@@ -56,9 +56,10 @@ class receive():
                 srcip, srcmac, intlist, flowkey = rs
 
                 # Convert each element in port_list into str
-                for i in range(len(intlist)):
+                for idx in range(len(intlist)): # i=0 -> last hop; i=len(intlist)-1 -> first hop
+                    i = len(intlist) - 1 - idx
                     tmpkey = struct.pack("%dsB"%len(flowkey), flowkey, i)
-                    # Device number
+                    # Device number>0
                     if intlist[i][0] is None:
                         if i == 0:
                             intlist[i][0] = ToR_deviceno
@@ -75,7 +76,7 @@ class receive():
                             ToR_deviceno = intlist[i][0]
                         deviceno_map[tmpkey] = intlist[i][0]
                         dint_prevbw += 9
-                    # Ingress port
+                    # Ingress port>0
                     if intlist[i][1] is None:
                         if tmpkey not in iport_map.keys():
                             print("ERROR: non existent key {} in iport map".format(tmpkey), flush=True)
@@ -86,7 +87,7 @@ class receive():
                     else:
                         iport_map[tmpkey] = intlist[i][1]
                         dint_prevbw += 9
-                    # Egress port
+                    # Egress port>0
                     if intlist[i][2] is None:
                         if i == 0:
                             intlist[i][2] = ToR_eport
@@ -103,10 +104,11 @@ class receive():
                             ToR_eport = intlist[i][2]
                         eport_map[tmpkey] = intlist[i][2]
                         dint_prevbw += 9
-                    # Latency
+                    # Latency>=0
                     if intlist[i][3] is None:
                         if i == 0:
                             intlist[i][3] = ToR_timedelta
+                            dint_prevbw += 1
                         else:
                             if tmpkey not in timedelta_map.keys():
                                 print("ERROR: non existent key {} in timedelta map".format(tmpkey), flush=True)
@@ -117,7 +119,7 @@ class receive():
                         if i == 0:
                             ToR_timedelta = intlist[i][3]
                         timedelta_map[tmpkey] = intlist[i][3]
-                        dint_prevbw += 32
+                        dint_prevbw += 33
                     print("recovered INT data [{}]: deviceno {}, iport {}, eport {}, timedelta {}".format(i, intlist[i][0], intlist[i][1], intlist[i][2], intlist[i][3]))
                     linkdown_detection_list.append("s{}-{}-{}".format(intlist[i][0], intlist[i][1], intlist[i][2]))
                     if intlist[i][3] < latency_threshold:

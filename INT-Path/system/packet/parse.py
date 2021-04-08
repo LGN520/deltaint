@@ -55,7 +55,7 @@ class parse():
             device_no = tmp_int_bytes[0] # 8-bit device_no
             ingress_port = tmp_int_bytes[1] # 8-bit ingress port
             egress_port = tmp_int_bytes[2] # 8-bit egress port
-            deq_timedelta = tmp_int_bytes[3] # 32-bit timedelta
+            deq_timedelta = tmp_int_bytes[3]*128 # 32-bit timedelta
             #ingress_port = (tmp_int_bytes[1] << 1) | ((tmp_int_bytes[2] >> 7) & 0x1) # 9-bit ingress_port
             #egress_port = ((tmp_int_bytes[2] & 0x7f) << 2) | ((tmp_int_bytes[3] >> 6) & 0x3) # 9-bit egress_port
             #ingress_global_timestamp = ((tmp_int_bytes[3] & 0x3f) << 42) | (tmp_int_bytes[4] << 34) | (tmp_int_bytes[5] << 26) | (tmp_int_bytes[6] << 18) | \
