@@ -275,6 +275,9 @@ class Ctrl(object):
             jsonPath = '{}/p4app/app.json'.format(sysdir) # INT-Path
         elif app_config["method"] == "DeltaINT":
             jsonPath = '{}/p4app/dint_app.json'.format(sysdir) # DINT
+            #jsonPath = '{}/p4app/dint_app2.json'.format(sysdir) # DINT hashnum=2
+            #jsonPath = '{}/p4app/dint_app3.json'.format(sysdir) # DINT hashnum=3
+            #jsonPath = '{}/p4app/dint_app4.json'.format(sysdir) # DINT hashnum=4
             #jsonPath = '{}/p4app/simple_dint_app.json'.format(sysdir) # DINT with sketch simplification
         else:
             print("Invalid method in config.json {} which should be INT-Path or DeltaINT".format(app_config["method"]), flush=True)
