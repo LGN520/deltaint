@@ -38,9 +38,15 @@ int main(int argc, char** argv){
 
 	// read trace
 	TraceFormat tr;
+	uint32_t count = 0;
+	uint32_t maxcount = 100*1000*1000;
 	while (tr.Deserialize(file) > 0){
 		if (!f.test(tr))
 			continue;
 		print_trace(tr);
+		count ++;
+		if (count >= maxcount) {
+			break;
+		}
 	}
 }

@@ -8,6 +8,7 @@
 - `sudo python3 -m p4utils.p4run --config p4app,json`
 - `sudo python3 exp.py 5`
 - `sudo python3 generate_results.py 5`
+- `sudo python3 plothelper.py final_results/5/tail/PINT8`
 
 ## Latency measurement
 
