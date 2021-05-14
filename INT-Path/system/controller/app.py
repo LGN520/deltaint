@@ -271,14 +271,16 @@ class Ctrl(object):
         curdir = os.path.dirname(os.path.abspath(__file__))
         sysdir = os.path.dirname(curdir)
         switchPath = '/home/ssy/behavioral-model/targets/simple_switch/simple_switch'
-        if app_config["method"] == "INT-Path":
+        if app_config["is_dump"] == "1":
+            jsonPath = "{}/p4app/dump_app.json".format(sysdir)
+        elif app_config["method"] == "INT-Path":
             jsonPath = '{}/p4app/app.json'.format(sysdir) # INT-Path
         elif app_config["method"] == "DeltaINT":
             jsonPath = '{}/p4app/dint_app.json'.format(sysdir) # DINT
             #jsonPath = '{}/p4app/dint_app2.json'.format(sysdir) # DINT hashnum=2
             #jsonPath = '{}/p4app/dint_app3.json'.format(sysdir) # DINT hashnum=3
             #jsonPath = '{}/p4app/dint_app4.json'.format(sysdir) # DINT hashnum=4
-            #jsonPath = '{}/p4app/simple_dint_app.json'.format(sysdir) # DINT with sketch simplification
+            #jsonPath = '{}/p4app/simple_dint_app.json'.format(sysdir) # DINT without sketching
         else:
             print("Invalid method in config.json {} which should be INT-Path or DeltaINT".format(app_config["method"]), flush=True)
             exit(-1)
@@ -492,7 +494,7 @@ if __name__ == '__main__':
     app.update(0, paths, 10) # Enable source hosts to send INT-packets continuously within 10 s
     time.sleep(2)
 
-    if app_config["is_detect"] == "1": # Skip this block when testing bandwidth overhead
+    if app_config["is_dump"] == "0" and app_config["is_detect"] == "1": # Skip this block when testing bandwidth overhead
         print("\nOpen detector...")
         #os.system("python3 detector.py >detector.log 2>&1 &")
         fd = open("detector.log", "w+")
@@ -518,10 +520,10 @@ if __name__ == '__main__':
             eport = 1
             timedelta = int(app_config["latency_threshold"])*128
             rule_filename = "{}/tmp/simulate_latency.txt".format(curdir)
-            fd = open(rule_filename, "w+")
-            fd.write("table_add set_timedelta_tbl set_timedelta {} => {}\n".format(eport, timedelta))
-            fd.flush()
-            fd.close()
+            fd2 = open(rule_filename, "w+")
+            fd2.write("table_add set_timedelta_tbl set_timedelta {} => {}\n".format(eport, timedelta))
+            fd2.flush()
+            fd2.close()
             print("Simluate latency in switch {} egress port {}, TIME {}".format(app.switches[i].name, eport, time.time()), flush=True)
             os.system("sudo {}/simple_switch_CLI --thrift-port {} < {} >/dev/null 2>&1".format(curdir, app.switches[i].thriftPort, rule_filename))
 
@@ -532,6 +534,6 @@ if __name__ == '__main__':
 
     print("\nClear OVS Switch, Mininet, Controller, and Detector...")
     app.topoMaker.cleanMn()
-    if app_config["is_detect"] == "1":
+    if app_config["is_dump"] == "0" and app_config["is_detect"] == "1":
         proc.terminate()
         fd.close()

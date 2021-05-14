@@ -7,6 +7,7 @@ Please see [PINT_README.d](./PINT_README.md) for original readme of HPCC-DINT.
 - `bash build.sh`
 - `bash run_hpcc_fb.sh; bash run_hpcc_pint1_fb.sh; bash run_hpcc_dint1_fb.sh >tmp.out 2>&1` for facebook dataset
 - `bash run_hpcc_wb.sh; bash run_hpcc_pint1_wb.sh; bash run_hpcc_dint1_wb.sh >tmp.out 2>&1` for websearch dataset
+- `python3 plothelper.py XXX.out` to get INT packet number
 - `cd analysis; bash plotDINTVsPINT.sh`
 
 ## NOTE

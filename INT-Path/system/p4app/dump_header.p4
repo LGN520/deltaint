@@ -72,14 +72,6 @@ header sr_t {               //source routing header
     bit<512> routingList; 
 }
 
-header intbitmap_t {
-	bit<1> device_bit;
-	bit<1> iport_bit;
-	bit<1> eport_bit;
-	bit<1> timedelta_bit;
-	bit<4> rsvd;
-}
-
 header intdeviceno_t {
 	bit<8> device_no;
 }
@@ -96,19 +88,6 @@ header inttimedelta_t {
 	bit<32> timedelta;
 }
 
-struct dint_metadata_t {
-	//bit<32> index;
-	//bit<64> register_value;
-	bit<8> prev_deviceno;
-	bit<8> prev_iport;
-	bit<8> prev_eport;
-	bit<32> prev_timedelta;
-	bit<8> output_deviceno;
-	bit<8> output_iport;
-	bit<8> output_eport;
-	bit<32> output_timedelta;
-}
-
 struct metadata {
     @name("ingress_metadata")
     ingress_metadata_t   ingress_metadata;
@@ -118,8 +97,6 @@ struct metadata {
     queueing_metadata_t queueing_metadata;
     @name("int_metadata")
     int_metadata_t int_metadata;
-	@name("dint_metadata")
-	dint_metadata_t dint_metadata;
 }
 
 struct headers {
@@ -133,8 +110,6 @@ struct headers {
     udp_t       udp;
     @name("sr")
     sr_t        sr;
-	@name("intbitmap")
-	intbitmap_t intbitmap;
     @name("intdeviceno")
 	intdeviceno_t intdeviceno;
 	@name("intiport")

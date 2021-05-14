@@ -188,7 +188,9 @@ class TopoMaker(object):
                 else:
                     log_filename = "/dev/null"
                 ##intReceiver = '~/P4_DC/packet/receiveint ' + str(i) + ' >/dev/null &'
-                if topoMaker_config["method"] == "INT-Path":
+                if topoMaker_config["is_dump"] == "1":
+                    intReceiver = 'python3 {}/packet/dump_receive.py {} >{} 2>&1 &'.format(sysdir, i, log_filename) # INT-Path
+                elif topoMaker_config["method"] == "INT-Path":
                     intReceiver = 'python3 {}/packet/receive.py {} >{} 2>&1 &'.format(sysdir, i, log_filename) # INT-Path
                 elif topoMaker_config["method"] == "DeltaINT":
                     intReceiver = 'python3 {}/packet/dint_receive.py {} >{} 2>&1 &'.format(sysdir, i, log_filename) # DINT

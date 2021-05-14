@@ -22,3 +22,7 @@ Please see [INTPATH_README.md](./INTPATH_README.md) for original readme of INT-P
 	+ `cd controller; sudo python3 app.py`
 - Evaluate bandwidth (must clean tmp directory before running and evaluating)
 	+ `cd controller; bash BW_evaluate.sh`
+- Measurement accuracy
+	+ Set is_dump as 1 in config.json
+	+ `cd controller; sudo python3 app.py`
+	+ `cd controller; sudo python3 measurement_accuracy.py`

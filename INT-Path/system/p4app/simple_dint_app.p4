@@ -15,10 +15,15 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
         mark_to_drop(standard_metadata);
     }
 
+	// For Leaf-Spine topology, k=3 -> at most 6 ports in each switch
+	register<bit<8>>(16) eport_register;
+	register<bit<8>>(16) iport_register;
+	register<bit<8>>(1) deviceno_register;
+	register<bit<32>>(1) timedelta_register;
 	// 1 MB space: 8-bit rsvd, 8-bit egress port, 8-bit deviceno, 8-bit iport (sketch simplification), 32-bit timedelta
-	register<bit<64>>(256) dint_register;
+	//register<bit<64>>(256) dint_register;
 
-	@name("dint_hash")
+	/*@name("dint_hash")
 	action dint_hash() {
 		meta.dint_metadata.index = (bit<32>)standard_metadata.egress_port;
 	}
@@ -30,11 +35,15 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 		key = {}
 		size = 1024;
 		default_action = dint_hash();
-	}
+	}*/
 
 	@name("read_register")
 	action read_register() {
-		dint_register.read(meta.dint_metadata.register_value, meta.dint_metadata.index);
+		//dint_register.read(meta.dint_metadata.register_value, meta.dint_metadata.index);
+		eport_register.read(meta.dint_metadata.prev_eport, (bit<32>)standard_metadata.egress_port);
+		iport_register.read(meta.dint_metadata.prev_iport, (bit<32>)standard_metadata.ingress_port);
+		deviceno_register.read(meta.dint_metadata.prev_deviceno, 0);
+		timedelta_register.read(meta.dint_metadata.prev_timedelta, 0);
 	}
 	@name("read_register_tbl")
 	table read_register_tbl {
@@ -46,7 +55,7 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 		default_action = read_register();
 	}
 
-	@name("parse_register")
+	/*@name("parse_register")
 	action parse_register() {
 		meta.dint_metadata.prev_eport = (bit<8>)(meta.dint_metadata.register_value >> 48);
 		meta.dint_metadata.prev_deviceno = (bit<8>)(meta.dint_metadata.register_value >> 40);
@@ -61,7 +70,7 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 		key = {}
 		size = 1024;
 		default_action = parse_register();
-	}
+	}*/
 
 	@name("delta_calc")
 	action delta_calc() {
@@ -114,7 +123,7 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 		default_action = delta_calc();
 	}
 
-	action set_bitmap() {
+	/*action set_bitmap() {
 		hdr.intbitmap.setValid();
 		hdr.intbitmap.device_bit = 1;
 		meta.dint_metadata.output_deviceno = meta.int_metadata.device_no;
@@ -132,7 +141,7 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 		key = {}
 		size = 1024;
 		default_action = set_bitmap();
-	}
+	}*/
 
 	action do_deviceno() {
 		hdr.intdeviceno.setValid();
@@ -247,11 +256,15 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 	}
 
 	action update_register() {
-		dint_register.write(meta.dint_metadata.index, \
+		/*dint_register.write(meta.dint_metadata.index, \
 				((bit<64>)(meta.dint_metadata.output_eport)<<48) | \
 				((bit<64>)(meta.dint_metadata.output_deviceno)<<40) | \
 				((bit<64>)(meta.dint_metadata.output_iport)<<32) | \
-				(bit<64>)(meta.dint_metadata.output_timedelta));
+				(bit<64>)(meta.dint_metadata.output_timedelta));*/
+		eport_register.write((bit<32>)standard_metadata.egress_port, meta.dint_metadata.output_eport);
+		iport_register.write((bit<32>)standard_metadata.ingress_port, meta.dint_metadata.output_iport);
+		deviceno_register.write(0, meta.dint_metadata.output_deviceno);
+		timedelta_register.write(0, meta.dint_metadata.output_timedelta);
 	}
 	table update_register_tbl {
 		actions = {
@@ -292,10 +305,10 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 		remove_softhard_diff_tbl.apply();
         egress_counter.count((bit<32>)standard_metadata.egress_port);
         if (hdr.sr.isValid()) {
-			dint_hash_tbl.apply();
+			//dint_hash_tbl.apply();
 			read_register_tbl.apply();
-			parse_register_tbl.apply();
-			if ((bit<8>)(standard_metadata.egress_port) == meta.dint_metadata.prev_eport) {
+			//parse_register_tbl.apply();
+			/*if ((bit<8>)(standard_metadata.egress_port) == meta.dint_metadata.prev_eport) {
 				// If egress port matches, keep loaded prev metadata
 				// Delta calculation (set bitmap according to delta)
 				delta_calc_tbl.apply();
@@ -303,7 +316,8 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 			else {
 				// Set bitmap as <1, 1, 1>
 				set_bitmap_tbl.apply();
-			}
+			}*/
+			delta_calc_tbl.apply();
 			if (hdr.intbitmap.device_bit == 1) {
 				do_deviceno_tbl.apply();
 			}
