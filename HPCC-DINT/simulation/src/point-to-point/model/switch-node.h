@@ -33,11 +33,15 @@ class SwitchNode : public Node{
 	static const uint32_t qCnt = 8;	// Number of queues/priorities used
 
 	// Written by Siyuan Sheng
-	static const uint32_t DINT_sketch_bytes = 512 * 1024; // 1 MB 
+	static const uint32_t DINT_sketch_bytes = 256 * 1024; // 1 MB 
 	static const uint32_t DINT_diff = 1; // Delta threshold
 	//static const uint32_t DINT_diff = 5; // Delta threshold
 	//static const uint32_t DINT_diff = 10; // Delta threshold
 	static const uint32_t DINT_hashnum = 1;
+
+	// For measurement accuracy (siyuan sheng)
+	uint32_t curnode_cntnum = 0;
+	static const uint32_t pernode_cntnum = 10000;
 
 	uint32_t m_ecmpSeed;
 	std::unordered_map<uint32_t, std::vector<int> > m_rtTable; // map from ip address (u32) to possible ECMP port (index of dev)

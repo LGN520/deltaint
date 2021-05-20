@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "ns3/ipv4.h"
 #include "ns3/packet.h"
 #include "ns3/ipv4-header.h"
@@ -379,7 +380,7 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 						hashidx[i] = EcmpHash(tmpbytes, 13, i) % (prev_inputs.size() / SwitchNode::DINT_hashnum);	
 					}
 
-					// Calculate max power
+					// Get cur input
 					uint16_t cur_input = 0;
 					if (ih->GetPower() != 0) { // Valid input
 						cur_input = ih->GetPower();
@@ -399,6 +400,8 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 							}
 						}
 					}
+
+					// Calculate max power
 					uint16_t cur_status = power;
 					uint16_t max_power = (cur_input>cur_status)?cur_input:cur_status;
 
@@ -412,7 +415,7 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 					else {
 					}*/
 
-					// Judge whether to set power in INT header
+					// Get prev output
 					uint16_t prev_output = 0; // Get minimum prev output (TODO: maybe median is better)
 					for (uint32_t i = 0; i < SwitchNode::DINT_hashnum; i++) {
 						/*if (i == 0) {
@@ -427,6 +430,16 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 							break;
 						}
 					}
+
+					// Prepare for measurement accuracy recording
+					FILE* accuracy_fd = NULL;
+					bool is_record_re = (curnode_cntnum < pernode_cntnum);
+					if (is_record_re) {
+						accuracy_fd = fopen("accuracy.out", "a+");
+						curnode_cntnum += 1;
+					}
+
+					// Judge whether to set power in INT header
 					uint16_t cur_diff = (max_power>prev_output)?(max_power-prev_output):(prev_output-max_power);
 					// printf("Switch [%d] [%ld]: prev input %d, prev output %d, max power %d, cur_diff %d\n", m_id, flowkey, cur_input, prev_output, max_power, cur_diff);
 					if (cur_diff > SwitchNode::DINT_diff) {
@@ -435,6 +448,9 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 							flowkeys[hashidx[i]] = flowkey;
 							prev_inputs[hashidx[i]] = cur_input;
 							prev_outputs[hashidx[i]] = max_power;
+						}
+						if (is_record_re) {
+							fprintf(accuracy_fd, "%f\n", 0.0f);
 						}
 					}
 					else {
@@ -445,10 +461,26 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 							prev_inputs[hashidx[i]] = cur_input;
 							prev_outputs[hashidx[i]] = prev_output;
 						}
+						if (is_record_re) {
+							if (max_power == 0) {
+								if (prev_output == 0) {
+									fprintf(accuracy_fd, "%f\n", 0.0f);
+								}
+								else {
+									fprintf(accuracy_fd, "%f\n", 1.0f);
+								}
+							}
+							else {
+								fprintf(accuracy_fd, "%f\n", cur_diff / float(max_power));
+							}
+						}
+					}
+					if (is_record_re) {
+						fclose(accuracy_fd);
 					}
 
 					//printf("Switch nhop: %u nsave: %u\n", ihw.ih.dint_nhop, ihw.ih.dint_nsave);
-
+					
 				}
 				else { // PINT
 					if (power > ih->GetPower())
