@@ -53,9 +53,9 @@ sketch = []
 for _ in range(height):
     sketch.append([0]*width)
 
-packet_count_sum = 0
-PINT_totalbits_sum = 0
-DINT_totalbits_sum = 0
+packet_count_list = []
+DINT_totalbits_list = []
+PINT_totalbits_list = []
 for hopnum in range(2, int(exp_name)+1):
     packet_count = 0
     PINT_totalbits = 0
@@ -88,8 +88,20 @@ for hopnum in range(2, int(exp_name)+1):
 
     print("Average bit [hopnum={}]: DINT {} PINT {}".format(hopnum, \
             DINT_totalbits/float(packet_count), PINT_totalbits/float(packet_count)))
-    packet_count_sum += packet_count
-    PINT_totalbits_sum += PINT_totalbits
-    DINT_totalbits_sum += DINT_totalbits
+    packet_count_list.append(packet_count)
+    PINT_totalbits_list.append(PINT_totalbits)
+    DINT_totalbits_list.append(DINT_totalbits)
+
+PINT_avgbits_list = []
+DINT_avgbits_list = []
+for i in range(len(packet_count_list)):
+    PINT_avgbits_list.append(PINT_totalbits_list[i]/float(packet_count_list[i]))
+    DINT_avgbits_list.append(DINT_totalbits_list[i]/float(packet_count_list[i]))
+print(PINT_avgbits_list)
+print(DINT_avgbits_list)
+
+packet_count_sum = sum(packet_count_list)
+PINT_totalbits_sum = sum(PINT_totalbits_list)
+DINT_totalbits_sum = sum(DINT_totalbits_list)
 print("Average bit [in total]: DINT {} PINT {}".format(\
         DINT_totalbits_sum/float(packet_count_sum), PINT_totalbits_sum/float(packet_count_sum)))
