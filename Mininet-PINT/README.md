@@ -15,6 +15,6 @@
 
 - `cd ../HPCC-DINT/analysis; ./trace_reader wb.tr >wb_trace.out 2>&1 &`
 	+ You'd better run it in screen if the trace file xxx.tr is large
-- `sudo python3 generate_delay_data.py ../HPCC-DINT/analysis/wb_trace.out`
-- `sudo python3 generate_delay_results_PINT.py`
-- `sudo python3 generate_delay_results_DINT.py`
+- `sudo python3 generate_delay_data_new.py ../HPCC-DINT/analysis/wb_trace.out`
+- `sudo python3 generate_delay_results_PINT_new.py`
+- `sudo python3 generate_delay_results_DINT_new.py`
