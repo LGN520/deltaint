@@ -4,6 +4,7 @@ Please see [PINT_README.d](./PINT_README.md) for original readme of HPCC-DINT.
 
 ## How to run
 
+- Perform once: `bash gen_traffic_files.sh`
 - `bash build.sh`
 - `bash run_hpcc_fb.sh; bash run_hpcc_pint1_fb.sh; bash run_hpcc_dint1_fb.sh >tmp.out 2>&1` for facebook dataset
 - `bash run_hpcc_wb.sh; bash run_hpcc_pint1_wb.sh; bash run_hpcc_dint1_wb.sh >tmp.out 2>&1` for websearch dataset

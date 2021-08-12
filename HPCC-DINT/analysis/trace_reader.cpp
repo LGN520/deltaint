@@ -49,4 +49,5 @@ int main(int argc, char** argv){
 			break;
 		}
 	}
+	//printf("count: %u max count: %u finish:%d\n", count, maxcount, count>=maxcount);
 }
