@@ -18,3 +18,4 @@
 - `sudo python3 generate_delay_data_new.py ../HPCC-DINT/analysis/wb_trace.out`
 - `sudo python3 generate_delay_results_PINT_new.py`
 - `sudo python3 generate_delay_results_DINT_new.py`
+- `sudo python3 generate_delay_results_DINT_ext.py`
