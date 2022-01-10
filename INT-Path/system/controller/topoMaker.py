@@ -194,6 +194,8 @@ class TopoMaker(object):
                     intReceiver = 'python3 {}/packet/receive.py {} >{} 2>&1 &'.format(sysdir, i, log_filename) # INT-Path
                 elif topoMaker_config["method"] == "DeltaINT":
                     intReceiver = 'python3 {}/packet/dint_receive.py {} >{} 2>&1 &'.format(sysdir, i, log_filename) # DINT
+                elif topoMaker_config["method"] == "DeltaINTExt":
+                    intReceiver = 'python3 {}/packet/dintext_receive.py {} >{} 2>&1 &'.format(sysdir, i, log_filename) # DINT extension
                 else:
                     print("Invalid method name {} which should be INT-Path or DeltaINT".format(topoMaker_config["method"]), flush=True)
                     exit(-1)
