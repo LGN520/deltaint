@@ -12,6 +12,8 @@ Please see [INTPATH_README.md](./INTPATH_README.md) for original readme of INT-P
 
 ## How to run
 
+- Preliminaries
+	+ Ryu controller, python 3.7, bmv2 (including thrift and nanomsg), and mininet
 - Compile p4 code
 	+ `cd p4app; bash run.sh`
 - Clean tmp directory
@@ -26,3 +28,4 @@ Please see [INTPATH_README.md](./INTPATH_README.md) for original readme of INT-P
 	+ Set is_dump as 1 in config.json
 	+ `cd controller; sudo python3 app.py`
 	+ `cd controller; sudo python3 measurement_accuracy.py`
+	+ NOTE: it dumps complete INT statistics in packet/tmp/ by INT-Path for a given epoch length, and simulate DE-DeltaINT in software to get bandwidth usage and measurement accuracy
