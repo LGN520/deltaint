@@ -360,6 +360,9 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 
 				// Written by Siyuan Sheng
 				if (1) { // DINT
+					if (power > ih->GetPintPower())
+						ih->SetPintPower(power); // Use to calculate measurement accuracy for DE-DeltaINT
+
 					// Calculate flowkey
 					//uint32_t* srcip = (uint32_t *)&buf[PppHeader::GetStaticSize() + 12];
 					//uint32_t* dstip = (uint32_t *)&buf[PppHeader::GetStaticSize() + 16];
@@ -444,6 +447,7 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 					// printf("Switch [%d] [%ld]: prev input %d, prev output %d, max power %d, cur_diff %d\n", m_id, flowkey, cur_input, prev_output, max_power, cur_diff);
 					if (cur_diff > SwitchNode::DINT_diff) {
 						ih->SetPower(max_power);
+						ih->SetDintPower(max_power);
 						for (uint32_t i = 0; i < SwitchNode::DINT_hashnum; i++) {
 							flowkeys[hashidx[i]] = flowkey;
 							prev_inputs[hashidx[i]] = cur_input;
@@ -455,7 +459,11 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 					}
 					else {
 						ih->SetPower(0); // Invalidate INT data
+						ih->SetDintPower(prev_output);
 						ih->SetDintNsave();
+						if (cur_diff == 0) {
+							ih->SetDintNzero();
+						}
 						for (uint32_t i = 0; i < SwitchNode::DINT_hashnum; i++) {
 							flowkeys[hashidx[i]] = flowkey;
 							prev_inputs[hashidx[i]] = cur_input;

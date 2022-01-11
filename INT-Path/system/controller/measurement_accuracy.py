@@ -9,7 +9,13 @@ import struct
 dirname = "../packet/tmp"
 filenames = ["h4_dump.txt", "h6_dump.txt", "h8_dump.txt"]
 thresholds = [0, 0, 0, 1] # deiveno, iport, eport, timedelta
-delta_bits = [1, 1, 1, 1+1] # Threshold=1 for delta encoding in DeltaINT-ext
+delta_bits = [1, 1, 1, 1+2] # Threshold=1 for delta encoding in DeltaINT-ext
+#thresholds = [0, 0, 0, 2] # deiveno, iport, eport, timedelta
+#delta_bits = [1, 1, 1, 1+3] # Threshold=2 for delta encoding in DeltaINT-ext
+#thresholds = [0, 0, 0, 4] # deiveno, iport, eport, timedelta
+#delta_bits = [1, 1, 1, 1+4] # Threshold=4 for delta encoding in DeltaINT-ext
+#thresholds = [0, 0, 0, 8] # deiveno, iport, eport, timedelta
+#delta_bits = [1, 1, 1, 1+5] # Threshold=8 for delta encoding in DeltaINT-ext
 complete_bits = [1+8, 1+8, 1+8, 1+32]
 statenum = len(thresholds)
 hopnum = 3
@@ -70,7 +76,7 @@ def delta_calc(curstates, recstates):
             results.append(recstates[i])
             dint_prevbw += 1
             if abs(curstates[i] - recstates[i]) == 0:
-                dintext_prevbw += (delta_bits[i] - 1)
+                dintext_prevbw += (1 + 1)
             else:
                 dintext_prevbw += delta_bits[i]
             dintext_truth_collect_cnt += 1

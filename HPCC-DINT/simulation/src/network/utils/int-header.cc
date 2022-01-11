@@ -13,6 +13,9 @@ IntHeader::IntHeader() : nhop(0) {
 		hop[i] = {0};
 	dint_nhop = 0;
 	dint_nsave = 0;
+	dint_nzero = 0;
+	pint_power = 0;
+	dint_power = 0;
 }
 
 uint32_t IntHeader::GetStaticSize(){
@@ -21,7 +24,7 @@ uint32_t IntHeader::GetStaticSize(){
 	}else if (mode == TS){
 		return sizeof(ts);
 	}else if (mode == PINT){
-		return sizeof(pint) + sizeof(dint_nhop) + sizeof(dint_nsave);
+		return sizeof(pint) + sizeof(dint_nhop) + sizeof(dint_nsave) + sizeof(dint_nzero) + sizeof(pint_power) + sizeof(dint_power);
 	}else {
 		return 0;
 	}
@@ -53,6 +56,9 @@ void IntHeader::Serialize (Buffer::Iterator start) const{
 			i.WriteU16(pint.power);
 		i.WriteU8(dint_nhop);
 		i.WriteU8(dint_nsave);
+		i.WriteU8(dint_nzero);
+		i.WriteU16(pint_power);
+		i.WriteU16(dint_power);
 	}
 }
 
@@ -73,6 +79,9 @@ uint32_t IntHeader::Deserialize (Buffer::Iterator start){
 			pint.power = i.ReadU16();
 		dint_nhop = i.ReadU8();
 		dint_nsave = i.ReadU8();
+		dint_nzero = i.ReadU8();
+		pint_power = i.ReadU16();
+		dint_power = i.ReadU16();
 	}
 	return GetStaticSize();
 }
@@ -111,6 +120,30 @@ uint8_t IntHeader::GetDintNsave() {
 
 void IntHeader::SetDintNsave() {
 	dint_nsave += 1;
+}
+
+void IntHeader::SetDintNzero() {
+	dint_nzero += 1;
+}
+
+uint8_t IntHeader::GetDintNzero() {
+	return dint_nzero;
+}
+
+void IntHeader::SetPintPower(uint16_t power) {
+	pint_power = power;
+}
+
+uint16_t IntHeader::GetPintPower() {
+	return pint_power;
+}
+
+void IntHeader::SetDintPower(uint16_t power) {
+	dint_power = power;
+}
+
+uint16_t IntHeader::GetDintPower() {
+	return dint_power;
 }
 
 

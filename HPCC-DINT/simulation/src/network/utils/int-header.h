@@ -102,6 +102,9 @@ public:
 			}pint;
 			uint8_t dint_nhop;
 			uint8_t dint_nsave;
+			uint8_t dint_nzero;
+			uint16_t pint_power; // truth for DINT
+			uint16_t dint_power; // collect for DINT
 		};
 	};
 
@@ -117,6 +120,12 @@ public:
 	uint8_t GetDintNhop();
 	void SetDintNsave();
 	uint8_t GetDintNsave();
+	void SetDintNzero();
+	uint8_t GetDintNzero();
+	void SetPintPower(uint16_t);
+	uint16_t GetPintPower();
+	void SetDintPower(uint16_t);
+	uint16_t GetDintPower();
 };
 
 class IntHeaderWrap : public Header 

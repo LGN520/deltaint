@@ -156,6 +156,8 @@ public:
 	uint32_t total_hopnum = 0; // 8-bit or 16-bit
 	uint32_t total_pktnum = 0;
 	uint32_t dint_pktnum = 0;
+	uint32_t zero_hopnum = 0;
+	uint32_t truth_collect_cnt = 0;
 };
 
 } /* namespace ns3 */
