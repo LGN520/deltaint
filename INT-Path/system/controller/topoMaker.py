@@ -95,7 +95,9 @@ class TopoMaker(object):
         # We must launch the controller before running the script
         #os.system("controller ptcp:6653:127.0.0.1 --log-file=./ovs-testcontroller.log &") # tcp: connection refused, ptcp: connection reset by peer
         #c = self.net.addController('mycontroller', controller=RemoteController, ip='127.0.0.1', port=6653)
-        os.system('ryu-manager /usr/local/python3.7.1/lib/python3.7/site-packages/ryu/app/simple_switch.py >./ryu-manager.log 2>&1 &')
+        # NOTE: set the ryu path accordingly
+        #os.system('ryu-manager /usr/local/python3.7.1/lib/python3.7/site-packages/ryu/app/simple_switch.py >./ryu-manager.log 2>&1 &')
+        os.system('ryu-manager /usr/local/lib/python3.6/site-packages/ryu/app/simple_switch.py >./ryu-manager.log 2>&1 &')
         c = self.net.addController('mycontroller', controller=RemoteController, ip='0.0.0.0', port=6633)
         c.checkListening()
         controller_list.append(c)

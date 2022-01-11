@@ -111,8 +111,8 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 			hdr.intbitmap.eport_bit = 1;
 			meta.dint_metadata.output_eport = (bit<8>)(standard_metadata.egress_port);
 		}
-		if ((meta.dint_metadata.prev_timedelta >= standard_metadata.deq_timedelta) && ((meta.dint_metadata.prev_timedelta - standard_metadata.deq_timedelta) <= 10) || \
-				(meta.dint_metadata.prev_timedelta < standard_metadata.deq_timedelta) && ((standard_metadata.deq_timedelta - meta.dint_metadata.prev_timedelta) <= 10)) {
+		if ((meta.dint_metadata.prev_timedelta >= standard_metadata.deq_timedelta) && ((meta.dint_metadata.prev_timedelta - standard_metadata.deq_timedelta) <= 1) || \
+				(meta.dint_metadata.prev_timedelta < standard_metadata.deq_timedelta) && ((standard_metadata.deq_timedelta - meta.dint_metadata.prev_timedelta) <= 1)) {
 			hdr.intbitmap.timedelta_bit = 0;
 			meta.dint_metadata.output_timedelta = meta.dint_metadata.prev_timedelta;
 		}

@@ -27,8 +27,8 @@ class parse():
                     pkt = struct.unpack("!64s%dsI" % (len(pkt[1])-64-4), pkt[1]) # 512-bit source routing, int metadata, 32-bit actId
                     print("source route: {}, act id: {}".format(pkt[0], pkt[2]), flush=True)
                     int_headers = self.int_process(pkt[1])
-                    #flowkey = struct.pack("4s4sHHB", self.ipv4_addrstr_to_bytes(ipv4[10]), self.ipv4_addrstr_to_bytes(ipv4[11]), udp[0], udp[1], ipv4[8])
-                    flowkey = struct.pack("4s4s", self.ipv4_addrstr_to_bytes(ipv4[10]), self.ipv4_addrstr_to_bytes(ipv4[11]))
+                    flowkey = struct.pack("4s4sHHB", self.ipv4_addrstr_to_bytes(ipv4[10]), self.ipv4_addrstr_to_bytes(ipv4[11]), udp[0], udp[1], ipv4[8])
+                    #flowkey = struct.pack("4s4s2H", self.ipv4_addrstr_to_bytes(ipv4[10]), self.ipv4_addrstr_to_bytes(ipv4[11]))
                     return flowkey, int_headers
         return None
 

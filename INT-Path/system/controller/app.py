@@ -23,6 +23,8 @@ from mininet.cli import CLI
 
 _ = float('inf')
 
+bmv2_path = "/home/ssy/behavioral-model/targets/simple_switch"
+
 with open("../config.json", "r") as f:
     app_config = json.load(f)
 
@@ -262,7 +264,7 @@ class Ctrl(object):
                 rule_fd.write('table_add {} {} {} => {}\n'.format(tableName, actionName, keys, values))
             rule_fd.flush()
             rule_fd.close()
-            os.system("sudo {}/simple_switch_CLI --thrift-port {} < {} >/dev/null 2>&1".format(curdir, switch.thriftPort, rule_filename))
+            os.system("sudo {}/simple_switch_CLI --thrift-port {} < {}".format(bmv2_path, switch.thriftPort, rule_filename))
 
     def makeTopo(self):
         """
@@ -526,7 +528,7 @@ if __name__ == '__main__':
             fd2.flush()
             fd2.close()
             print("Simluate latency in switch {} egress port {}, TIME {}".format(app.switches[i].name, eport, time.time()), flush=True)
-            os.system("sudo {}/simple_switch_CLI --thrift-port {} < {} >/dev/null 2>&1".format(curdir, app.switches[i].thriftPort, rule_filename))
+            os.system("sudo {}/simple_switch_CLI --thrift-port {} < {}".format(bmv2_path, app.switches[i].thriftPort, rule_filename))
 
     time.sleep(20)
     #CLI(app.topoMaker.net)

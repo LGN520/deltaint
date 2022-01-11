@@ -40,6 +40,7 @@ class receive():
 
         latency_threshold = int(receive_config["latency_threshold"])*128
         aging_time = int(receive_config["aging_time"])*1000 # 3000ms
+        print(aging_time)
         while True:
             linkdown_detection_list = []
             grayfailure_detection_list = []

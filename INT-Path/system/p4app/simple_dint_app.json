@@ -13,7 +13,7 @@
         ["tmp_5", 32, false],
         ["result_0", 32, false],
         ["tempip_0", 32, false],
-        ["port_1", 8, false],
+        ["port_2", 8, false],
         ["userMetadata._ingress_metadata_nhop_ipv40", 32, false],
         ["userMetadata._intrinsic_metadata_ingress_global_timestamp1", 48, false],
         ["userMetadata._intrinsic_metadata_lf_field_list2", 32, false],
@@ -250,13 +250,13 @@
   "header_union_stacks" : [],
   "field_lists" : [],
   "errors" : [
-    ["NoError", 1],
-    ["PacketTooShort", 2],
-    ["NoMatch", 3],
-    ["StackOutOfBounds", 4],
-    ["HeaderTooShort", 5],
-    ["ParserTimeout", 6],
-    ["ParserInvalidArgument", 7]
+    ["NoError", 0],
+    ["PacketTooShort", 1],
+    ["NoMatch", 2],
+    ["StackOutOfBounds", 3],
+    ["HeaderTooShort", 4],
+    ["ParserTimeout", 5],
+    ["ParserInvalidArgument", 6]
   ],
   "enums" : [],
   "parsers" : [
@@ -743,6 +743,86 @@
                     "value" : "0x00"
                   },
                   "right" : {
+                    "type" : "field",
+                    "value" : ["intbitmap", "device_bit"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_deviceno12"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._int_metadata_device_no11"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata._dint_metadata_output_deviceno16"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_prev_deviceno12"]
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_output_deviceno16"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_deviceno12"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._int_metadata_device_no11"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["intbitmap", "device_bit"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x00"
+                  },
+                  "right" : {
                     "type" : "hexstr",
                     "value" : "0x01"
                   },
@@ -823,6 +903,126 @@
                     "value" : "0x00"
                   },
                   "right" : {
+                    "type" : "field",
+                    "value" : ["intbitmap", "iport_bit"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_iport13"]
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "ingress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata._dint_metadata_output_iport17"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_prev_iport13"]
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_output_iport17"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_iport13"]
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "ingress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["intbitmap", "iport_bit"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x00"
+                  },
+                  "right" : {
                     "type" : "hexstr",
                     "value" : "0x01"
                   },
@@ -839,8 +1039,18 @@
                         "value" : {
                           "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["standard_metadata", "ingress_port"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "ingress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
@@ -877,8 +1087,18 @@
                     "value" : {
                       "op" : "&",
                       "left" : {
-                        "type" : "field",
-                        "value" : ["standard_metadata", "ingress_port"]
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "field",
+                            "value" : ["standard_metadata", "ingress_port"]
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00ff"
+                          }
+                        }
                       },
                       "right" : {
                         "type" : "hexstr",
@@ -899,8 +1119,138 @@
                         "value" : {
                           "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["standard_metadata", "ingress_port"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "ingress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["intbitmap", "eport_bit"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x00"
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["intbitmap", "eport_bit"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_eport14"]
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "egress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata._dint_metadata_output_eport18"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_prev_eport14"]
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_output_eport18"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_eport14"]
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "egress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
@@ -949,8 +1299,18 @@
                         "value" : {
                           "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["standard_metadata", "egress_port"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "egress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
@@ -987,8 +1347,18 @@
                     "value" : {
                       "op" : "&",
                       "left" : {
-                        "type" : "field",
-                        "value" : ["standard_metadata", "egress_port"]
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "field",
+                            "value" : ["standard_metadata", "egress_port"]
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00ff"
+                          }
+                        }
                       },
                       "right" : {
                         "type" : "hexstr",
@@ -1009,12 +1379,302 @@
                         "value" : {
                           "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["standard_metadata", "egress_port"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "egress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
                             "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["intbitmap", "timedelta_bit"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x00"
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["intbitmap", "timedelta_bit"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "or",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "and",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">=",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta15"]
+                              },
+                              "right" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "deq_timedelta"]
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<=",
+                              "left" : {
+                                "type" : "expression",
+                                "value" : {
+                                  "op" : "&",
+                                  "left" : {
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "-",
+                                      "left" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta15"]
+                                      },
+                                      "right" : {
+                                        "type" : "field",
+                                        "value" : ["standard_metadata", "deq_timedelta"]
+                                      }
+                                    }
+                                  },
+                                  "right" : {
+                                    "type" : "hexstr",
+                                    "value" : "0xffffffff"
+                                  }
+                                }
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00000064"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "and",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta15"]
+                              },
+                              "right" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "deq_timedelta"]
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<=",
+                              "left" : {
+                                "type" : "expression",
+                                "value" : {
+                                  "op" : "&",
+                                  "left" : {
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "-",
+                                      "left" : {
+                                        "type" : "field",
+                                        "value" : ["standard_metadata", "deq_timedelta"]
+                                      },
+                                      "right" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta15"]
+                                      }
+                                    }
+                                  },
+                                  "right" : {
+                                    "type" : "hexstr",
+                                    "value" : "0xffffffff"
+                                  }
+                                }
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00000064"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata._dint_metadata_output_timedelta19"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta15"]
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_output_timedelta19"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "or",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "and",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">=",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta15"]
+                              },
+                              "right" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "deq_timedelta"]
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<=",
+                              "left" : {
+                                "type" : "expression",
+                                "value" : {
+                                  "op" : "&",
+                                  "left" : {
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "-",
+                                      "left" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta15"]
+                                      },
+                                      "right" : {
+                                        "type" : "field",
+                                        "value" : ["standard_metadata", "deq_timedelta"]
+                                      }
+                                    }
+                                  },
+                                  "right" : {
+                                    "type" : "hexstr",
+                                    "value" : "0xffffffff"
+                                  }
+                                }
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00000064"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "and",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta15"]
+                              },
+                              "right" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "deq_timedelta"]
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<=",
+                              "left" : {
+                                "type" : "expression",
+                                "value" : {
+                                  "op" : "&",
+                                  "left" : {
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "-",
+                                      "left" : {
+                                        "type" : "field",
+                                        "value" : ["standard_metadata", "deq_timedelta"]
+                                      },
+                                      "right" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta15"]
+                                      }
+                                    }
+                                  },
+                                  "right" : {
+                                    "type" : "hexstr",
+                                    "value" : "0xffffffff"
+                                  }
+                                }
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00000064"
+                              }
+                            }
                           }
                         }
                       }
@@ -1675,8 +2335,18 @@
                 "value" : {
                   "op" : "&",
                   "left" : {
-                    "type" : "field",
-                    "value" : ["standard_metadata", "ingress_port"]
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["standard_metadata", "ingress_port"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00ff"
+                      }
+                    }
                   },
                   "right" : {
                     "type" : "hexstr",
@@ -1877,8 +2547,18 @@
                 "value" : {
                   "op" : "&",
                   "left" : {
-                    "type" : "field",
-                    "value" : ["standard_metadata", "egress_port"]
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["standard_metadata", "egress_port"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00ff"
+                      }
+                    }
                   },
                   "right" : {
                     "type" : "hexstr",
@@ -2718,32 +3398,8 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : "?",
+                          "op" : "&",
                           "left" : {
-                            "type" : "expression",
-                            "value" : {
-                              "op" : "&",
-                              "left" : {
-                                "type" : "expression",
-                                "value" : {
-                                  "op" : ">>",
-                                  "left" : {
-                                    "type" : "local",
-                                    "value" : 1
-                                  },
-                                  "right" : {
-                                    "type" : "hexstr",
-                                    "value" : "0x4"
-                                  }
-                                }
-                              },
-                              "right" : {
-                                "type" : "hexstr",
-                                "value" : "0xffff"
-                              }
-                            }
-                          },
-                          "right" : {
                             "type" : "expression",
                             "value" : {
                               "op" : "?",
@@ -2761,7 +3417,7 @@
                                       },
                                       "right" : {
                                         "type" : "hexstr",
-                                        "value" : "0x8"
+                                        "value" : "0x4"
                                       }
                                     }
                                   },
@@ -2800,8 +3456,184 @@
                                     }
                                   },
                                   "right" : {
-                                    "type" : "local",
-                                    "value" : 1
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "?",
+                                      "left" : {
+                                        "type" : "expression",
+                                        "value" : {
+                                          "op" : "&",
+                                          "left" : {
+                                            "type" : "expression",
+                                            "value" : {
+                                              "op" : ">>",
+                                              "left" : {
+                                                "type" : "local",
+                                                "value" : 1
+                                              },
+                                              "right" : {
+                                                "type" : "hexstr",
+                                                "value" : "0x8"
+                                              }
+                                            }
+                                          },
+                                          "right" : {
+                                            "type" : "hexstr",
+                                            "value" : "0xffff"
+                                          }
+                                        }
+                                      },
+                                      "right" : {
+                                        "type" : "expression",
+                                        "value" : {
+                                          "op" : "?",
+                                          "left" : {
+                                            "type" : "expression",
+                                            "value" : {
+                                              "op" : "&",
+                                              "left" : {
+                                                "type" : "expression",
+                                                "value" : {
+                                                  "op" : ">>",
+                                                  "left" : {
+                                                    "type" : "local",
+                                                    "value" : 1
+                                                  },
+                                                  "right" : {
+                                                    "type" : "hexstr",
+                                                    "value" : "0x4"
+                                                  }
+                                                }
+                                              },
+                                              "right" : {
+                                                "type" : "hexstr",
+                                                "value" : "0xffff"
+                                              }
+                                            }
+                                          },
+                                          "right" : {
+                                            "type" : "expression",
+                                            "value" : {
+                                              "op" : "?",
+                                              "left" : {
+                                                "type" : "expression",
+                                                "value" : {
+                                                  "op" : "&",
+                                                  "left" : {
+                                                    "type" : "expression",
+                                                    "value" : {
+                                                      "op" : ">>",
+                                                      "left" : {
+                                                        "type" : "local",
+                                                        "value" : 1
+                                                      },
+                                                      "right" : {
+                                                        "type" : "hexstr",
+                                                        "value" : "0x8"
+                                                      }
+                                                    }
+                                                  },
+                                                  "right" : {
+                                                    "type" : "hexstr",
+                                                    "value" : "0xffff"
+                                                  }
+                                                }
+                                              },
+                                              "right" : {
+                                                "type" : "expression",
+                                                "value" : {
+                                                  "op" : "?",
+                                                  "left" : {
+                                                    "type" : "expression",
+                                                    "value" : {
+                                                      "op" : "&",
+                                                      "left" : {
+                                                        "type" : "expression",
+                                                        "value" : {
+                                                          "op" : ">>",
+                                                          "left" : {
+                                                            "type" : "local",
+                                                            "value" : 1
+                                                          },
+                                                          "right" : {
+                                                            "type" : "hexstr",
+                                                            "value" : "0x4"
+                                                          }
+                                                        }
+                                                      },
+                                                      "right" : {
+                                                        "type" : "hexstr",
+                                                        "value" : "0xffff"
+                                                      }
+                                                    }
+                                                  },
+                                                  "right" : {
+                                                    "type" : "local",
+                                                    "value" : 1
+                                                  },
+                                                  "cond" : {
+                                                    "type" : "expression",
+                                                    "value" : {
+                                                      "op" : "==",
+                                                      "left" : {
+                                                        "type" : "field",
+                                                        "value" : ["scalars", "result_0"]
+                                                      },
+                                                      "right" : {
+                                                        "type" : "hexstr",
+                                                        "value" : "0x00000001"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "cond" : {
+                                                "type" : "expression",
+                                                "value" : {
+                                                  "op" : "==",
+                                                  "left" : {
+                                                    "type" : "field",
+                                                    "value" : ["scalars", "result_0"]
+                                                  },
+                                                  "right" : {
+                                                    "type" : "hexstr",
+                                                    "value" : "0x00000002"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "cond" : {
+                                            "type" : "expression",
+                                            "value" : {
+                                              "op" : "==",
+                                              "left" : {
+                                                "type" : "field",
+                                                "value" : ["scalars", "result_0"]
+                                              },
+                                              "right" : {
+                                                "type" : "hexstr",
+                                                "value" : "0x00000001"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "cond" : {
+                                        "type" : "expression",
+                                        "value" : {
+                                          "op" : "==",
+                                          "left" : {
+                                            "type" : "field",
+                                            "value" : ["scalars", "result_0"]
+                                          },
+                                          "right" : {
+                                            "type" : "hexstr",
+                                            "value" : "0x00000003"
+                                          }
+                                        }
+                                      }
+                                    }
                                   },
                                   "cond" : {
                                     "type" : "expression",
@@ -2813,7 +3645,7 @@
                                       },
                                       "right" : {
                                         "type" : "hexstr",
-                                        "value" : "0x00000003"
+                                        "value" : "0x00000002"
                                       }
                                     }
                                   }
@@ -2829,25 +3661,15 @@
                                   },
                                   "right" : {
                                     "type" : "hexstr",
-                                    "value" : "0x00000002"
+                                    "value" : "0x00000001"
                                   }
                                 }
                               }
                             }
                           },
-                          "cond" : {
-                            "type" : "expression",
-                            "value" : {
-                              "op" : "==",
-                              "left" : {
-                                "type" : "field",
-                                "value" : ["scalars", "result_0"]
-                              },
-                              "right" : {
-                                "type" : "hexstr",
-                                "value" : "0x00000001"
-                              }
-                            }
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x000f"
                           }
                         }
                       },
@@ -2892,32 +3714,8 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : "?",
+                          "op" : "&",
                           "left" : {
-                            "type" : "expression",
-                            "value" : {
-                              "op" : "&",
-                              "left" : {
-                                "type" : "expression",
-                                "value" : {
-                                  "op" : ">>",
-                                  "left" : {
-                                    "type" : "local",
-                                    "value" : 1
-                                  },
-                                  "right" : {
-                                    "type" : "hexstr",
-                                    "value" : "0x4"
-                                  }
-                                }
-                              },
-                              "right" : {
-                                "type" : "hexstr",
-                                "value" : "0xffff"
-                              }
-                            }
-                          },
-                          "right" : {
                             "type" : "expression",
                             "value" : {
                               "op" : "?",
@@ -2935,7 +3733,7 @@
                                       },
                                       "right" : {
                                         "type" : "hexstr",
-                                        "value" : "0x8"
+                                        "value" : "0x4"
                                       }
                                     }
                                   },
@@ -2974,8 +3772,184 @@
                                     }
                                   },
                                   "right" : {
-                                    "type" : "local",
-                                    "value" : 1
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "?",
+                                      "left" : {
+                                        "type" : "expression",
+                                        "value" : {
+                                          "op" : "&",
+                                          "left" : {
+                                            "type" : "expression",
+                                            "value" : {
+                                              "op" : ">>",
+                                              "left" : {
+                                                "type" : "local",
+                                                "value" : 1
+                                              },
+                                              "right" : {
+                                                "type" : "hexstr",
+                                                "value" : "0x8"
+                                              }
+                                            }
+                                          },
+                                          "right" : {
+                                            "type" : "hexstr",
+                                            "value" : "0xffff"
+                                          }
+                                        }
+                                      },
+                                      "right" : {
+                                        "type" : "expression",
+                                        "value" : {
+                                          "op" : "?",
+                                          "left" : {
+                                            "type" : "expression",
+                                            "value" : {
+                                              "op" : "&",
+                                              "left" : {
+                                                "type" : "expression",
+                                                "value" : {
+                                                  "op" : ">>",
+                                                  "left" : {
+                                                    "type" : "local",
+                                                    "value" : 1
+                                                  },
+                                                  "right" : {
+                                                    "type" : "hexstr",
+                                                    "value" : "0x4"
+                                                  }
+                                                }
+                                              },
+                                              "right" : {
+                                                "type" : "hexstr",
+                                                "value" : "0xffff"
+                                              }
+                                            }
+                                          },
+                                          "right" : {
+                                            "type" : "expression",
+                                            "value" : {
+                                              "op" : "?",
+                                              "left" : {
+                                                "type" : "expression",
+                                                "value" : {
+                                                  "op" : "&",
+                                                  "left" : {
+                                                    "type" : "expression",
+                                                    "value" : {
+                                                      "op" : ">>",
+                                                      "left" : {
+                                                        "type" : "local",
+                                                        "value" : 1
+                                                      },
+                                                      "right" : {
+                                                        "type" : "hexstr",
+                                                        "value" : "0x8"
+                                                      }
+                                                    }
+                                                  },
+                                                  "right" : {
+                                                    "type" : "hexstr",
+                                                    "value" : "0xffff"
+                                                  }
+                                                }
+                                              },
+                                              "right" : {
+                                                "type" : "expression",
+                                                "value" : {
+                                                  "op" : "?",
+                                                  "left" : {
+                                                    "type" : "expression",
+                                                    "value" : {
+                                                      "op" : "&",
+                                                      "left" : {
+                                                        "type" : "expression",
+                                                        "value" : {
+                                                          "op" : ">>",
+                                                          "left" : {
+                                                            "type" : "local",
+                                                            "value" : 1
+                                                          },
+                                                          "right" : {
+                                                            "type" : "hexstr",
+                                                            "value" : "0x4"
+                                                          }
+                                                        }
+                                                      },
+                                                      "right" : {
+                                                        "type" : "hexstr",
+                                                        "value" : "0xffff"
+                                                      }
+                                                    }
+                                                  },
+                                                  "right" : {
+                                                    "type" : "local",
+                                                    "value" : 1
+                                                  },
+                                                  "cond" : {
+                                                    "type" : "expression",
+                                                    "value" : {
+                                                      "op" : "==",
+                                                      "left" : {
+                                                        "type" : "field",
+                                                        "value" : ["scalars", "result_0"]
+                                                      },
+                                                      "right" : {
+                                                        "type" : "hexstr",
+                                                        "value" : "0x00000001"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "cond" : {
+                                                "type" : "expression",
+                                                "value" : {
+                                                  "op" : "==",
+                                                  "left" : {
+                                                    "type" : "field",
+                                                    "value" : ["scalars", "result_0"]
+                                                  },
+                                                  "right" : {
+                                                    "type" : "hexstr",
+                                                    "value" : "0x00000002"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "cond" : {
+                                            "type" : "expression",
+                                            "value" : {
+                                              "op" : "==",
+                                              "left" : {
+                                                "type" : "field",
+                                                "value" : ["scalars", "result_0"]
+                                              },
+                                              "right" : {
+                                                "type" : "hexstr",
+                                                "value" : "0x00000001"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "cond" : {
+                                        "type" : "expression",
+                                        "value" : {
+                                          "op" : "==",
+                                          "left" : {
+                                            "type" : "field",
+                                            "value" : ["scalars", "result_0"]
+                                          },
+                                          "right" : {
+                                            "type" : "hexstr",
+                                            "value" : "0x00000003"
+                                          }
+                                        }
+                                      }
+                                    }
                                   },
                                   "cond" : {
                                     "type" : "expression",
@@ -2987,7 +3961,7 @@
                                       },
                                       "right" : {
                                         "type" : "hexstr",
-                                        "value" : "0x00000003"
+                                        "value" : "0x00000002"
                                       }
                                     }
                                   }
@@ -3003,25 +3977,15 @@
                                   },
                                   "right" : {
                                     "type" : "hexstr",
-                                    "value" : "0x00000002"
+                                    "value" : "0x00000001"
                                   }
                                 }
                               }
                             }
                           },
-                          "cond" : {
-                            "type" : "expression",
-                            "value" : {
-                              "op" : "==",
-                              "left" : {
-                                "type" : "field",
-                                "value" : ["scalars", "result_0"]
-                              },
-                              "right" : {
-                                "type" : "hexstr",
-                                "value" : "0x00000001"
-                              }
-                            }
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x000f"
                           }
                         }
                       },
@@ -3241,7 +4205,7 @@
           "parameters" : [
             {
               "type" : "field",
-              "value" : ["scalars", "port_1"]
+              "value" : ["scalars", "port_2"]
             },
             {
               "type" : "expression",
@@ -3250,8 +4214,18 @@
                 "value" : {
                   "op" : "&",
                   "left" : {
-                    "type" : "field",
-                    "value" : ["sr", "routingList"]
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["sr", "routingList"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ff"
+                      }
+                    }
                   },
                   "right" : {
                     "type" : "hexstr",
@@ -3333,7 +4307,7 @@
                           "op" : "&",
                           "left" : {
                             "type" : "field",
-                            "value" : ["scalars", "port_1"]
+                            "value" : ["scalars", "port_2"]
                           },
                           "right" : {
                             "type" : "hexstr",
@@ -3385,7 +4359,7 @@
                           "op" : "&",
                           "left" : {
                             "type" : "field",
-                            "value" : ["scalars", "port_1"]
+                            "value" : ["scalars", "port_2"]
                           },
                           "right" : {
                             "type" : "hexstr",

@@ -4,15 +4,30 @@
       "name" : "scalars_0",
       "id" : 0,
       "fields" : [
-        ["tmp", 128, false],
-        ["tmp_0", 128, false],
-        ["tmp_1", 128, false],
-        ["tmp_2", 32, false],
-        ["tmp_3", 32, false],
+        ["tmp", 32, false],
+        ["tmp_0", 32, false],
+        ["tmp_1", 16, false],
+        ["tmp_2", 16, false],
+        ["tmp_3", 8, false],
         ["tmp_4", 32, false],
+        ["tmp_5", 32, false],
+        ["tmp_6", 16, false],
+        ["tmp_7", 16, false],
+        ["tmp_8", 8, false],
+        ["tmp_9", 32, false],
+        ["tmp_10", 32, false],
+        ["tmp_11", 16, false],
+        ["tmp_12", 16, false],
+        ["tmp_13", 8, false],
+        ["tmp_14", 128, false],
+        ["tmp_15", 128, false],
+        ["tmp_16", 128, false],
+        ["tmp_17", 32, false],
+        ["tmp_18", 32, false],
+        ["tmp_19", 32, false],
         ["result_0", 32, false],
         ["tempip_0", 32, false],
-        ["port_1", 8, false],
+        ["port_2", 8, false],
         ["userMetadata._ingress_metadata_nhop_ipv40", 32, false],
         ["userMetadata._intrinsic_metadata_ingress_global_timestamp1", 48, false],
         ["userMetadata._intrinsic_metadata_lf_field_list2", 32, false],
@@ -278,13 +293,13 @@
   "header_union_stacks" : [],
   "field_lists" : [],
   "errors" : [
-    ["NoError", 1],
-    ["PacketTooShort", 2],
-    ["NoMatch", 3],
-    ["StackOutOfBounds", 4],
-    ["HeaderTooShort", 5],
-    ["ParserTimeout", 6],
-    ["ParserInvalidArgument", 7]
+    ["NoError", 0],
+    ["PacketTooShort", 1],
+    ["NoMatch", 2],
+    ["StackOutOfBounds", 3],
+    ["HeaderTooShort", 4],
+    ["ParserTimeout", 5],
+    ["ParserInvalidArgument", 6]
   ],
   "enums" : [],
   "parsers" : [
@@ -593,23 +608,23 @@
       "input" : [
         {
           "type" : "field",
-          "value" : ["ipv4", "srcAddr"]
+          "value" : ["scalars", "tmp"]
         },
         {
           "type" : "field",
-          "value" : ["ipv4", "dstAddr"]
+          "value" : ["scalars", "tmp_0"]
         },
         {
           "type" : "field",
-          "value" : ["udp", "srcPort"]
+          "value" : ["scalars", "tmp_1"]
         },
         {
           "type" : "field",
-          "value" : ["udp", "dstPort"]
+          "value" : ["scalars", "tmp_2"]
         },
         {
           "type" : "field",
-          "value" : ["ipv4", "protocol"]
+          "value" : ["scalars", "tmp_3"]
         }
       ]
     },
@@ -620,23 +635,23 @@
       "input" : [
         {
           "type" : "field",
-          "value" : ["ipv4", "srcAddr"]
+          "value" : ["scalars", "tmp_4"]
         },
         {
           "type" : "field",
-          "value" : ["ipv4", "dstAddr"]
+          "value" : ["scalars", "tmp_5"]
         },
         {
           "type" : "field",
-          "value" : ["udp", "srcPort"]
+          "value" : ["scalars", "tmp_6"]
         },
         {
           "type" : "field",
-          "value" : ["udp", "dstPort"]
+          "value" : ["scalars", "tmp_7"]
         },
         {
           "type" : "field",
-          "value" : ["ipv4", "protocol"]
+          "value" : ["scalars", "tmp_8"]
         }
       ]
     },
@@ -647,23 +662,23 @@
       "input" : [
         {
           "type" : "field",
-          "value" : ["ipv4", "srcAddr"]
+          "value" : ["scalars", "tmp_9"]
         },
         {
           "type" : "field",
-          "value" : ["ipv4", "dstAddr"]
+          "value" : ["scalars", "tmp_10"]
         },
         {
           "type" : "field",
-          "value" : ["udp", "srcPort"]
+          "value" : ["scalars", "tmp_11"]
         },
         {
           "type" : "field",
-          "value" : ["udp", "dstPort"]
+          "value" : ["scalars", "tmp_12"]
         },
         {
           "type" : "field",
-          "value" : ["ipv4", "protocol"]
+          "value" : ["scalars", "tmp_13"]
         }
       ]
     }
@@ -681,6 +696,101 @@
       "id" : 1,
       "runtime_data" : [],
       "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ipv4", "srcAddr"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "./dint_app3.p4",
+            "line" : 32,
+            "column" : 67,
+            "source_fragment" : "hdr.ipv4.srcAddr"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_0"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ipv4", "dstAddr"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "./dint_app3.p4",
+            "line" : 32,
+            "column" : 85,
+            "source_fragment" : "hdr.ipv4.dstAddr"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_1"]
+            },
+            {
+              "type" : "field",
+              "value" : ["udp", "srcPort"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "./dint_app3.p4",
+            "line" : 32,
+            "column" : 103,
+            "source_fragment" : "hdr.udp.srcPort"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_2"]
+            },
+            {
+              "type" : "field",
+              "value" : ["udp", "dstPort"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "./dint_app3.p4",
+            "line" : 32,
+            "column" : 120,
+            "source_fragment" : "hdr.udp.dstPort"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_3"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ipv4", "protocol"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "./dint_app3.p4",
+            "line" : 32,
+            "column" : 137,
+            "source_fragment" : "hdr.ipv4.protocol"
+          }
+        },
         {
           "op" : "modify_field_with_hash_based_offset",
           "parameters" : [
@@ -716,6 +826,101 @@
       "runtime_data" : [],
       "primitives" : [
         {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_4"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ipv4", "srcAddr"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "./dint_app3.p4",
+            "line" : 46,
+            "column" : 68,
+            "source_fragment" : "hdr.ipv4.srcAddr"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_5"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ipv4", "dstAddr"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "./dint_app3.p4",
+            "line" : 46,
+            "column" : 86,
+            "source_fragment" : "hdr.ipv4.dstAddr"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_6"]
+            },
+            {
+              "type" : "field",
+              "value" : ["udp", "srcPort"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "./dint_app3.p4",
+            "line" : 46,
+            "column" : 104,
+            "source_fragment" : "hdr.udp.srcPort"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_7"]
+            },
+            {
+              "type" : "field",
+              "value" : ["udp", "dstPort"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "./dint_app3.p4",
+            "line" : 46,
+            "column" : 121,
+            "source_fragment" : "hdr.udp.dstPort"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_8"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ipv4", "protocol"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "./dint_app3.p4",
+            "line" : 46,
+            "column" : 138,
+            "source_fragment" : "hdr.ipv4.protocol"
+          }
+        },
+        {
           "op" : "modify_field_with_hash_based_offset",
           "parameters" : [
             {
@@ -749,6 +954,101 @@
       "id" : 3,
       "runtime_data" : [],
       "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_9"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ipv4", "srcAddr"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "./dint_app3.p4",
+            "line" : 60,
+            "column" : 69,
+            "source_fragment" : "hdr.ipv4.srcAddr"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_10"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ipv4", "dstAddr"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "./dint_app3.p4",
+            "line" : 60,
+            "column" : 87,
+            "source_fragment" : "hdr.ipv4.dstAddr"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_11"]
+            },
+            {
+              "type" : "field",
+              "value" : ["udp", "srcPort"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "./dint_app3.p4",
+            "line" : 60,
+            "column" : 105,
+            "source_fragment" : "hdr.udp.srcPort"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_12"]
+            },
+            {
+              "type" : "field",
+              "value" : ["udp", "dstPort"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "./dint_app3.p4",
+            "line" : 60,
+            "column" : 122,
+            "source_fragment" : "hdr.udp.dstPort"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_13"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ipv4", "protocol"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "./dint_app3.p4",
+            "line" : 60,
+            "column" : 139,
+            "source_fragment" : "hdr.ipv4.protocol"
+          }
+        },
         {
           "op" : "modify_field_with_hash_based_offset",
           "parameters" : [
@@ -962,20 +1262,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value13"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value13"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x60"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x60"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x000000000000000000000000ffffffff"
                       }
                     }
                   },
@@ -1014,20 +1324,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value13"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value13"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x40"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x40"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x000000000000000000000000ffffffff"
                       }
                     }
                   },
@@ -1066,20 +1386,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value13"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value13"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x30"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x30"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x0000000000000000000000000000ffff"
                       }
                     }
                   },
@@ -1118,20 +1448,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value13"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value13"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x20"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x20"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x0000000000000000000000000000ffff"
                       }
                     }
                   },
@@ -1170,20 +1510,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value13"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value13"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x18"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x18"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x000000000000000000000000000000ff"
                       }
                     }
                   },
@@ -1222,20 +1572,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value13"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value13"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x10"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x10"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x000000000000000000000000000000ff"
                       }
                     }
                   },
@@ -1274,20 +1634,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value13"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value13"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x8"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x8"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x000000000000000000000000000000ff"
                       }
                     }
                   },
@@ -1320,8 +1690,18 @@
                 "value" : {
                   "op" : "&",
                   "left" : {
-                    "type" : "field",
-                    "value" : ["scalars", "userMetadata._dint_metadata_register_value13"]
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_register_value13"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x000000000000000000000000000000ff"
+                      }
+                    }
                   },
                   "right" : {
                     "type" : "hexstr",
@@ -1365,20 +1745,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value224"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value224"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x60"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x60"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x000000000000000000000000ffffffff"
                       }
                     }
                   },
@@ -1417,20 +1807,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value224"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value224"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x40"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x40"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x000000000000000000000000ffffffff"
                       }
                     }
                   },
@@ -1469,20 +1869,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value224"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value224"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x30"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x30"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x0000000000000000000000000000ffff"
                       }
                     }
                   },
@@ -1521,20 +1931,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value224"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value224"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x20"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x20"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x0000000000000000000000000000ffff"
                       }
                     }
                   },
@@ -1573,20 +1993,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value224"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value224"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x18"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x18"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x000000000000000000000000000000ff"
                       }
                     }
                   },
@@ -1625,20 +2055,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value224"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value224"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x10"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x10"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x000000000000000000000000000000ff"
                       }
                     }
                   },
@@ -1677,20 +2117,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value224"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value224"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x8"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x8"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x000000000000000000000000000000ff"
                       }
                     }
                   },
@@ -1723,8 +2173,18 @@
                 "value" : {
                   "op" : "&",
                   "left" : {
-                    "type" : "field",
-                    "value" : ["scalars", "userMetadata._dint_metadata_register_value224"]
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_register_value224"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x000000000000000000000000000000ff"
+                      }
+                    }
                   },
                   "right" : {
                     "type" : "hexstr",
@@ -1768,20 +2228,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value335"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value335"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x60"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x60"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x000000000000000000000000ffffffff"
                       }
                     }
                   },
@@ -1820,20 +2290,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value335"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value335"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x40"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x40"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x000000000000000000000000ffffffff"
                       }
                     }
                   },
@@ -1872,20 +2352,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value335"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value335"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x30"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x30"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x0000000000000000000000000000ffff"
                       }
                     }
                   },
@@ -1924,20 +2414,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value335"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value335"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x20"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x20"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x0000000000000000000000000000ffff"
                       }
                     }
                   },
@@ -1976,20 +2476,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value335"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value335"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x18"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x18"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x000000000000000000000000000000ff"
                       }
                     }
                   },
@@ -2028,20 +2538,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value335"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value335"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x10"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x10"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x000000000000000000000000000000ff"
                       }
                     }
                   },
@@ -2080,20 +2600,30 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : ">>",
+                          "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["scalars", "userMetadata._dint_metadata_register_value335"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_register_value335"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x8"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
-                            "value" : "0x8"
+                            "value" : "0xffffffffffffffffffffffffffffffff"
                           }
                         }
                       },
                       "right" : {
                         "type" : "hexstr",
-                        "value" : "0xffffffffffffffffffffffffffffffff"
+                        "value" : "0x000000000000000000000000000000ff"
                       }
                     }
                   },
@@ -2126,8 +2656,18 @@
                 "value" : {
                   "op" : "&",
                   "left" : {
-                    "type" : "field",
-                    "value" : ["scalars", "userMetadata._dint_metadata_register_value335"]
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_register_value335"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x000000000000000000000000000000ff"
+                      }
+                    }
                   },
                   "right" : {
                     "type" : "hexstr",
@@ -2165,6 +2705,86 @@
             "column" : 2,
             "source_fragment" : "hdr.intbitmap.setValid()"
           }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["intbitmap", "device_bit"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x00"
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["intbitmap", "device_bit"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_deviceno19"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._int_metadata_device_no11"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata._dint_metadata_output_deviceno45"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_prev_deviceno19"]
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_output_deviceno45"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_deviceno19"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._int_metadata_device_no11"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
         },
         {
           "op" : "assign",
@@ -2264,6 +2884,126 @@
                     "value" : "0x00"
                   },
                   "right" : {
+                    "type" : "field",
+                    "value" : ["intbitmap", "iport_bit"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_iport20"]
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "ingress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata._dint_metadata_output_iport46"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_prev_iport20"]
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_output_iport46"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_iport20"]
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "ingress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["intbitmap", "iport_bit"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x00"
+                  },
+                  "right" : {
                     "type" : "hexstr",
                     "value" : "0x01"
                   },
@@ -2280,8 +3020,18 @@
                         "value" : {
                           "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["standard_metadata", "ingress_port"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "ingress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
@@ -2318,8 +3068,18 @@
                     "value" : {
                       "op" : "&",
                       "left" : {
-                        "type" : "field",
-                        "value" : ["standard_metadata", "ingress_port"]
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "field",
+                            "value" : ["standard_metadata", "ingress_port"]
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00ff"
+                          }
+                        }
                       },
                       "right" : {
                         "type" : "hexstr",
@@ -2340,8 +3100,138 @@
                         "value" : {
                           "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["standard_metadata", "ingress_port"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "ingress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["intbitmap", "eport_bit"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x00"
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["intbitmap", "eport_bit"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_eport21"]
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "egress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata._dint_metadata_output_eport47"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_prev_eport21"]
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_output_eport47"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_eport21"]
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "egress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
@@ -2390,8 +3280,18 @@
                         "value" : {
                           "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["standard_metadata", "egress_port"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "egress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
@@ -2428,8 +3328,18 @@
                     "value" : {
                       "op" : "&",
                       "left" : {
-                        "type" : "field",
-                        "value" : ["standard_metadata", "egress_port"]
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "field",
+                            "value" : ["standard_metadata", "egress_port"]
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00ff"
+                          }
+                        }
                       },
                       "right" : {
                         "type" : "hexstr",
@@ -2450,12 +3360,302 @@
                         "value" : {
                           "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["standard_metadata", "egress_port"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "egress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
                             "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["intbitmap", "timedelta_bit"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x00"
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["intbitmap", "timedelta_bit"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "or",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "and",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">=",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta22"]
+                              },
+                              "right" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "deq_timedelta"]
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<=",
+                              "left" : {
+                                "type" : "expression",
+                                "value" : {
+                                  "op" : "&",
+                                  "left" : {
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "-",
+                                      "left" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta22"]
+                                      },
+                                      "right" : {
+                                        "type" : "field",
+                                        "value" : ["standard_metadata", "deq_timedelta"]
+                                      }
+                                    }
+                                  },
+                                  "right" : {
+                                    "type" : "hexstr",
+                                    "value" : "0xffffffff"
+                                  }
+                                }
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x0000000a"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "and",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta22"]
+                              },
+                              "right" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "deq_timedelta"]
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<=",
+                              "left" : {
+                                "type" : "expression",
+                                "value" : {
+                                  "op" : "&",
+                                  "left" : {
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "-",
+                                      "left" : {
+                                        "type" : "field",
+                                        "value" : ["standard_metadata", "deq_timedelta"]
+                                      },
+                                      "right" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta22"]
+                                      }
+                                    }
+                                  },
+                                  "right" : {
+                                    "type" : "hexstr",
+                                    "value" : "0xffffffff"
+                                  }
+                                }
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x0000000a"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata._dint_metadata_output_timedelta48"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta22"]
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_output_timedelta48"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "or",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "and",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">=",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta22"]
+                              },
+                              "right" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "deq_timedelta"]
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<=",
+                              "left" : {
+                                "type" : "expression",
+                                "value" : {
+                                  "op" : "&",
+                                  "left" : {
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "-",
+                                      "left" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta22"]
+                                      },
+                                      "right" : {
+                                        "type" : "field",
+                                        "value" : ["standard_metadata", "deq_timedelta"]
+                                      }
+                                    }
+                                  },
+                                  "right" : {
+                                    "type" : "hexstr",
+                                    "value" : "0xffffffff"
+                                  }
+                                }
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x0000000a"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "and",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta22"]
+                              },
+                              "right" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "deq_timedelta"]
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<=",
+                              "left" : {
+                                "type" : "expression",
+                                "value" : {
+                                  "op" : "&",
+                                  "left" : {
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "-",
+                                      "left" : {
+                                        "type" : "field",
+                                        "value" : ["standard_metadata", "deq_timedelta"]
+                                      },
+                                      "right" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta22"]
+                                      }
+                                    }
+                                  },
+                                  "right" : {
+                                    "type" : "hexstr",
+                                    "value" : "0xffffffff"
+                                  }
+                                }
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x0000000a"
+                              }
+                            }
                           }
                         }
                       }
@@ -2931,6 +4131,86 @@
                     "value" : "0x00"
                   },
                   "right" : {
+                    "type" : "field",
+                    "value" : ["intbitmap", "device_bit"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_deviceno230"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._int_metadata_device_no11"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata._dint_metadata_output_deviceno45"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_prev_deviceno230"]
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_output_deviceno45"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_deviceno230"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._int_metadata_device_no11"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["intbitmap", "device_bit"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x00"
+                  },
+                  "right" : {
                     "type" : "hexstr",
                     "value" : "0x01"
                   },
@@ -3011,6 +4291,126 @@
                     "value" : "0x00"
                   },
                   "right" : {
+                    "type" : "field",
+                    "value" : ["intbitmap", "iport_bit"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_iport231"]
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "ingress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata._dint_metadata_output_iport46"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_prev_iport231"]
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_output_iport46"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_iport231"]
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "ingress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["intbitmap", "iport_bit"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x00"
+                  },
+                  "right" : {
                     "type" : "hexstr",
                     "value" : "0x01"
                   },
@@ -3027,8 +4427,18 @@
                         "value" : {
                           "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["standard_metadata", "ingress_port"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "ingress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
@@ -3065,8 +4475,18 @@
                     "value" : {
                       "op" : "&",
                       "left" : {
-                        "type" : "field",
-                        "value" : ["standard_metadata", "ingress_port"]
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "field",
+                            "value" : ["standard_metadata", "ingress_port"]
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00ff"
+                          }
+                        }
                       },
                       "right" : {
                         "type" : "hexstr",
@@ -3087,8 +4507,138 @@
                         "value" : {
                           "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["standard_metadata", "ingress_port"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "ingress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["intbitmap", "eport_bit"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x00"
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["intbitmap", "eport_bit"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_eport232"]
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "egress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata._dint_metadata_output_eport47"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_prev_eport232"]
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_output_eport47"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_eport232"]
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "egress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
@@ -3137,8 +4687,18 @@
                         "value" : {
                           "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["standard_metadata", "egress_port"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "egress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
@@ -3175,8 +4735,18 @@
                     "value" : {
                       "op" : "&",
                       "left" : {
-                        "type" : "field",
-                        "value" : ["standard_metadata", "egress_port"]
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "field",
+                            "value" : ["standard_metadata", "egress_port"]
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00ff"
+                          }
+                        }
                       },
                       "right" : {
                         "type" : "hexstr",
@@ -3197,12 +4767,302 @@
                         "value" : {
                           "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["standard_metadata", "egress_port"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "egress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
                             "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["intbitmap", "timedelta_bit"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x00"
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["intbitmap", "timedelta_bit"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "or",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "and",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">=",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta233"]
+                              },
+                              "right" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "deq_timedelta"]
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<=",
+                              "left" : {
+                                "type" : "expression",
+                                "value" : {
+                                  "op" : "&",
+                                  "left" : {
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "-",
+                                      "left" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta233"]
+                                      },
+                                      "right" : {
+                                        "type" : "field",
+                                        "value" : ["standard_metadata", "deq_timedelta"]
+                                      }
+                                    }
+                                  },
+                                  "right" : {
+                                    "type" : "hexstr",
+                                    "value" : "0xffffffff"
+                                  }
+                                }
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x0000000a"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "and",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta233"]
+                              },
+                              "right" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "deq_timedelta"]
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<=",
+                              "left" : {
+                                "type" : "expression",
+                                "value" : {
+                                  "op" : "&",
+                                  "left" : {
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "-",
+                                      "left" : {
+                                        "type" : "field",
+                                        "value" : ["standard_metadata", "deq_timedelta"]
+                                      },
+                                      "right" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta233"]
+                                      }
+                                    }
+                                  },
+                                  "right" : {
+                                    "type" : "hexstr",
+                                    "value" : "0xffffffff"
+                                  }
+                                }
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x0000000a"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata._dint_metadata_output_timedelta48"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta233"]
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_output_timedelta48"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "or",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "and",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">=",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta233"]
+                              },
+                              "right" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "deq_timedelta"]
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<=",
+                              "left" : {
+                                "type" : "expression",
+                                "value" : {
+                                  "op" : "&",
+                                  "left" : {
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "-",
+                                      "left" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta233"]
+                                      },
+                                      "right" : {
+                                        "type" : "field",
+                                        "value" : ["standard_metadata", "deq_timedelta"]
+                                      }
+                                    }
+                                  },
+                                  "right" : {
+                                    "type" : "hexstr",
+                                    "value" : "0xffffffff"
+                                  }
+                                }
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x0000000a"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "and",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta233"]
+                              },
+                              "right" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "deq_timedelta"]
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<=",
+                              "left" : {
+                                "type" : "expression",
+                                "value" : {
+                                  "op" : "&",
+                                  "left" : {
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "-",
+                                      "left" : {
+                                        "type" : "field",
+                                        "value" : ["standard_metadata", "deq_timedelta"]
+                                      },
+                                      "right" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta233"]
+                                      }
+                                    }
+                                  },
+                                  "right" : {
+                                    "type" : "hexstr",
+                                    "value" : "0xffffffff"
+                                  }
+                                }
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x0000000a"
+                              }
+                            }
                           }
                         }
                       }
@@ -3678,6 +5538,86 @@
                     "value" : "0x00"
                   },
                   "right" : {
+                    "type" : "field",
+                    "value" : ["intbitmap", "device_bit"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_deviceno341"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._int_metadata_device_no11"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata._dint_metadata_output_deviceno45"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_prev_deviceno341"]
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_output_deviceno45"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_deviceno341"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._int_metadata_device_no11"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["intbitmap", "device_bit"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x00"
+                  },
+                  "right" : {
                     "type" : "hexstr",
                     "value" : "0x01"
                   },
@@ -3758,6 +5698,126 @@
                     "value" : "0x00"
                   },
                   "right" : {
+                    "type" : "field",
+                    "value" : ["intbitmap", "iport_bit"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_iport342"]
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "ingress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata._dint_metadata_output_iport46"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_prev_iport342"]
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_output_iport46"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_iport342"]
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "ingress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["intbitmap", "iport_bit"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x00"
+                  },
+                  "right" : {
                     "type" : "hexstr",
                     "value" : "0x01"
                   },
@@ -3774,8 +5834,18 @@
                         "value" : {
                           "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["standard_metadata", "ingress_port"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "ingress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
@@ -3812,8 +5882,18 @@
                     "value" : {
                       "op" : "&",
                       "left" : {
-                        "type" : "field",
-                        "value" : ["standard_metadata", "ingress_port"]
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "field",
+                            "value" : ["standard_metadata", "ingress_port"]
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00ff"
+                          }
+                        }
                       },
                       "right" : {
                         "type" : "hexstr",
@@ -3834,8 +5914,138 @@
                         "value" : {
                           "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["standard_metadata", "ingress_port"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "ingress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["intbitmap", "eport_bit"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x00"
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["intbitmap", "eport_bit"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_eport343"]
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "egress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata._dint_metadata_output_eport47"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_prev_eport343"]
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_output_eport47"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "==",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata._dint_metadata_prev_eport343"]
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "egress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
@@ -3884,8 +6094,18 @@
                         "value" : {
                           "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["standard_metadata", "egress_port"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "egress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
@@ -3922,8 +6142,18 @@
                     "value" : {
                       "op" : "&",
                       "left" : {
-                        "type" : "field",
-                        "value" : ["standard_metadata", "egress_port"]
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "field",
+                            "value" : ["standard_metadata", "egress_port"]
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00ff"
+                          }
+                        }
                       },
                       "right" : {
                         "type" : "hexstr",
@@ -3944,12 +6174,302 @@
                         "value" : {
                           "op" : "&",
                           "left" : {
-                            "type" : "field",
-                            "value" : ["standard_metadata", "egress_port"]
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "egress_port"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x00ff"
+                              }
+                            }
                           },
                           "right" : {
                             "type" : "hexstr",
                             "value" : "0xff"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["intbitmap", "timedelta_bit"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "hexstr",
+                    "value" : "0x00"
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["intbitmap", "timedelta_bit"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "or",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "and",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">=",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta344"]
+                              },
+                              "right" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "deq_timedelta"]
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<=",
+                              "left" : {
+                                "type" : "expression",
+                                "value" : {
+                                  "op" : "&",
+                                  "left" : {
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "-",
+                                      "left" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta344"]
+                                      },
+                                      "right" : {
+                                        "type" : "field",
+                                        "value" : ["standard_metadata", "deq_timedelta"]
+                                      }
+                                    }
+                                  },
+                                  "right" : {
+                                    "type" : "hexstr",
+                                    "value" : "0xffffffff"
+                                  }
+                                }
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x0000000a"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "and",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta344"]
+                              },
+                              "right" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "deq_timedelta"]
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<=",
+                              "left" : {
+                                "type" : "expression",
+                                "value" : {
+                                  "op" : "&",
+                                  "left" : {
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "-",
+                                      "left" : {
+                                        "type" : "field",
+                                        "value" : ["standard_metadata", "deq_timedelta"]
+                                      },
+                                      "right" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta344"]
+                                      }
+                                    }
+                                  },
+                                  "right" : {
+                                    "type" : "hexstr",
+                                    "value" : "0xffffffff"
+                                  }
+                                }
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x0000000a"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata._dint_metadata_output_timedelta48"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "?",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta344"]
+                  },
+                  "right" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata._dint_metadata_output_timedelta48"]
+                  },
+                  "cond" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "or",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "and",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">=",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta344"]
+                              },
+                              "right" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "deq_timedelta"]
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<=",
+                              "left" : {
+                                "type" : "expression",
+                                "value" : {
+                                  "op" : "&",
+                                  "left" : {
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "-",
+                                      "left" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta344"]
+                                      },
+                                      "right" : {
+                                        "type" : "field",
+                                        "value" : ["standard_metadata", "deq_timedelta"]
+                                      }
+                                    }
+                                  },
+                                  "right" : {
+                                    "type" : "hexstr",
+                                    "value" : "0xffffffff"
+                                  }
+                                }
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x0000000a"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "and",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta344"]
+                              },
+                              "right" : {
+                                "type" : "field",
+                                "value" : ["standard_metadata", "deq_timedelta"]
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "<=",
+                              "left" : {
+                                "type" : "expression",
+                                "value" : {
+                                  "op" : "&",
+                                  "left" : {
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "-",
+                                      "left" : {
+                                        "type" : "field",
+                                        "value" : ["standard_metadata", "deq_timedelta"]
+                                      },
+                                      "right" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "userMetadata._dint_metadata_prev_timedelta344"]
+                                      }
+                                    }
+                                  },
+                                  "right" : {
+                                    "type" : "hexstr",
+                                    "value" : "0xffffffff"
+                                  }
+                                }
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x0000000a"
+                              }
+                            }
                           }
                         }
                       }
@@ -4478,8 +6998,18 @@
                 "value" : {
                   "op" : "&",
                   "left" : {
-                    "type" : "field",
-                    "value" : ["standard_metadata", "ingress_port"]
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["standard_metadata", "ingress_port"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00ff"
+                      }
+                    }
                   },
                   "right" : {
                     "type" : "hexstr",
@@ -4529,8 +7059,18 @@
                 "value" : {
                   "op" : "&",
                   "left" : {
-                    "type" : "field",
-                    "value" : ["standard_metadata", "egress_port"]
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["standard_metadata", "egress_port"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00ff"
+                      }
+                    }
                   },
                   "right" : {
                     "type" : "hexstr",
@@ -4810,8 +7350,18 @@
                 "value" : {
                   "op" : "&",
                   "left" : {
-                    "type" : "field",
-                    "value" : ["standard_metadata", "ingress_port"]
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["standard_metadata", "ingress_port"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00ff"
+                      }
+                    }
                   },
                   "right" : {
                     "type" : "hexstr",
@@ -5012,8 +7562,18 @@
                 "value" : {
                   "op" : "&",
                   "left" : {
-                    "type" : "field",
-                    "value" : ["standard_metadata", "egress_port"]
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["standard_metadata", "egress_port"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00ff"
+                      }
+                    }
                   },
                   "right" : {
                     "type" : "hexstr",
@@ -5379,7 +7939,7 @@
           "parameters" : [
             {
               "type" : "field",
-              "value" : ["scalars", "tmp"]
+              "value" : ["scalars", "tmp_14"]
             },
             {
               "type" : "expression",
@@ -5699,7 +8259,7 @@
             },
             {
               "type" : "field",
-              "value" : ["scalars", "tmp"]
+              "value" : ["scalars", "tmp_14"]
             }
           ],
           "source_info" : {
@@ -5744,7 +8304,7 @@
           "parameters" : [
             {
               "type" : "field",
-              "value" : ["scalars", "tmp_0"]
+              "value" : ["scalars", "tmp_15"]
             },
             {
               "type" : "expression",
@@ -6064,7 +8624,7 @@
             },
             {
               "type" : "field",
-              "value" : ["scalars", "tmp_0"]
+              "value" : ["scalars", "tmp_15"]
             }
           ],
           "source_info" : {
@@ -6109,7 +8669,7 @@
           "parameters" : [
             {
               "type" : "field",
-              "value" : ["scalars", "tmp_1"]
+              "value" : ["scalars", "tmp_16"]
             },
             {
               "type" : "expression",
@@ -6429,7 +8989,7 @@
             },
             {
               "type" : "field",
-              "value" : ["scalars", "tmp_1"]
+              "value" : ["scalars", "tmp_16"]
             }
           ],
           "source_info" : {
@@ -6554,7 +9114,7 @@
           "parameters" : [
             {
               "type" : "field",
-              "value" : ["scalars", "tmp_2"]
+              "value" : ["scalars", "tmp_17"]
             },
             {
               "type" : "expression",
@@ -6590,7 +9150,7 @@
             },
             {
               "type" : "field",
-              "value" : ["scalars", "tmp_2"]
+              "value" : ["scalars", "tmp_17"]
             }
           ],
           "source_info" : {
@@ -6695,7 +9255,7 @@
           "parameters" : [
             {
               "type" : "field",
-              "value" : ["scalars", "tmp_3"]
+              "value" : ["scalars", "tmp_18"]
             },
             {
               "type" : "expression",
@@ -6755,7 +9315,7 @@
             },
             {
               "type" : "field",
-              "value" : ["scalars", "tmp_3"]
+              "value" : ["scalars", "tmp_18"]
             }
           ],
           "source_info" : {
@@ -6785,32 +9345,8 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : "?",
+                          "op" : "&",
                           "left" : {
-                            "type" : "expression",
-                            "value" : {
-                              "op" : "&",
-                              "left" : {
-                                "type" : "expression",
-                                "value" : {
-                                  "op" : ">>",
-                                  "left" : {
-                                    "type" : "local",
-                                    "value" : 1
-                                  },
-                                  "right" : {
-                                    "type" : "hexstr",
-                                    "value" : "0x4"
-                                  }
-                                }
-                              },
-                              "right" : {
-                                "type" : "hexstr",
-                                "value" : "0xffff"
-                              }
-                            }
-                          },
-                          "right" : {
                             "type" : "expression",
                             "value" : {
                               "op" : "?",
@@ -6828,7 +9364,7 @@
                                       },
                                       "right" : {
                                         "type" : "hexstr",
-                                        "value" : "0x8"
+                                        "value" : "0x4"
                                       }
                                     }
                                   },
@@ -6867,8 +9403,184 @@
                                     }
                                   },
                                   "right" : {
-                                    "type" : "local",
-                                    "value" : 1
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "?",
+                                      "left" : {
+                                        "type" : "expression",
+                                        "value" : {
+                                          "op" : "&",
+                                          "left" : {
+                                            "type" : "expression",
+                                            "value" : {
+                                              "op" : ">>",
+                                              "left" : {
+                                                "type" : "local",
+                                                "value" : 1
+                                              },
+                                              "right" : {
+                                                "type" : "hexstr",
+                                                "value" : "0x8"
+                                              }
+                                            }
+                                          },
+                                          "right" : {
+                                            "type" : "hexstr",
+                                            "value" : "0xffff"
+                                          }
+                                        }
+                                      },
+                                      "right" : {
+                                        "type" : "expression",
+                                        "value" : {
+                                          "op" : "?",
+                                          "left" : {
+                                            "type" : "expression",
+                                            "value" : {
+                                              "op" : "&",
+                                              "left" : {
+                                                "type" : "expression",
+                                                "value" : {
+                                                  "op" : ">>",
+                                                  "left" : {
+                                                    "type" : "local",
+                                                    "value" : 1
+                                                  },
+                                                  "right" : {
+                                                    "type" : "hexstr",
+                                                    "value" : "0x4"
+                                                  }
+                                                }
+                                              },
+                                              "right" : {
+                                                "type" : "hexstr",
+                                                "value" : "0xffff"
+                                              }
+                                            }
+                                          },
+                                          "right" : {
+                                            "type" : "expression",
+                                            "value" : {
+                                              "op" : "?",
+                                              "left" : {
+                                                "type" : "expression",
+                                                "value" : {
+                                                  "op" : "&",
+                                                  "left" : {
+                                                    "type" : "expression",
+                                                    "value" : {
+                                                      "op" : ">>",
+                                                      "left" : {
+                                                        "type" : "local",
+                                                        "value" : 1
+                                                      },
+                                                      "right" : {
+                                                        "type" : "hexstr",
+                                                        "value" : "0x8"
+                                                      }
+                                                    }
+                                                  },
+                                                  "right" : {
+                                                    "type" : "hexstr",
+                                                    "value" : "0xffff"
+                                                  }
+                                                }
+                                              },
+                                              "right" : {
+                                                "type" : "expression",
+                                                "value" : {
+                                                  "op" : "?",
+                                                  "left" : {
+                                                    "type" : "expression",
+                                                    "value" : {
+                                                      "op" : "&",
+                                                      "left" : {
+                                                        "type" : "expression",
+                                                        "value" : {
+                                                          "op" : ">>",
+                                                          "left" : {
+                                                            "type" : "local",
+                                                            "value" : 1
+                                                          },
+                                                          "right" : {
+                                                            "type" : "hexstr",
+                                                            "value" : "0x4"
+                                                          }
+                                                        }
+                                                      },
+                                                      "right" : {
+                                                        "type" : "hexstr",
+                                                        "value" : "0xffff"
+                                                      }
+                                                    }
+                                                  },
+                                                  "right" : {
+                                                    "type" : "local",
+                                                    "value" : 1
+                                                  },
+                                                  "cond" : {
+                                                    "type" : "expression",
+                                                    "value" : {
+                                                      "op" : "==",
+                                                      "left" : {
+                                                        "type" : "field",
+                                                        "value" : ["scalars", "result_0"]
+                                                      },
+                                                      "right" : {
+                                                        "type" : "hexstr",
+                                                        "value" : "0x00000001"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "cond" : {
+                                                "type" : "expression",
+                                                "value" : {
+                                                  "op" : "==",
+                                                  "left" : {
+                                                    "type" : "field",
+                                                    "value" : ["scalars", "result_0"]
+                                                  },
+                                                  "right" : {
+                                                    "type" : "hexstr",
+                                                    "value" : "0x00000002"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "cond" : {
+                                            "type" : "expression",
+                                            "value" : {
+                                              "op" : "==",
+                                              "left" : {
+                                                "type" : "field",
+                                                "value" : ["scalars", "result_0"]
+                                              },
+                                              "right" : {
+                                                "type" : "hexstr",
+                                                "value" : "0x00000001"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "cond" : {
+                                        "type" : "expression",
+                                        "value" : {
+                                          "op" : "==",
+                                          "left" : {
+                                            "type" : "field",
+                                            "value" : ["scalars", "result_0"]
+                                          },
+                                          "right" : {
+                                            "type" : "hexstr",
+                                            "value" : "0x00000003"
+                                          }
+                                        }
+                                      }
+                                    }
                                   },
                                   "cond" : {
                                     "type" : "expression",
@@ -6880,7 +9592,7 @@
                                       },
                                       "right" : {
                                         "type" : "hexstr",
-                                        "value" : "0x00000003"
+                                        "value" : "0x00000002"
                                       }
                                     }
                                   }
@@ -6896,25 +9608,15 @@
                                   },
                                   "right" : {
                                     "type" : "hexstr",
-                                    "value" : "0x00000002"
+                                    "value" : "0x00000001"
                                   }
                                 }
                               }
                             }
                           },
-                          "cond" : {
-                            "type" : "expression",
-                            "value" : {
-                              "op" : "==",
-                              "left" : {
-                                "type" : "field",
-                                "value" : ["scalars", "result_0"]
-                              },
-                              "right" : {
-                                "type" : "hexstr",
-                                "value" : "0x00000001"
-                              }
-                            }
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x000f"
                           }
                         }
                       },
@@ -6959,32 +9661,8 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : "?",
+                          "op" : "&",
                           "left" : {
-                            "type" : "expression",
-                            "value" : {
-                              "op" : "&",
-                              "left" : {
-                                "type" : "expression",
-                                "value" : {
-                                  "op" : ">>",
-                                  "left" : {
-                                    "type" : "local",
-                                    "value" : 1
-                                  },
-                                  "right" : {
-                                    "type" : "hexstr",
-                                    "value" : "0x4"
-                                  }
-                                }
-                              },
-                              "right" : {
-                                "type" : "hexstr",
-                                "value" : "0xffff"
-                              }
-                            }
-                          },
-                          "right" : {
                             "type" : "expression",
                             "value" : {
                               "op" : "?",
@@ -7002,7 +9680,7 @@
                                       },
                                       "right" : {
                                         "type" : "hexstr",
-                                        "value" : "0x8"
+                                        "value" : "0x4"
                                       }
                                     }
                                   },
@@ -7041,8 +9719,184 @@
                                     }
                                   },
                                   "right" : {
-                                    "type" : "local",
-                                    "value" : 1
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "?",
+                                      "left" : {
+                                        "type" : "expression",
+                                        "value" : {
+                                          "op" : "&",
+                                          "left" : {
+                                            "type" : "expression",
+                                            "value" : {
+                                              "op" : ">>",
+                                              "left" : {
+                                                "type" : "local",
+                                                "value" : 1
+                                              },
+                                              "right" : {
+                                                "type" : "hexstr",
+                                                "value" : "0x8"
+                                              }
+                                            }
+                                          },
+                                          "right" : {
+                                            "type" : "hexstr",
+                                            "value" : "0xffff"
+                                          }
+                                        }
+                                      },
+                                      "right" : {
+                                        "type" : "expression",
+                                        "value" : {
+                                          "op" : "?",
+                                          "left" : {
+                                            "type" : "expression",
+                                            "value" : {
+                                              "op" : "&",
+                                              "left" : {
+                                                "type" : "expression",
+                                                "value" : {
+                                                  "op" : ">>",
+                                                  "left" : {
+                                                    "type" : "local",
+                                                    "value" : 1
+                                                  },
+                                                  "right" : {
+                                                    "type" : "hexstr",
+                                                    "value" : "0x4"
+                                                  }
+                                                }
+                                              },
+                                              "right" : {
+                                                "type" : "hexstr",
+                                                "value" : "0xffff"
+                                              }
+                                            }
+                                          },
+                                          "right" : {
+                                            "type" : "expression",
+                                            "value" : {
+                                              "op" : "?",
+                                              "left" : {
+                                                "type" : "expression",
+                                                "value" : {
+                                                  "op" : "&",
+                                                  "left" : {
+                                                    "type" : "expression",
+                                                    "value" : {
+                                                      "op" : ">>",
+                                                      "left" : {
+                                                        "type" : "local",
+                                                        "value" : 1
+                                                      },
+                                                      "right" : {
+                                                        "type" : "hexstr",
+                                                        "value" : "0x8"
+                                                      }
+                                                    }
+                                                  },
+                                                  "right" : {
+                                                    "type" : "hexstr",
+                                                    "value" : "0xffff"
+                                                  }
+                                                }
+                                              },
+                                              "right" : {
+                                                "type" : "expression",
+                                                "value" : {
+                                                  "op" : "?",
+                                                  "left" : {
+                                                    "type" : "expression",
+                                                    "value" : {
+                                                      "op" : "&",
+                                                      "left" : {
+                                                        "type" : "expression",
+                                                        "value" : {
+                                                          "op" : ">>",
+                                                          "left" : {
+                                                            "type" : "local",
+                                                            "value" : 1
+                                                          },
+                                                          "right" : {
+                                                            "type" : "hexstr",
+                                                            "value" : "0x4"
+                                                          }
+                                                        }
+                                                      },
+                                                      "right" : {
+                                                        "type" : "hexstr",
+                                                        "value" : "0xffff"
+                                                      }
+                                                    }
+                                                  },
+                                                  "right" : {
+                                                    "type" : "local",
+                                                    "value" : 1
+                                                  },
+                                                  "cond" : {
+                                                    "type" : "expression",
+                                                    "value" : {
+                                                      "op" : "==",
+                                                      "left" : {
+                                                        "type" : "field",
+                                                        "value" : ["scalars", "result_0"]
+                                                      },
+                                                      "right" : {
+                                                        "type" : "hexstr",
+                                                        "value" : "0x00000001"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "cond" : {
+                                                "type" : "expression",
+                                                "value" : {
+                                                  "op" : "==",
+                                                  "left" : {
+                                                    "type" : "field",
+                                                    "value" : ["scalars", "result_0"]
+                                                  },
+                                                  "right" : {
+                                                    "type" : "hexstr",
+                                                    "value" : "0x00000002"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "cond" : {
+                                            "type" : "expression",
+                                            "value" : {
+                                              "op" : "==",
+                                              "left" : {
+                                                "type" : "field",
+                                                "value" : ["scalars", "result_0"]
+                                              },
+                                              "right" : {
+                                                "type" : "hexstr",
+                                                "value" : "0x00000001"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "cond" : {
+                                        "type" : "expression",
+                                        "value" : {
+                                          "op" : "==",
+                                          "left" : {
+                                            "type" : "field",
+                                            "value" : ["scalars", "result_0"]
+                                          },
+                                          "right" : {
+                                            "type" : "hexstr",
+                                            "value" : "0x00000003"
+                                          }
+                                        }
+                                      }
+                                    }
                                   },
                                   "cond" : {
                                     "type" : "expression",
@@ -7054,7 +9908,7 @@
                                       },
                                       "right" : {
                                         "type" : "hexstr",
-                                        "value" : "0x00000003"
+                                        "value" : "0x00000002"
                                       }
                                     }
                                   }
@@ -7070,25 +9924,15 @@
                                   },
                                   "right" : {
                                     "type" : "hexstr",
-                                    "value" : "0x00000002"
+                                    "value" : "0x00000001"
                                   }
                                 }
                               }
                             }
                           },
-                          "cond" : {
-                            "type" : "expression",
-                            "value" : {
-                              "op" : "==",
-                              "left" : {
-                                "type" : "field",
-                                "value" : ["scalars", "result_0"]
-                              },
-                              "right" : {
-                                "type" : "hexstr",
-                                "value" : "0x00000001"
-                              }
-                            }
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x000f"
                           }
                         }
                       },
@@ -7308,7 +10152,7 @@
           "parameters" : [
             {
               "type" : "field",
-              "value" : ["scalars", "port_1"]
+              "value" : ["scalars", "port_2"]
             },
             {
               "type" : "expression",
@@ -7317,8 +10161,18 @@
                 "value" : {
                   "op" : "&",
                   "left" : {
-                    "type" : "field",
-                    "value" : ["sr", "routingList"]
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["sr", "routingList"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ff"
+                      }
+                    }
                   },
                   "right" : {
                     "type" : "hexstr",
@@ -7400,7 +10254,7 @@
                           "op" : "&",
                           "left" : {
                             "type" : "field",
-                            "value" : ["scalars", "port_1"]
+                            "value" : ["scalars", "port_2"]
                           },
                           "right" : {
                             "type" : "hexstr",
@@ -7452,7 +10306,7 @@
                           "op" : "&",
                           "left" : {
                             "type" : "field",
-                            "value" : ["scalars", "port_1"]
+                            "value" : ["scalars", "port_2"]
                           },
                           "right" : {
                             "type" : "hexstr",
@@ -7524,7 +10378,7 @@
           "parameters" : [
             {
               "type" : "field",
-              "value" : ["scalars", "tmp_4"]
+              "value" : ["scalars", "tmp_19"]
             },
             {
               "type" : "expression",
@@ -7560,7 +10414,7 @@
             },
             {
               "type" : "field",
-              "value" : ["scalars", "tmp_4"]
+              "value" : ["scalars", "tmp_19"]
             }
           ],
           "source_info" : {

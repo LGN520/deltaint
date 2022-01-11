@@ -32,10 +32,11 @@ class receive():
             if not data:
                 print("Client has exist")
                 break
-            rs = parse1.filter(data) # 2-tuple flowkey, list of (deviceno, iport, eport, timedelta)
+            rs = parse1.filter(data) # 5-tuple flowkey, list of (deviceno, iport, eport, timedelta)
             if rs != None:
-                flowkey, intlist = rs
-                flowkey = struct.unpack("L", flowkey)[0]
+                flowkey_bytes, intlist = rs
+                ip_long, port_int, proto_byte = struct.unpack("QIB", flowkey_bytes)
+                flowkey = ip_long + port_int + proto_byte
                 intstr = ""
                 for i in range(len(intlist)):
                     if i == 0:

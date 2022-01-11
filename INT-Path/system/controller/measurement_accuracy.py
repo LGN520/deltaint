@@ -10,15 +10,16 @@ dirname = "../packet/tmp"
 filenames = ["h4_dump.txt", "h6_dump.txt", "h8_dump.txt"]
 thresholds = [0, 0, 0, 1] # deiveno, iport, eport, timedelta
 delta_bits = [1, 1, 1, 1+2] # Threshold=1 for delta encoding in DeltaINT-ext
-#thresholds = [0, 0, 0, 2] # deiveno, iport, eport, timedelta
-#delta_bits = [1, 1, 1, 1+3] # Threshold=2 for delta encoding in DeltaINT-ext
 #thresholds = [0, 0, 0, 4] # deiveno, iport, eport, timedelta
-#delta_bits = [1, 1, 1, 1+4] # Threshold=4 for delta encoding in DeltaINT-ext
-#thresholds = [0, 0, 0, 8] # deiveno, iport, eport, timedelta
-#delta_bits = [1, 1, 1, 1+5] # Threshold=8 for delta encoding in DeltaINT-ext
+#delta_bits = [1, 1, 1, 1+4] # Threshold=2 for delta encoding in DeltaINT-ext
+#thresholds = [0, 0, 0, 16] # deiveno, iport, eport, timedelta
+#delta_bits = [1, 1, 1, 1+6] # Threshold=4 for delta encoding in DeltaINT-ext
+#thresholds = [0, 0, 0, 64] # deiveno, iport, eport, timedelta
+#delta_bits = [1, 1, 1, 1+8] # Threshold=8 for delta encoding in DeltaINT-ext
 complete_bits = [1+8, 1+8, 1+8, 1+32]
 statenum = len(thresholds)
 hopnum = 3
+switchnum = 9 # Device number from 1 to 9
 
 totalbytes = 1024 * 1024 # 1MB
 hashnum = 1
@@ -39,9 +40,9 @@ dintext_truth_collect_cnt = 0
 ## Util functions
 
 def init_sketches():
-    global hopnum, hashnum, width
+    global switchnum, hashnum, width
     sketches = []
-    for _ in range(hopnum):
+    for _ in range(switchnum):
         sketches.append([])
         sketch = sketches[-1]
         for i in range(hashnum):
@@ -70,6 +71,7 @@ def delta_calc(curstates, recstates):
     global dint_prevbw, dintext_prevbw, DINT_BW, DINTEXT_BW
     global dint_truth_cnt, dint_collect_cnt, dint_truth_collect_cnt
     global dintext_truth_cnt, dintext_collect_cnt, dintext_truth_collect_cnt
+    global debug_a, debug_b
     results = []
     for i in range(len(curstates)):
         if recstates[i] != -1 and abs(curstates[i] - recstates[i]) <= thresholds[i]:
@@ -77,19 +79,19 @@ def delta_calc(curstates, recstates):
             dint_prevbw += 1
             if abs(curstates[i] - recstates[i]) == 0:
                 dintext_prevbw += (1 + 1)
+                dint_truth_collect_cnt += 1
             else:
                 dintext_prevbw += delta_bits[i]
-            dintext_truth_collect_cnt += 1
         else:
             results.append(curstates[i])
             dint_prevbw += complete_bits[i]
             dintext_prevbw += complete_bits[i]
             dint_truth_collect_cnt += 1
-            dintext_truth_collect_cnt += 1
         dint_truth_cnt += 1
         dint_collect_cnt += 1
         dintext_truth_cnt += 1
         dintext_collect_cnt += 1
+        dintext_truth_collect_cnt += 1
     DINT_BW += dint_prevbw
     DINTEXT_BW += dintext_prevbw
     return results
@@ -142,31 +144,44 @@ for filename in filenames:
         intlist = []
         for idx in range(hopnum):
             base = statenum * idx
+            # device numter, iport, eport, timedelta
             intlist.append([entries[base+1], entries[base+2], entries[base+3], entries[base+4]])
 
-        global dint_prevbw, dintext_prevbw
         dint_prevbw = 0
         dintext_prevbw = 0
         pktcnt += 1
         for idx in range(hopnum):
-            sketch = sketches[idx]
+            switchidx = intlist[idx][0] - 1 # device number - 1
+            sketch = sketches[switchidx]
             recstates = state_load(sketch, flowkey)
             if recstates is not None:
                 outputs = delta_calc(intlist[idx], recstates)
             else:
                 outputs = intlist[idx]
+                for i in range(len(intlist[idx])):
+                    dint_prevbw += complete_bits[i]
+                    dintext_prevbw += complete_bits[i]
+                    DINT_BW += dint_prevbw
+                    DINTEXT_BW += dintext_prevbw
+                    dint_truth_cnt += 1
+                    dint_collect_cnt += 1
+                    dintext_truth_cnt += 1
+                    dintext_collect_cnt += 1
+                    dint_truth_collect_cnt += 1
+                    dintext_truth_collect_cnt += 1
             state_update(sketch, flowkey, outputs)
             res = accuracy_calc(intlist[idx], outputs)
             global_res += res
 
     fd.close()
 
-dint_avgbit = float(DINT_BW) / float(pktcnt)
-dintext_avgbit = float(DINTEXT_BW) / float(pktcnt)
+dint_avgbit = float(DINT_BW) / float(pktcnt) / float(hopnum)
+dintext_avgbit = float(DINTEXT_BW) / float(pktcnt) / float(hopnum)
 print("Average bit cost of DINT: {} DINT-ext: {}".format(dint_avgbit, dintext_avgbit))
 
 dint_precision = float(dint_truth_collect_cnt) / float(dint_collect_cnt)
 dint_recall = float(dint_truth_collect_cnt) / float(dint_truth_cnt)
+print(dint_collect_cnt, dint_truth_cnt, dint_truth_collect_cnt)
 print("DINT precision: {} recall: {}".format(dint_precision, dint_recall))
 
 dintext_precision = float(dintext_truth_collect_cnt) / float(dintext_collect_cnt)
