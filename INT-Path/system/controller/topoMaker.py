@@ -59,6 +59,7 @@ class MakeSwitchTopo(Topo):
                         self.addLink(
                             self.mn_switches[i], self.mn_switches[deviceNum])
                 else:
+                    # Assign bmv2link between host and bmv2switch
                     self.addLink(
                         self.mn_switches[i], self.mn_hosts[deviceNum])
 
@@ -134,6 +135,7 @@ class TopoMaker(object):
                 name = self.topoObj.hosts[i].name
                 ipAddr = self.topoObj.hosts[i].ovsIpAddress
                 #ovslinks[-1].intf1.ip = ipAddr
+                # Assign ovslink between host and ovsswitch
                 action = "ip addr add {}/24 broadcast 192.168.8.255 dev {}-eth1".format(ipAddr, name)
                 self.net.hosts[j].cmd(action)
                 self.net.hosts[j].cmd('ifconfig')

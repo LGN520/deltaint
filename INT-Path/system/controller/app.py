@@ -314,6 +314,7 @@ class Ctrl(object):
         print('start connect')
         for host in self.hosts:
             if host:
+                # Use ovslink instead of bmv2link
                 print('connecting ', host.ovsIpAddress)
                 socketLink = self.genHostLink(host)
                 print(host.ovsIpAddress, 'connected')

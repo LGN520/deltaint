@@ -13,7 +13,7 @@ Please see [INTPATH_README.md](./INTPATH_README.md) for original readme of INT-P
 ## How to run
 
 - Preliminaries
-	+ Ryu controller, python 3.7, bmv2 (including thrift and nanomsg), and mininet
+	+ Ryu controller, python 3.6, bmv2 (including thrift and nanomsg), and mininet
 - Compile p4 code
 	+ `cd p4app; bash run.sh`
 - Clean tmp directory
