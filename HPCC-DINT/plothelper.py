@@ -5,7 +5,7 @@ if len(sys.argv) != 3:
     exit(-1)
 
 filepath = sys.argv[1]
-threshold = sys.argv[2]
+threshold = int(sys.argv[2])
 deltabits = {1: 1+2, 2: 1+3, 4: 1+4, 8: 1+5}
 if threshold not in deltabits.keys():
     print("Invalid threshold!")
@@ -33,7 +33,7 @@ while True:
         total_pktnum = int(total_pktnum[0:len(total_pktnum)-1]) # E.g., 100
         zero_hopnum = elements[17] # E.g., 100,
         zero_hopnum = int(zero_hopnum[0:len(zero_hopnum)-1]) # E.g., 100
-        truth_collect_cnt = elements[19] # E.g., 100
+        truth_collect_cnt = int(elements[19]) # E.g., 100
         if hostid not in datamap.keys():
             datamap[hostid] = {}
             datamap[hostid]["flownum"] = 0
@@ -70,6 +70,6 @@ dint_avgbit = float((1+completebit)*(total_intpktnum - save_intpktnum) + 1*save_
 dintext_avgbit = float((1+completebit)*(total_intpktnum - save_intpktnum) + (1+1)*zero_intpktnum + deltabits[threshold]*(save_intpktnum - zero_intpktnum)) / float(total_intpktnum)
 precision = float(total_truth_collect_cnt) / float(total_collect_cnt)
 recall = float(total_truth_collect_cnt) / float(total_truth_cnt)
-print("flownum: {}, PINT INT-packet num: {} Gpps, DeltaINT INT-packet num: {} Gpps, DeltaINT bit cost: {}, precision: {}, recall: {}, DE-DeltaINT bit cost" {}\
-        .format(total_flownum, total_intpktnum/0.2/1024/1024/1024, (total_intpktnum-save_intpktnum)/0.2/1024/1024/1024),
-        dint_avgbit, dintext_avgbit, precision, recall)
+print("flownum: {}, PINT INT-packet num: {} Gpps, DeltaINT INT-packet num: {} Gpps, zero-packet num: {} Gpps, DeltaINT bit cost: {}, precision: {}, recall: {}, DE-DeltaINT bit cost {}"\
+        .format(total_flownum, total_intpktnum/0.2/1024/1024/1024, (total_intpktnum-save_intpktnum)/0.2/1024/1024/1024, zero_intpktnum/0.2/1024/1024/1024,
+        dint_avgbit, precision, recall, dintext_avgbit))

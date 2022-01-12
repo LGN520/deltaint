@@ -16,6 +16,7 @@ Please see [PINT_README.d](./PINT_README.md) for original readme of HPCC-DINT.
 ## NOTE
 
 - To generate trace file for latency quantitle simulation, you must launch run.py with `--enable_tr 1`
+	+ Then, run `cd anaylysis; ./trace_reader trace_file` to get trace file
 
 ## Changes for DE-DeltaINT
 
