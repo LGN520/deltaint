@@ -9,7 +9,7 @@ Please see [INTPATH_README.md](./INTPATH_README.md) for original readme of INT-P
 - Install controller (Mininet does not provide built-in controller though it provides built-in OVS)
 	+ Use `sudo apt-get install openvswitch-testcontroller`, `sudo ln /usr/bin/ovs-testcontroller /usr/bin/controller`, `sudo service openvswitch-testcontroller stop`, and `sudo update-rc.d openvswitch-testcontroller disable` to install OVS controller for mininet
 	+ Or, use `sudo pip3 install ryu` to install ryu controller for mininet
-- If python > 3.6 (e.g., 3.9), to support bmv2 (and thrift)
+- If python > 3.7 (e.g., 3.9), to support bmv2 (and thrift)
 	+ Change "from ttypes" as "from \.ttypes" in /home/ssy/behavioral-model-main/tools/bm_runtime/\*.py
 	+ Change "except XXX, ouch:" as "except XXX as ouch:" in /home/ssy/behavioral-model-main/tools/bm_runtime/\*.py
 	+ Add "isinstance(str_val, str)" before "bytes(str_val, "utf-8")" in /home/ssy/.local/lib/python3.9/site-packages/thrift/compat.py
