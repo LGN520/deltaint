@@ -22,32 +22,35 @@ while True:
     line = line.strip()
     elements = line.split()
     if elements[0] == "Host":
-        valid_linenum += 1
-        hostid = elements[1] # E.g., [268]:
-        hostid = hostid[1:len(hostid)-2] # E.g., 268
-        save_hopnum = elements[4] # E.g., 100,
-        save_hopnum = int(save_hopnum[0:len(save_hopnum)-1]) # E.g., 100
-        total_hopnum = elements[7] # E.g., 100,
-        total_hopnum = int(total_hopnum[0:len(total_hopnum)-1]) # E.g., 100
-        total_pktnum = elements[10] # E.g., 100,
-        total_pktnum = int(total_pktnum[0:len(total_pktnum)-1]) # E.g., 100
-        zero_hopnum = elements[17] # E.g., 100,
-        zero_hopnum = int(zero_hopnum[0:len(zero_hopnum)-1]) # E.g., 100
-        truth_collect_cnt = int(elements[19]) # E.g., 100
-        if hostid not in datamap.keys():
-            datamap[hostid] = {}
-            datamap[hostid]["flownum"] = 0
-            datamap[hostid]["save_hopnum"] = 0
-            datamap[hostid]["total_hopnum"] = 0
-            datamap[hostid]["total_pktnum"] = 0
-            datamap[hostid]["zero_hopnum"] = 0
-            datamap[hostid]["truth_collect_cnt"] = 0
-        datamap[hostid]["flownum"] += 1
-        datamap[hostid]["save_hopnum"] += save_hopnum
-        datamap[hostid]["total_hopnum"] += total_hopnum
-        datamap[hostid]["total_pktnum"] += total_pktnum
-        datamap[hostid]["zero_hopnum"] += zero_hopnum
-        datamap[hostid]["truth_collect_cnt"] += truth_collect_cnt
+        try: 
+            valid_linenum += 1
+            hostid = elements[1] # E.g., [268]:
+            hostid = hostid[1:len(hostid)-2] # E.g., 268
+            save_hopnum = elements[4] # E.g., 100,
+            save_hopnum = int(save_hopnum[0:len(save_hopnum)-1]) # E.g., 100
+            total_hopnum = elements[7] # E.g., 100,
+            total_hopnum = int(total_hopnum[0:len(total_hopnum)-1]) # E.g., 100
+            total_pktnum = elements[10] # E.g., 100,
+            total_pktnum = int(total_pktnum[0:len(total_pktnum)-1]) # E.g., 100
+            zero_hopnum = elements[17] # E.g., 100,
+            zero_hopnum = int(zero_hopnum[0:len(zero_hopnum)-1]) # E.g., 100
+            truth_collect_cnt = int(elements[19]) # E.g., 100
+            if hostid not in datamap.keys():
+                datamap[hostid] = {}
+                datamap[hostid]["flownum"] = 0
+                datamap[hostid]["save_hopnum"] = 0
+                datamap[hostid]["total_hopnum"] = 0
+                datamap[hostid]["total_pktnum"] = 0
+                datamap[hostid]["zero_hopnum"] = 0
+                datamap[hostid]["truth_collect_cnt"] = 0
+            datamap[hostid]["flownum"] += 1
+            datamap[hostid]["save_hopnum"] += save_hopnum
+            datamap[hostid]["total_hopnum"] += total_hopnum
+            datamap[hostid]["total_pktnum"] += total_pktnum
+            datamap[hostid]["zero_hopnum"] += zero_hopnum
+            datamap[hostid]["truth_collect_cnt"] += truth_collect_cnt
+        except Exception as e:
+            continue
 fd.close()
 
 total_flownum = 0
