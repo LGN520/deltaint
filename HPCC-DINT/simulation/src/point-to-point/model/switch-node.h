@@ -34,7 +34,7 @@ class SwitchNode : public Node{
 
 	// Written by Siyuan Sheng
 	static const uint32_t DINT_sketch_bytes = 256 * 1024; // 1 MB 
-	static const uint32_t DINT_diff = 2; // Delta threshold
+	static const uint32_t DINT_diff = 4; // Delta threshold
 	//static const uint32_t DINT_diff = 5; // Delta threshold
 	//static const uint32_t DINT_diff = 10; // Delta threshold
 	static const uint32_t DINT_hashnum = 1;
