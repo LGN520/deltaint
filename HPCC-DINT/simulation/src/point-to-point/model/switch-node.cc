@@ -487,6 +487,8 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 						fclose(accuracy_fd);
 					}
 
+					//printf("[%u-%u-%hu-%hu-%hu]: power: %hu, max_power: %hu, prev_output: %hu, dint_power: %u, pint_power: %u, nhop: %u, nsave: %u, delta: %u\n",\
+					//		srcip, dstip, srcport, dstport, protocol, power, max_power, prev_output, ih->GetDintPower(), ih->GetPintPower(), ih->GetDintNhop(), ih->GetDintNsave(), cur_diff);
 					//printf("Switch nhop: %u nsave: %u\n", ihw.ih.dint_nhop, ihw.ih.dint_nsave);
 					
 				}

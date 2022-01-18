@@ -73,6 +73,7 @@ dint_avgbit = float((1+completebit)*(total_intpktnum - save_intpktnum) + 1*save_
 dintext_avgbit = float((1+completebit)*(total_intpktnum - save_intpktnum) + (1+1)*zero_intpktnum + deltabits[threshold]*(save_intpktnum - zero_intpktnum)) / float(total_intpktnum)
 precision = float(total_truth_collect_cnt) / float(total_collect_cnt)
 recall = float(total_truth_collect_cnt) / float(total_truth_cnt)
+#precision = float(zero_intpktnum + total_intpktnum - save_intpktnum) / float(total_intpktnum)
 print("flownum: {}, PINT INT-packet num: {} Gpps, DeltaINT INT-packet num: {} Gpps, zero-packet num: {} Gpps, DeltaINT bit cost: {}, precision: {}, recall: {}, DE-DeltaINT bit cost {}"\
         .format(total_flownum, total_intpktnum/0.2/1024/1024/1024, (total_intpktnum-save_intpktnum)/0.2/1024/1024/1024, zero_intpktnum/0.2/1024/1024/1024,
         dint_avgbit, precision, recall, dintext_avgbit))
