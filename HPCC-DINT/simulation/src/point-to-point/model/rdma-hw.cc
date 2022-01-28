@@ -1060,12 +1060,23 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 	   if (ih.dint_nhop == ih.dint_nsave) {
 		   dint_pktnum += 1;
 	   }
-	   if (ih.GetPower() != 0) {
-		   // update rate
+	   if (ih.GetPower() != 0) { // DeltaINT-O w/ current state
 		   if (ack_seq > qp->hpccPint.m_lastUpdateSeq){ // if full RTT feedback is ready, do full update
 				   UpdateRateHpPint(qp, p, ch, false);
 		   }else{ // do fast react
 				   UpdateRateHpPint(qp, p, ch, true);
+		   }
+	   }
+	   else { // DeltaINT-O w/o current state
+		   // if for DeltaINT-E
+		   if (1) {
+			   ch.ack.ih.SetPower(ih.GetPintPower());
+			   // update rate
+			   if (ack_seq > qp->hpccPint.m_lastUpdateSeq){ // if full RTT feedback is ready, do full update
+					   UpdateRateHpPint(qp, p, ch, false);
+			   }else{ // do fast react
+					   UpdateRateHpPint(qp, p, ch, true);
+			   }
 		   }
 	   }
 

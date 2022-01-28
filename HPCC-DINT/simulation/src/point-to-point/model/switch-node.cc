@@ -361,7 +361,7 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 				// Written by Siyuan Sheng
 				if (1) { // DINT
 					if (power > ih->GetPintPower())
-						ih->SetPintPower(power); // Use to calculate measurement accuracy for DE-DeltaINT
+						ih->SetPintPower(power); // Use to calculate measurement accuracy for DeltaINT-O (as the groundtruth of PINT)
 
 					// Calculate flowkey
 					//uint32_t* srcip = (uint32_t *)&buf[PppHeader::GetStaticSize() + 12];
@@ -458,8 +458,8 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 						}
 					}
 					else {
-						ih->SetPower(0); // Invalidate INT data
-						ih->SetDintPower(prev_output);
+						ih->SetPower(0); // Invalidate INT data (power=0 means negligible delta for DeltaINT-O)
+						ih->SetDintPower(prev_output); // max link utilization estimated by DeltaINT-O
 						ih->SetDintNsave();
 						if (cur_diff == 0) {
 							ih->SetDintNzero();
