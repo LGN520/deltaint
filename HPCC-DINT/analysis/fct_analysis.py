@@ -23,7 +23,7 @@ if __name__=="__main__":
     CCs = [
         #'hpccPint95ai50log1.050p1.000', # HPCC-PINT
         'hpccDint95ai50log1.050p1.000', # HPCC-DINT
-        'hpccDint95ai50log1.050p1.000', # HPCC-DINT (for DINT-E)
+        #'hpccDint95ai50log1.050p1.000', # HPCC-DINT (for DINT-E)
         #'hp95ai50', # HPCC
     ]
 
@@ -50,6 +50,7 @@ if __name__=="__main__":
         output = output.decode()
         a = output.split('\n')[:-2]
         n = len(a)
+        min_data = []
         for i in range(0,100,step):
             l = int(i * n / 100)
             r = int((i+step) * n / 100)
@@ -63,6 +64,19 @@ if __name__=="__main__":
             res[idx].append(get_pctl(fct, 0.5)) # mid fct
             res[idx].append(get_pctl(fct, 0.95)) # 95-pct fct
             res[idx].append(get_pctl(fct, 0.99)) # 99-pct fct
+            if i == 0: # 0% quantile
+                tmp_d = []
+                for i in range(len(d)):
+                    if d[i][1] == d[0][1]: # Min flow size
+                        tmp_d.append(d[i])
+                min_data.append(d[0][1]) # flow size
+                tmp_fct=sorted(map(lambda x: x[0], tmp_d))
+                min_data.append(get_pctl(tmp_fct, 0.5)) # mid fct
+                min_data.append(get_pctl(tmp_fct, 0.95)) # 95-pct fct
+                min_data.append(get_pctl(tmp_fct, 0.99)) # 99-pct fct
+    line = "%.3f %d"%(0, min_data[0])
+    line += "\t%.3f %.3f %.3f"%(min_data[1], min_data[2], min_data[3])
+    print(line)
     for item in res:
         line = "%.3f %d"%(item[0], item[1])
         i = 0
