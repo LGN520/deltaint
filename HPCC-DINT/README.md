@@ -10,6 +10,7 @@ Please see [PINT_README.d](./PINT_README.md) for original readme of HPCC-DINT.
 - `bash run_hpcc_wb.sh; bash run_hpcc_pint1_wb.sh; bash run_hpcc_dint1_wb.sh >tmp.out 2>&1` for websearch dataset
 - `python3 plothelper.py XXX.out` to get INT packet number
 - `cd analysis; bash plotDINTVsPINT.sh`
+	+ NOTE: the flow size is the number of bytes in original packet (w/o INT header), instead of the number of packets
 - `python3 accuracy_analysis XXX.out` to get ARE of all states
 	+ Note that we append accuracy.out, so you should delete or move accuracy.out before each time your run the experiment
 
