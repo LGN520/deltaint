@@ -100,8 +100,10 @@ public:
 					uint8_t power_lo8, power_hi8;
 				};
 			}pint;
+			// Remove the following fields (used for bandwidth simulation) when running slowdown otherwise
 			uint8_t dint_nhop;
 			uint8_t dint_nsave;
+			// Remove the following fields (used for accuracy simulation) when running slowdown if DeltaINT-O
 			uint8_t dint_nzero;
 			uint16_t pint_power; // truth for DINT
 			uint16_t dint_power; // collect for DINT
