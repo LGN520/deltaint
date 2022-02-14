@@ -1068,7 +1068,7 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 		   }
 	   }
 	   else { // DeltaINT w/o current state
-		   if (1) { // if using DeltaINT-E
+		   if (0) { // if using DeltaINT-E
 			   ch.ack.ih.SetPower(ih.GetPintPower());
 			   // update rate
 			   if (ack_seq > qp->hpccPint.m_lastUpdateSeq){ // if full RTT feedback is ready, do full update
