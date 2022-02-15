@@ -1068,7 +1068,7 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 		   }
 	   }
 	   else { // DeltaINT w/o current state
-		   bool is_dinte = false
+		   bool is_dinte = false;
 		   if (is_dinte) { // if using DeltaINT-E
 			   ch.ack.ih.SetPower(ih.GetPintPower());
 			   // update rate
@@ -1078,7 +1078,7 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 					   UpdateRateHpPint(qp, p, ch, true);
 			   }
 		   }
-	   }*
+	   }
 
 	   if (qp->IsFinished()) { // One flow in current host ends
 		   //printf("Host [%d]: save: %d, total: %d, save ratio: %lf\n", m_node->GetId(), save_hopnum, total_hopnum, \
