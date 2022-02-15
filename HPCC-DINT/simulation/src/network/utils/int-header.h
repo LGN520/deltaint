@@ -100,13 +100,14 @@ public:
 					uint8_t power_lo8, power_hi8;
 				};
 			}pint;
-			// Remove the following fields (used for bandwidth simulation) when running slowdown otherwise
+			// Comment the following fields when running slowdown for PINT 
+			// For DeltaINT-O
 			uint8_t dint_nhop;
 			uint8_t dint_nsave;
-			// Remove the following fields (used for accuracy simulation) when running slowdown if DeltaINT-O
+			// For DeltaINT-E
 			uint8_t dint_nzero;
-			uint16_t pint_power; // truth for DINT
-			uint16_t dint_power; // collect for DINT
+			//uint16_t pint_power; // truth for DINT
+			//uint16_t dint_power; // collect for DINT
 		};
 	};
 
@@ -124,10 +125,10 @@ public:
 	uint8_t GetDintNsave();
 	void SetDintNzero();
 	uint8_t GetDintNzero();
-	void SetPintPower(uint16_t);
+	/*void SetPintPower(uint16_t);
 	uint16_t GetPintPower();
 	void SetDintPower(uint16_t);
-	uint16_t GetDintPower();
+	uint16_t GetDintPower();*/
 };
 
 class IntHeaderWrap : public Header 
