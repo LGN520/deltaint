@@ -125,10 +125,10 @@ public:
 	uint8_t GetDintNsave();
 	void SetDintNzero();
 	uint8_t GetDintNzero();
-	/*void SetPintPower(uint16_t);
+	void SetPintPower(uint16_t);
 	uint16_t GetPintPower();
 	void SetDintPower(uint16_t);
-	uint16_t GetDintPower();*/
+	uint16_t GetDintPower();
 };
 
 class IntHeaderWrap : public Header 
