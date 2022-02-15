@@ -1054,9 +1054,9 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 	   save_hopnum += ih.dint_nsave;
 	   zero_hopnum += ih.dint_nzero;
 	   total_pktnum += 1;
-	   /*if (ih.dint_power == ih.pint_power) {
+	   if (ih.dint_power == ih.pint_power) {
 		   truth_collect_cnt += 1;
-	   }*/
+	   }
 	   if (ih.dint_nhop == ih.dint_nsave) {
 		   dint_pktnum += 1;
 	   }
@@ -1067,8 +1067,9 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 				   UpdateRateHpPint(qp, p, ch, true);
 		   }
 	   }
-	   /*else { // DeltaINT w/o current state
-		   if (0) { // if using DeltaINT-E
+	   else { // DeltaINT w/o current state
+		   bool is_dinte = false
+		   if (is_dinte) { // if using DeltaINT-E
 			   ch.ack.ih.SetPower(ih.GetPintPower());
 			   // update rate
 			   if (ack_seq > qp->hpccPint.m_lastUpdateSeq){ // if full RTT feedback is ready, do full update
@@ -1077,15 +1078,13 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 					   UpdateRateHpPint(qp, p, ch, true);
 			   }
 		   }
-	   }*/
+	   }*
 
 	   if (qp->IsFinished()) { // One flow in current host ends
 		   //printf("Host [%d]: save: %d, total: %d, save ratio: %lf\n", m_node->GetId(), save_hopnum, total_hopnum, \
 				   1.0-double(save_hopnum*1+(total_hopnum-save_hopnum)*(IntHeader::pint_bytes*8+1))/double(total_hopnum*IntHeader::pint_bytes*8));
-		   //printf("Host [%d]: save hopnum: %d, total hopnum: %d, total pktnum: %d, dint pktnum: %d, ratio: %lf, zero_hopnum: %d, truth_collect_cnt: %d\n", m_node->GetId(), save_hopnum, total_hopnum, total_pktnum, dint_pktnum, \
+		   printf("Host [%d]: save hopnum: %d, total hopnum: %d, total pktnum: %d, dint pktnum: %d, ratio: %lf, zero_hopnum: %d, truth_collect_cnt: %d\n", m_node->GetId(), save_hopnum, total_hopnum, total_pktnum, dint_pktnum, \
 				   1.0-double(save_hopnum*0+(total_hopnum-save_hopnum)*(IntHeader::pint_bytes*8+0))/double(total_hopnum*IntHeader::pint_bytes*8), zero_hopnum, truth_collect_cnt);
-		   printf("Host [%d]: save hopnum: %d, total hopnum: %d, total pktnum: %d, dint pktnum: %d, ratio: %lf, zero_hopnum: %d\n", m_node->GetId(), save_hopnum, total_hopnum, total_pktnum, dint_pktnum, \
-				   1.0-double(save_hopnum*0+(total_hopnum-save_hopnum)*(IntHeader::pint_bytes*8+0))/double(total_hopnum*IntHeader::pint_bytes*8), zero_hopnum);
 	   }
 }
 

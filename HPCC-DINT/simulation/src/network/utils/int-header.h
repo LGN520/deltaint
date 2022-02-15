@@ -100,14 +100,14 @@ public:
 					uint8_t power_lo8, power_hi8;
 				};
 			}pint;
-			// Comment the following fields when running slowdown for PINT 
+			// Used for bandwidth calculation, not affect in-band network telemetry
 			// For DeltaINT-O
 			uint8_t dint_nhop;
 			uint8_t dint_nsave;
 			// For DeltaINT-E
 			uint8_t dint_nzero;
-			//uint16_t pint_power; // truth for DINT
-			//uint16_t dint_power; // collect for DINT
+			uint16_t pint_power; // truth for DINT
+			uint16_t dint_power; // collect for DINT
 		};
 	};
 
