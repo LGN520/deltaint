@@ -1093,8 +1093,9 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 					   UpdateRateHpPint(qp, p, ch, true);
 			   }
 		   }
-		   else if (is_dinto && pint_smpl_thresh != 65536) { // p!=1 for DeltaINT-O
-			   if (prev_power_map.find(qp_flowkey) != prev_power_map.end()) {
+		   //else if (is_dinto && pint_smpl_thresh != 65536) { // p!=1 for DeltaINT-O
+		   else if (is_dinto) { // For DeltaINT-O
+			   if (prev_power_map.find(qp_flowkey) != prev_power_map.end()) { // latest embedded state
 				   ch.ack.ih.SetPower(prev_power_map[qp_flowkey]);
 				   // update rate
 				   if (ack_seq > qp->hpccPint.m_lastUpdateSeq){ // if full RTT feedback is ready, do full update
