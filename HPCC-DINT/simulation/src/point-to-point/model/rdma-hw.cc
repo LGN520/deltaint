@@ -1046,12 +1046,17 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 	   uint64_t qp_flowkey = qp->sip.Get() + qp->dip.Get() + qp->sport + qp->dport;
 	   bool is_dinto = true;
 	   bool is_dinte = false;
-	   if (ch.ack.ih.GetPower() != 0) { // If using DeltaINT-O
+	   if (ch.ack.ih.GetPower() != 0) { // with complete state
 		   if (prev_power_map.find(qp_flowkey) != prev_power_map.end()) {
 			   prev_power_map[qp_flowkey] = ch.ack.ih.GetPower(); // Update latest embedded state
 		   }
 		   else {
 			   prev_power_map.insert(std::pair<uint64_t, uint16_t>(qp_flowkey, ch.ack.ih.GetPower()))
+		   }
+	   }
+	   else {
+		   if (prev_power_map.find(qp_flowkey) == prev_power_map.end()) { // the first packet with power = 0
+			   prev_power_map[qp_flowkey] = ch.ack.ih.GetPintPower(); // Update latest embedded state (the real value is just 0)
 		   }
 	   }
        if (rand() % 65536 >= pint_smpl_thresh)
