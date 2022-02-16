@@ -1051,7 +1051,7 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 			   prev_power_map[qp_flowkey] = ch.ack.ih.GetPower(); // Update latest embedded state
 		   }
 		   else {
-			   prev_power_map.insert(std::pair<uint64_t, uint16_t>(qp_flowkey, ch.ack.ih.GetPower()))
+			   prev_power_map.insert(std::pair<uint64_t, uint16_t>(qp_flowkey, ch.ack.ih.GetPower()));
 		   }
 	   }
 	   else {
@@ -1105,7 +1105,7 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 			   }
 			   else {
 				   printf("[WARNING] Host [%d], is_dinto: %d (1), is_dinte: %d (0), smpl_thresh: %d (!=65536), current power: %d (0), no prev power for flowkey %llu\n",\
-						   m_node->GetId(), int(is_dinto?1:0), int(is_dinte?1:0), pint_smpl_thresh, int(ih.GetPower()), unsigned long long(qp_flowkey));
+						   m_node->GetId(), int(is_dinto?1:0), int(is_dinte?1:0), pint_smpl_thresh, int(ih.GetPower()), (unsigned long long)(qp_flowkey));
 			   }
 		   }
 	   }
