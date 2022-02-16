@@ -61,7 +61,6 @@ if __name__=="__main__":
             idx = int(i/step)
             res[idx].append(d[-1][1]) # flow size
             #res[idx].append(sum(fct) / len(fct)) # avg fct
-            print("max flow size:{} fct:{}".format(d[-1][1], fct[-1]))
             res[idx].append(get_pctl(fct, 0.5)) # mid fct
             res[idx].append(get_pctl(fct, 0.95)) # 95-pct fct
             res[idx].append(get_pctl(fct, 0.99)) # 99-pct fct
@@ -77,7 +76,7 @@ if __name__=="__main__":
                 min_data.append(get_pctl(tmp_fct, 0.99)) # 99-pct fct
     #line = "%.3f %d"%(0, min_data[0])
     #line += "\t%.3f %.3f %.3f"%(min_data[1], min_data[2], min_data[3])
-    print(line)
+    #print(line)
     for item in res:
         line = "%.3f %d"%(item[0], item[1])
         i = 0
