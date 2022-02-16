@@ -21,8 +21,8 @@ if __name__=="__main__":
     # For example, here we list two CC: 1. HPCC-PINT with utgt=95,AI=50Mbps,pint_log_base=1.05,pint_prob=1; 2. HPCC with utgt=95,ai=50Mbps.
     # For the exact naming, please check ../simulation/mix/fct_*.txt output by the simulation.
     CCs = [
-        'hpccPint95ai50log1.050p1.000', # HPCC-PINT
-        #'hpccDint95ai50log1.050p1.000', # HPCC-DINT
+        #'hpccPint95ai50log1.050p1.000', # HPCC-PINT
+        'hpccDint95ai50log1.050p1.000', # HPCC-DINT
         #'hpccDint95ai50log1.050p1.000', # HPCC-DINT (for DINT-E)
         #'hp95ai50', # HPCC
     ]
@@ -61,6 +61,7 @@ if __name__=="__main__":
             idx = int(i/step)
             res[idx].append(d[-1][1]) # flow size
             #res[idx].append(sum(fct) / len(fct)) # avg fct
+            print("max flow size:{} fct:{}".format(d[-1][1], fct[-1]))
             res[idx].append(get_pctl(fct, 0.5)) # mid fct
             res[idx].append(get_pctl(fct, 0.95)) # 95-pct fct
             res[idx].append(get_pctl(fct, 0.99)) # 99-pct fct
@@ -74,8 +75,8 @@ if __name__=="__main__":
                 min_data.append(get_pctl(tmp_fct, 0.5)) # mid fct
                 min_data.append(get_pctl(tmp_fct, 0.95)) # 95-pct fct
                 min_data.append(get_pctl(tmp_fct, 0.99)) # 99-pct fct
-    line = "%.3f %d"%(0, min_data[0])
-    line += "\t%.3f %.3f %.3f"%(min_data[1], min_data[2], min_data[3])
+    #line = "%.3f %d"%(0, min_data[0])
+    #line += "\t%.3f %.3f %.3f"%(min_data[1], min_data[2], min_data[3])
     print(line)
     for item in res:
         line = "%.3f %d"%(item[0], item[1])
