@@ -359,7 +359,7 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 				ih->SetDintNhop();
 
 				// Written by Siyuan Sheng
-				bool is_dint = false;
+				bool is_dint = true;
 				if (is_dint) { // DeltaINT 
 					if (power > ih->GetPintPower())
 						ih->SetPintPower(power); // Use to calculate measurement accuracy for DeltaINT-O (as the groundtruth of PINT)

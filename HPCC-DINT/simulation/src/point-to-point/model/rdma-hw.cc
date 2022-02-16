@@ -1043,6 +1043,17 @@ void RdmaHw::SetPintSmplThresh(double p){
 }
 void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader &ch){
        uint32_t ack_seq = ch.ack.seq;
+	   uint64_t qp_flowkey = qp->sip.Get() + qp->dip.Get() + qp->sport + qp->dport;
+	   bool is_dinto = true;
+	   bool is_dinte = false;
+	   if (ch.ack.ih.GetPower() != 0) { // If using DeltaINT-O
+		   if (prev_power_map.find(qp_flowkey) != prev_power_map.end()) {
+			   prev_power_map[qp_flowkey] = ch.ack.ih.GetPower(); // Update latest embedded state
+		   }
+		   else {
+			   prev_power_map.insert(std::pair<uint64_t, uint16_t>(qp_flowkey, ch.ack.ih.GetPower()))
+		   }
+	   }
        if (rand() % 65536 >= pint_smpl_thresh)
                return;
 
@@ -1068,7 +1079,6 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 		   }
 	   }
 	   else { // DeltaINT w/o current state
-		   bool is_dinte = false;
 		   if (is_dinte) { // if using DeltaINT-E
 			   ch.ack.ih.SetPower(ih.GetPintPower());
 			   // update rate
@@ -1076,6 +1086,21 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 					   UpdateRateHpPint(qp, p, ch, false);
 			   }else{ // do fast react
 					   UpdateRateHpPint(qp, p, ch, true);
+			   }
+		   }
+		   else if (is_dinto && pint_smpl_thresh != 65536) { // p!=1 for DeltaINT-O
+			   if (prev_power_map.find(qp_flowkey) != prev_power_map.end()) {
+				   ch.ack.ih.SetPower(prev_power_map[qp_flowkey]);
+				   // update rate
+				   if (ack_seq > qp->hpccPint.m_lastUpdateSeq){ // if full RTT feedback is ready, do full update
+						   UpdateRateHpPint(qp, p, ch, false);
+				   }else{ // do fast react
+						   UpdateRateHpPint(qp, p, ch, true);
+				   }
+			   }
+			   else {
+				   printf("[WARNING] Host [%d], is_dinto: %d (1), is_dinte: %d (0), smpl_thresh: %d (!=65536), current power: %d (0), no prev power for flowkey %llu\n",\
+						   m_node->GetId(), int(is_dinto?1:0), int(is_dinte?1:0), pint_smpl_thresh, int(ih.GetPower()), unsigned long long(qp_flowkey));
 			   }
 		   }
 	   }
