@@ -34,5 +34,5 @@ Please see [INTPATH_README.md](./INTPATH_README.md) for original readme of INT-P
 - Measurement accuracy
 	+ Set is_dump as 1 in config.json
 	+ `cd controller; sudo python3 app.py`
-	+ `cd controller; sudo python3 measurement_accuracy.py`
+	+ `cd controller; sudo python3 measurement_accuracy.py` (also get recirculation fraction)
 	+ NOTE: it dumps complete INT statistics in packet/tmp/ by INT-Path for a given epoch length, and simulate DE-DeltaINT in software to get bandwidth usage and measurement accuracy
