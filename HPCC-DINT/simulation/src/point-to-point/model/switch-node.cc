@@ -445,6 +445,14 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 						curnode_cntnum += 1;
 					}
 
+					// Uncomment for recirculation fraction
+					if (max_power>prev_output) {
+						ih->SetDintNlarger();
+					}
+					else if (max_power<prev_output) {
+						ih->SetDintNsmaller();
+					}
+
 					// Judge whether to set power in INT header
 					uint16_t cur_diff = (max_power>prev_output)?(max_power-prev_output):(prev_output-max_power);
 					// printf("Switch [%d] [%ld]: prev input %d, prev output %d, max power %d, cur_diff %d\n", m_id, flowkey, cur_input, prev_output, max_power, cur_diff);
@@ -464,7 +472,7 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 						ih->SetPower(0); // Invalidate INT data (power=0 means negligible delta for DeltaINT-O)
 						ih->SetDintPower(prev_output); // max link utilization estimated by DeltaINT-O
 						ih->SetDintNsave();
-						if (cur_diff == 0) {
+						if (cur_diff == 0) { // max_power == prev_output
 							ih->SetDintNzero();
 						}
 						for (uint32_t i = 0; i < SwitchNode::DINT_hashnum; i++) {

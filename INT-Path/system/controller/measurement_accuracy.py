@@ -128,6 +128,10 @@ def accuracy_calc(curstates, outputs):
 
 global_res = []
 pktcnt = 0
+complete_num = 0
+equal_num = 0
+larger_num = 0
+smaller_num = 0
 for filename in filenames:
     sketches = init_sketches()
     filepath = os.path.join(dirname, filename)
@@ -154,6 +158,16 @@ for filename in filenames:
             switchidx = intlist[idx][0] - 1 # device number - 1
             sketch = sketches[switchidx]
             recstates = state_load(sketch, flowkey)
+            if recstates is None:
+                complete_num += 1 # No embedded state -> directly update stateful memory without need for recirculation
+            else:
+                for i in range(len(intlist[idx])):
+                    if intlist[idx][i] == recstates[i]:
+                        equal_num += 1
+                    elif intlist[idx][i] > recstates[i]:
+                        larger_num += 1
+                    else:
+                        smaller_num += 1
             if recstates is not None:
                 outputs = delta_calc(intlist[idx], recstates)
             else:
@@ -187,6 +201,8 @@ print("DINT precision: {} recall: {}".format(dint_precision, dint_recall))
 dintext_precision = float(dintext_truth_collect_cnt) / float(dintext_collect_cnt)
 dintext_recall = float(dintext_truth_collect_cnt) / float(dintext_truth_cnt)
 print("DINT-ext precision: {} recall: {}".format(dintext_precision, dintext_recall))
+
+print("complete_num: {}, equal_num: {}, larger_num: {}, smaller_num: {}, sum: {}".format(complete_num, equal_num, larger_num, smaller_num, complete_num + equal_num + larger_num + smaller_num))
 
 #avg_re = sum(global_res) / float(len(global_res))
 #print("Average relative error of measurement accuracy of states: {}".format(avg_re))

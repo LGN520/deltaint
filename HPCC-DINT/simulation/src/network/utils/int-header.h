@@ -102,12 +102,15 @@ public:
 			}pint;
 			// Used for bandwidth calculation, not affect in-band network telemetry
 			// For DeltaINT-O
-			uint8_t dint_nhop;
-			uint8_t dint_nsave;
+			uint8_t dint_nhop; // # of all states
+			uint8_t dint_nsave; // # of all states with negligible deltas
 			// For DeltaINT-E
-			uint8_t dint_nzero;
+			uint8_t dint_nzero; // # of zero deltas (curstate=embstate)
 			uint16_t pint_power; // truth for DINT
 			uint16_t dint_power; // collect for DINT
+			// Uncomment to calculate recirculation fraction
+			uint8_t dint_nlarger; // # of curstate>embstate
+			uint8_t dint_nsmaller; // # of curstate<embstate
 		};
 	};
 
@@ -129,6 +132,11 @@ public:
 	uint16_t GetPintPower();
 	void SetDintPower(uint16_t);
 	uint16_t GetDintPower();
+	// Uncomment to calculate recirculation fraction
+	uint8_t GetDintNlarger();
+	void SetDintNlarger();
+	uint8_t GetDintNsmaller();
+	void SetDintNsmaller();
 };
 
 class IntHeaderWrap : public Header 

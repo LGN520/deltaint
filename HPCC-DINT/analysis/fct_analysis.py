@@ -54,6 +54,7 @@ if __name__=="__main__":
             l = int(i * n / 100)
             r = int((i+step) * n / 100)
             d = list(map(lambda x: [float(x.split()[0]), int(x.split()[1])], a[l:r]))
+            print(d)
             if len(d) == 0:
                 break
             fct=sorted(map(lambda x: x[0], d))

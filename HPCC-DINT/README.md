@@ -28,3 +28,4 @@ Please see [PINT_README.d](./PINT_README.md) for original readme of HPCC-DINT.
 	+ For PINT: set is\_dint, is\_dinto, and is\_dinte as false
 	+ For DeltaINT-O: set is\_dint and is\_dinto as true, and is\_dinte as false
 	+ For DeltaINT-E: set is\_dint and is\_dinte as true, and is\_dinto as false
+- To get fraction of recirculated packets, uncomment dint_nlarger and dint_nsmaller in simulation/src/network/utils/int-header.\*
