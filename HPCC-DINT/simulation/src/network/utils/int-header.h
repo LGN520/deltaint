@@ -109,8 +109,8 @@ public:
 			uint16_t pint_power; // truth for DINT
 			uint16_t dint_power; // collect for DINT
 			// Uncomment to calculate recirculation fraction
-			uint8_t dint_nlarger; // # of curstate>embstate
-			uint8_t dint_nsmaller; // # of curstate<embstate
+			//uint8_t dint_nlarger; // # of curstate>embstate
+			//uint8_t dint_nsmaller; // # of curstate<embstate
 		};
 	};
 
@@ -133,10 +133,10 @@ public:
 	void SetDintPower(uint16_t);
 	uint16_t GetDintPower();
 	// Uncomment to calculate recirculation fraction
-	uint8_t GetDintNlarger();
+	/*uint8_t GetDintNlarger();
 	void SetDintNlarger();
 	uint8_t GetDintNsmaller();
-	void SetDintNsmaller();
+	void SetDintNsmaller();*/
 };
 
 class IntHeaderWrap : public Header 

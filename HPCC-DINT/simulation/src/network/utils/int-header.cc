@@ -25,9 +25,9 @@ uint32_t IntHeader::GetStaticSize(){
 		return sizeof(ts);
 	}else if (mode == PINT){
 		// Uncomment to calculate recirculation fraction
-		return sizeof(pint) + sizeof(dint_nhop) + sizeof(dint_nsave) + sizeof(dint_nzero) + sizeof(pint_power) + sizeof(dint_power) + sizeof(dint_nlarger) + sizeof(dint_nsmaller);
+		//return sizeof(pint) + sizeof(dint_nhop) + sizeof(dint_nsave) + sizeof(dint_nzero) + sizeof(pint_power) + sizeof(dint_power) + sizeof(dint_nlarger) + sizeof(dint_nsmaller);
 
-		//return sizeof(pint) + sizeof(dint_nhop) + sizeof(dint_nsave) + sizeof(dint_nzero) + sizeof(pint_power) + sizeof(dint_power);
+		return sizeof(pint) + sizeof(dint_nhop) + sizeof(dint_nsave) + sizeof(dint_nzero) + sizeof(pint_power) + sizeof(dint_power);
 	}else {
 		return 0;
 	}
@@ -63,8 +63,8 @@ void IntHeader::Serialize (Buffer::Iterator start) const{
 		i.WriteU16(pint_power);
 		i.WriteU16(dint_power);
 		// Uncomment for recirculation fraction
-		i.WriteU8(dint_nlarger);
-		i.WriteU8(dint_nsmaller);
+		//i.WriteU8(dint_nlarger);
+		//i.WriteU8(dint_nsmaller);
 	}
 }
 
@@ -89,8 +89,8 @@ uint32_t IntHeader::Deserialize (Buffer::Iterator start){
 		pint_power = i.ReadU16();
 		dint_power = i.ReadU16();
 		// Uncomment for recirculation fraction
-		dint_nlarger = i.ReadU8();
-		dint_nsmaller = i.ReadU8();
+		//dint_nlarger = i.ReadU8();
+		//dint_nsmaller = i.ReadU8();
 	}
 	return GetStaticSize();
 }
@@ -156,7 +156,7 @@ uint16_t IntHeader::GetDintPower() {
 }
 
 // Uncomment to calculate recirculation fraction
-uint8_t IntHeader::GetDintNlarger() {
+/*uint8_t IntHeader::GetDintNlarger() {
 	return dint_nlarger;
 }
 void IntHeader::SetDintNlarger() {
@@ -167,7 +167,7 @@ uint8_t IntHeader::GetDintNsmaller() {
 }
 void IntHeader::SetDintNsmaller() {
 	dint_nsmaller += 1;
-}
+}*/
 
 
 // INT Header Wrap

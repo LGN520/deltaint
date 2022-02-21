@@ -446,12 +446,12 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 					}
 
 					// Uncomment for recirculation fraction
-					if (max_power>prev_output) {
+					/*if (max_power>prev_output) {
 						ih->SetDintNlarger();
 					}
 					else if (max_power<prev_output) {
 						ih->SetDintNsmaller();
-					}
+					}*/
 
 					// Judge whether to set power in INT header
 					uint16_t cur_diff = (max_power>prev_output)?(max_power-prev_output):(prev_output-max_power);
