@@ -57,8 +57,13 @@ fw=open("experiments/delays/processed_data","w")
 valid_latencynum = 0
 for _ in range(20): # Run 20 times for stability
     for i in range(len(datalist)):
-        # flow, seq, node, hopidx, latency
-        fw.write("{} {} {} {} {}\n".format(datalist[i][0], datalist[i][1], datalist[i][2], datalist[i][3], datalist[i][4]))
+        # flow, seq, node, hopidx, latency, hopnum
+        flow = datalist[i][0]
+        seq = datalist[i][1]
+        hopnum = len(data[flow][seq])
+        if hopnum > 5:
+            hopnum = 5
+        fw.write("{} {} {} {} {} {}\n".format(flow, seq, datalist[i][2], datalist[i][3], datalist[i][4], hopnum)))
         valid_latencynum += 1
 print("Valid latency number: {}".format(valid_latencynum))
 fw.close()

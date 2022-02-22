@@ -33,3 +33,4 @@
 	+ You'd better run it in screen if the trace file xxx.tr is large
 - `sudo python3 generate_delay_data_v2.py ../HPCC-DINT/analysis/wb_trace.out`
 	+ NOTE: see ../HPCC-DINT/simulation/mix/fat.txt for topology information
+- `sudo python3 generate_monitoring_results_v2.py`

@@ -5,6 +5,8 @@ import numpy as np
 import operator
 import random
 import os
+import mmh3
+import struct
 
 # Sketch
 totalbytes = 1024 * 1024 # 1MB
@@ -44,13 +46,13 @@ int_perpkt_bwcost_map = {} # {flow, {seq, [[bwcost*hopnum]*runtimes]}}
 dinto_perpkt_bwcost_map = {} # {flow, {seq, [[bwcost*hopnum]*runtimes]}}
 dinte_perpkt_bwcost_map = {} # {flow, {seq, [[bwcost*hopnum]*runtimes]}}
 complete_bitcost = 32 # original INT
-delta_threshold = 1
+#delta_threshold = 1
 #delta_threshold = 2
 #delta_threshold = 4
 #delta_threshold = 8
 #delta_threshold = 16
 #delta_threshold = 64
-#delta_threshold = 256
+delta_threshold = 256
 dint_complete_bitcost = 1 + complete_bitcost
 dinto_delta_bitcost = 1
 if delta_threshold == 1:
@@ -83,26 +85,25 @@ def get_re(truth, estimation):
             re = 1
     return re
 
-sum_int_avgbitcost, sum_dinto_avgbitcost, sum_dinte_avgbitcost = 0, 0, 0
-
 ### Trace replay ###
 
 f=open("experiments/delays/processed_data","r")
 for line in f:
     digests=line.strip().split(" ")
-    flow = digests[0]
+    flow = int(digests[0])
     seq = digests[1]
     node = digests[2]
-    hopidx = digests[3]
-    latency = digests[4]
+    hopidx = int(digests[3])
+    latency = int(digests[4])
+    hopnum = int(digests[5]) # unused
 
     truth.append(latency)
 
     # INT
     origin_int.append(latency)
-    if flow not in pint_perpkt_bwcost_map:
+    if flow not in int_perpkt_bwcost_map:
         int_perpkt_bwcost_map[flow] = {}
-    if seq not in pint_perpkt_bwcost_map[flow]:
+    if seq not in int_perpkt_bwcost_map[flow]:
         int_perpkt_bwcost_map[flow][seq] = []
     if hopidx == 0:
         int_perpkt_bwcost_map[flow][seq].append([complete_bitcost])
@@ -114,13 +115,18 @@ for line in f:
     if node not in pernode_sketch_map:
         pernode_sketch_map[node] = init_sketch()
     embedded_latency = state_load(pernode_sketch_map[node], flow)
+    if flow not in dinto_perpkt_bwcost_map:
+        dinto_perpkt_bwcost_map[flow]  = {}
+    if seq not in dinto_perpkt_bwcost_map[flow]:
+        dinto_perpkt_bwcost_map[flow][seq] = []
+    if flow not in dinte_perpkt_bwcost_map:
+        dinte_perpkt_bwcost_map[flow]  = {}
+    if seq not in dinte_perpkt_bwcost_map[flow]:
+        dinte_perpkt_bwcost_map[flow][seq] = []
     if ((embedded_latency is None) or (abs(latency - embedded_latency) > delta_threshold)):
+        state_update(pernode_sketch_map[node], flow, latency)
         # DINTO
         dinto.append(latency)
-        if flow not int dinto_perpkt_bwcost_map:
-            dinto_perpkt_bwcost_map[flow]  = {}
-        if seq not in dinto_perpkt_bwcost_map[flow]:
-            dinto_perpkt_bwcost_map[flow][seq] = []
         if hopidx == 0:
             dinto_perpkt_bwcost_map[flow][seq].append([dint_complete_bitcost])
         else:
@@ -128,51 +134,78 @@ for line in f:
             dinto_perpkt_bwcost_map[flow][seq][-1].append(tmp_dinto_prevbw + dint_complete_bitcost)
         # DINTE
         dinte.append(latency)
-        if flow not int dinte_perpkt_bwcost_map:
-            dinte_perpkt_bwcost_map[flow]  = {}
-        if seq not in dinte_perpkt_bwcost_map[flow]:
-            dinte_perpkt_bwcost_map[flow][seq] = []
         if hopidx == 0:
             dinte_perpkt_bwcost_map[flow][seq].append([dint_complete_bitcost])
         else:
             tmp_dinte_prevbw = dinte_perpkt_bwcost_map[flow][seq][-1][-1]
             dinte_perpkt_bwcost_map[flow][seq][-1].append(tmp_dinte_prevbw + dint_complete_bitcost)
     else:
-        # TODO
-
-    for i in range(len(digests)):
-        curpkt_curnode_int_bitcost += complete_bitcost
-        curpkt_int_bitcost += curpkt_curnode_int_bitcost
-        # DeltaINT-O/E
-        if (dint_prev_states[i] == -1) or (abs(dint_prev_states[i] - digest) > delta_threshold):
-            dint_prev_states[i] = digest
-            dinto.append(digest)
-            dinte.append(digest)
-            curpkt_curnode_dinto_bitcost += dint_complete_bitcost
-            curpkt_curnode_dinte_bitcost += dint_complete_bitcost
+        # DINTO
+        dinto.append(embedded_latency)
+        if hopidx == 0:
+            dinto_perpkt_bwcost_map[flow][seq].append([dinto_delta_bitcost])
         else:
-            dinto.append(dint_prev_states[i])
-            dinte.append(digest)
-            curpkt_curnode_dinto_bitcost += dinto_delta_bitcost
-            if dint_prev_states[i] == digest:
-                curpkt_curnode_dinte_bitcost += dinte_zero_delta_bitcost
+            tmp_dinto_prevbw = dinto_perpkt_bwcost_map[flow][seq][-1][-1]
+            dinto_perpkt_bwcost_map[flow][seq][-1].append(tmp_dinto_prevbw + dinto_delta_bitcost)
+        # DINTE
+        dinte.append(latency)
+        if abs(latency - embedded_latency) == 0:
+            if hopidx == 0:
+                dinte_perpkt_bwcost_map[flow][seq].append([dinte_zero_delta_bitcost])
             else:
-                curpkt_curnode_dinte_bitcost += dinte_nonzero_delta_bitcost
-        curpkt_dinto_bitcost += curpkt_curnode_dinto_bitcost
-        curpkt_dinte_bitcost += curpkt_curnode_dinte_bitcost
-    curpkt_int_avgbitcost = curpkt_int_bitcost / len(digests)
-    sum_int_avgbitcost += curpkt_int_avgbitcost
-    curpkt_dinto_avgbitcost = curpkt_dinto_bitcost / len(digests)
-    sum_dinto_avgbitcost += curpkt_dinto_avgbitcost
-    curpkt_dinte_avgbitcost = curpkt_dinte_bitcost / len(digests)
-    sum_dinte_avgbitcost += curpkt_dinte_avgbitcost
+                tmp_dinte_prevbw = dinte_perpkt_bwcost_map[flow][seq][-1][-1]
+                dinte_perpkt_bwcost_map[flow][seq][-1].append(tmp_dinte_prevbw + dinte_zero_delta_bitcost)
+        else:
+            if hopidx == 0:
+                dinte_perpkt_bwcost_map[flow][seq].append([dinte_nonzero_delta_bitcost])
+            else:
+                tmp_dinte_prevbw = dinte_perpkt_bwcost_map[flow][seq][-1][-1]
+                dinte_perpkt_bwcost_map[flow][seq][-1].append(tmp_dinte_prevbw + dinte_nonzero_delta_bitcost)
 f.close()
 
 ### Bandwidth cost ###
 
+sum_int_avgbitcost, sum_dinto_avgbitcost, sum_dinte_avgbitcost = 0, 0, 0
+
+# Original INT
+pktnum = 0
+for flow, seq_bwcost_map in int_perpkt_bwcost_map.items():
+    for seq, runtimes_bwcost_list in seq_bwcost_map.items():
+        for hop_bwcost_list in runtimes_bwcost_list:
+            pktnum += 1
+            tmp_hopnum = len(hop_bwcost_list)
+            tmp_bitcost = 0
+            for i in range(len(hop_bwcost_list)):
+                tmp_bitcost += hop_bwcost_list[i]
+            sum_int_avgbitcost += (float(tmp_bitcost) / float(tmp_hopnum))
 int_avgbitcost = float(sum_int_avgbitcost) / float(pktnum)
+
+# DeltaINT-O
+pktnum = 0
+for flow, seq_bwcost_map in dinto_perpkt_bwcost_map.items():
+    for seq, runtimes_bwcost_list in seq_bwcost_map.items():
+        for hop_bwcost_list in runtimes_bwcost_list:
+            pktnum += 1
+            tmp_hopnum = len(hop_bwcost_list)
+            tmp_bitcost = 0
+            for i in range(len(hop_bwcost_list)):
+                tmp_bitcost += hop_bwcost_list[i]
+            sum_dinto_avgbitcost += (float(tmp_bitcost) / float(tmp_hopnum))
 dinto_avgbitcost = float(sum_dinto_avgbitcost) / float(pktnum)
+
+# DeltaINT-E
+pktnum = 0
+for flow, seq_bwcost_map in dinte_perpkt_bwcost_map.items():
+    for seq, runtimes_bwcost_list in seq_bwcost_map.items():
+        for hop_bwcost_list in runtimes_bwcost_list:
+            pktnum += 1
+            tmp_hopnum = len(hop_bwcost_list)
+            tmp_bitcost = 0
+            for i in range(len(hop_bwcost_list)):
+                tmp_bitcost += hop_bwcost_list[i]
+            sum_dinte_avgbitcost += (float(tmp_bitcost) / float(tmp_hopnum))
 dinte_avgbitcost = float(sum_dinte_avgbitcost) / float(pktnum)
+
 print("[Average bit cost] original INT: {}, DeltaINT-O: {}, DeltaINT-E: {}".format(int_avgbitcost, dinto_avgbitcost, dinte_avgbitcost))
 
 int_res, dinto_res, dinte_res = [], [], []
