@@ -71,7 +71,7 @@ def get_approx_res(approx_list, truth_list, packets):
     if truth_median == 0:
         # Follow PINT
         #median_avgre = 0.0
-        if tmp_median == 0:
+        if int(tmp_median) == 0:
             median_avgre = 0.0
         else:
             median_avgre = 1.0
@@ -83,7 +83,7 @@ def get_approx_res(approx_list, truth_list, packets):
     if truth_tail == 0:
         # Follow PINT
         #tail_avgre = 0.0
-        if tmp_tail == 0:
+        if int(tmp_tail) == 0:
             tail_avgre = 0.0
         else:
             tail_avgre = 1.0
@@ -144,9 +144,9 @@ dinto_perpkt_bwcost_map = {} # {flow, {seq, [[bwcost*hopnum]*runtimes]}}
 dinte_perpkt_bwcost_map = {} # {flow, {seq, [[bwcost*hopnum]*runtimes]}}
 complete_bitcost = 8 # original INT
 #delta_threshold = 1
-#delta_threshold = 2
+delta_threshold = 2
 #delta_threshold = 4
-delta_threshold = 8
+#delta_threshold = 8
 dint_complete_bitcost = 1 + complete_bitcost
 dinto_delta_bitcost = 1
 if delta_threshold == 1:
@@ -173,7 +173,7 @@ for line in f:
     seq = digests[1]
     node = int(digests[2])
     hopidx = int(digests[3])
-    latency = float(digests[4])
+    latency = int(digests[4])
     hopnum = int(digests[5])
 
     if flow not in perflow_pernode_truth:
@@ -216,8 +216,8 @@ for line in f:
     # Value approximation (follow PINT)
     approx_value = 0
     if latency != 0:
-        range_1=int(math.log(latency, (1+ap)**2))
-        range_2=int(math.log(latency, (1+ap)**2)+0.5)
+        range_1=int(math.log(float(latency), (1+ap)**2))
+        range_2=int(math.log(float(latency), (1+ap)**2)+0.5)
         approx_value_1=(1+ap)**(2*range_1)
         approx_value_2=(1+ap)**(2*range_2)
         diff_1=latency-approx_value_1
@@ -227,9 +227,9 @@ for line in f:
         if diff_2<0:
             diff_2=-1*diff_2
         if diff_1 <= diff_2:
-            approx_value = approx_value_1
+            approx_value = int(approx_value_1)
         if diff_1 > diff_2:
-            approx_value = approx_value_2
+            approx_value = int(approx_value_2)
 
     # PINT
     if (random.randint(1, 2) == 1) or (hopidx==hopnum-1): # Sampling by global hashing for PINT
