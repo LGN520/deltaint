@@ -144,9 +144,9 @@ dinto_perpkt_bwcost_map = {} # {flow, {seq, [[bwcost*hopnum]*runtimes]}}
 dinte_perpkt_bwcost_map = {} # {flow, {seq, [[bwcost*hopnum]*runtimes]}}
 complete_bitcost = 8 # original INT
 #delta_threshold = 1
-delta_threshold = 2
+#delta_threshold = 2
 #delta_threshold = 4
-#delta_threshold = 8
+delta_threshold = 8
 dint_complete_bitcost = 1 + complete_bitcost
 dinto_delta_bitcost = 1
 if delta_threshold == 1:
