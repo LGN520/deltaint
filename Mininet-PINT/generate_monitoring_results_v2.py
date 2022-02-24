@@ -51,8 +51,8 @@ complete_bitcost = 32 # original INT
 #delta_threshold = 4
 #delta_threshold = 8
 #delta_threshold = 16
-#delta_threshold = 64
-delta_threshold = 256
+delta_threshold = 64
+#delta_threshold = 256
 dint_complete_bitcost = 1 + complete_bitcost
 dinto_delta_bitcost = 1
 if delta_threshold == 1:
