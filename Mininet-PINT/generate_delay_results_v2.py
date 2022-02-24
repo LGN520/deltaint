@@ -41,6 +41,9 @@ def get_approx_res(approx_list, truth_list, packets):
                 final_approx_list.append(approx)
         final_truth_list = final_truth_list[0:packets]
         final_approx_list = final_approx_list[0:int(packets*sampling_ratio)]
+    else:
+        final_truth_list = truth_list[0:packets]
+        final_approx_list = approx_list[0:int(packets*sampling_ratio)]
 
     sketch_size = 100
     kll = KLL(sketch_size)
@@ -143,10 +146,10 @@ pint_perpkt_bwcost_map = {} # {flow, {seq, [[bwcost*hopnum]*runtimes]}}
 dinto_perpkt_bwcost_map = {} # {flow, {seq, [[bwcost*hopnum]*runtimes]}}
 dinte_perpkt_bwcost_map = {} # {flow, {seq, [[bwcost*hopnum]*runtimes]}}
 complete_bitcost = 8 # original INT
-#delta_threshold = 1
+delta_threshold = 1
 #delta_threshold = 2
 #delta_threshold = 4
-delta_threshold = 8
+#delta_threshold = 8
 dint_complete_bitcost = 1 + complete_bitcost
 dinto_delta_bitcost = 1
 if delta_threshold == 1:
@@ -166,7 +169,7 @@ dinto_perflow_pernode_approx = {} # {flow, node, [approx * pktnum]}
 dinte_perflow_pernode_approx = {} # {flow, node, [approx * pktnum]}
 eventnum = 0
 
-f=open("experiments/delays/processed_data","r")
+f=open("experiments/delays/{}".format(sys.argv[1]),"r")
 for line in f:
     digests=line.strip().split(" ")
     flow = int(digests[0])
@@ -328,6 +331,7 @@ f.close()
 pint_median_final_avgre_list, pint_tail_final_avgre_list = [], []
 dinto_median_final_avgre_list, dinto_tail_final_avgre_list = [], []
 dinte_median_final_avgre_list, dinte_tail_final_avgre_list = [], []
+packets_idx = 0
 for packets in packets_range:
     # For different flow-node keys
     pint_median_avgre_list, pint_tail_avgre_list = [], []
@@ -338,6 +342,7 @@ for packets in packets_range:
     #    node = top_node_list[i]
     for flow in perflow_pernode_truth.keys():
         for node in perflow_pernode_truth[flow].keys():
+            tmp_pktnum = len(perflow_pernode_truth[flow][node])
             if flow in pint_perflow_pernode_approx and node in pint_perflow_pernode_approx[flow]:
                 pint_median_avgre, pint_tail_avgre = get_approx_res(pint_perflow_pernode_approx[flow][node], perflow_pernode_truth[flow][node], packets)
             else:

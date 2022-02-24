@@ -90,7 +90,7 @@ def get_re(truth, estimation):
 
 ### Trace replay ###
 
-f=open("experiments/delays/processed_data","r")
+f=open("experiments/delays/{}".format(sys.argv[1]),"r")
 for line in f:
     digests=line.strip().split(" ")
     flow = int(digests[0])

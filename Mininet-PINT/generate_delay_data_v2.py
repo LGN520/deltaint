@@ -53,7 +53,7 @@ for line in f:
 print("Valid line number: {}".format(valid_linenum))
 f.close()
 
-fw=open("experiments/delays/processed_data","w")
+fw=open("experiments/delays/{}".format(sys.argv[2]),"w")
 valid_latencynum = 0
 for _ in range(1): # Run 20 times for stability
     for i in range(len(datalist)):
