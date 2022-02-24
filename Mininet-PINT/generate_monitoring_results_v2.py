@@ -51,8 +51,9 @@ complete_bitcost = 32 # original INT
 #delta_threshold = 4
 #delta_threshold = 8
 #delta_threshold = 16
-delta_threshold = 64
+#delta_threshold = 64
 #delta_threshold = 256
+delta_threshold = 1024
 dint_complete_bitcost = 1 + complete_bitcost
 dinto_delta_bitcost = 1
 if delta_threshold == 1:
@@ -69,6 +70,8 @@ elif delta_threshold == 64:
     dinte_nonzero_delta_bitcost, dinte_zero_delta_bitcost = 1+8, 1+1
 elif delta_threshold == 256:
     dinte_nonzero_delta_bitcost, dinte_zero_delta_bitcost = 1+10, 1+1
+elif delta_threshold == 1024:
+    dinte_nonzero_delta_bitcost, dinte_zero_delta_bitcost = 1+12, 1+1
 
 # Measurement accuracy
 truth = []

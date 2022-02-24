@@ -25,13 +25,13 @@ class Element:
     def __eq__(self, other):
         return self.flow == other.flow and self.node == other.node and self.approx_value == other.approx_value
 
-# We follow PINT to simulate the increase of # of packets of a flow at a node, so as to see how # of packets of a flow 
+# We follow PINT to deploy a KLL sketch with 100 digests for each flow and each node, so as to see how # of packets of a flow 
 # at a node affects KLL sketch (not event as PINT samples packets which may not be reported)
-
 def get_approx_res(approx_list, truth_list, packets):
     sampling_ratio = float(len(approx_list)) / float(len(truth_list))
     final_approx_list = approx_list.copy()
     final_truth_list = truth_list.copy()
+    # Repeat the trace to simulate the increase of # of packets of a flow at a node
     if packets > len(truth_list):
         repeatnum = int(packets/len(truth_list))
         for _ in range(repeatnum):
