@@ -1070,10 +1070,6 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 	   save_hopnum += ih.dint_nsave;
 	   zero_hopnum += ih.dint_nzero;
 
-	   // Uncomment for recirculation fraction
-	   //larger_hopnum += ih.dint_nlarger;
-	   //smaller_hopnum += ih.dint_nsmaller;
-
 	   total_pktnum += 1;
 	   if (ih.dint_power == ih.pint_power) {
 		   truth_collect_cnt += 1;
@@ -1117,10 +1113,6 @@ void RdmaHw::HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader 
 	   }
 
 	   if (qp->IsFinished()) { // One flow in current host ends
-		   // Uncomment for recirculation fraction
-		   //printf("Host [%d]: save hopnum: %d, total hopnum: %d, total pktnum: %d, dint pktnum: %d, ratio: %lf, zero_hopnum: %d, truth_collect_cnt: %d, larger_hopnum: %d, smaller_hopnum: %d\n", m_node->GetId(), save_hopnum, total_hopnum, total_pktnum, dint_pktnum, \
-				   1.0-double(save_hopnum*0+(total_hopnum-save_hopnum)*(IntHeader::pint_bytes*8+0))/double(total_hopnum*IntHeader::pint_bytes*8), zero_hopnum, truth_collect_cnt, larger_hopnum, smaller_hopnum);
-
 		   printf("Host [%d]: save hopnum: %d, total hopnum: %d, total pktnum: %d, dint pktnum: %d, ratio: %lf, zero_hopnum: %d, truth_collect_cnt: %d\n", m_node->GetId(), save_hopnum, total_hopnum, total_pktnum, dint_pktnum, \
 				   1.0-double(save_hopnum*0+(total_hopnum-save_hopnum)*(IntHeader::pint_bytes*8+0))/double(total_hopnum*IntHeader::pint_bytes*8), zero_hopnum, truth_collect_cnt);
 	   }

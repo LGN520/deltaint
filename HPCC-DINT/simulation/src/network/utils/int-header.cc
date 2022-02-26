@@ -24,9 +24,6 @@ uint32_t IntHeader::GetStaticSize(){
 	}else if (mode == TS){
 		return sizeof(ts);
 	}else if (mode == PINT){
-		// Uncomment to calculate recirculation fraction
-		//return sizeof(pint) + sizeof(dint_nhop) + sizeof(dint_nsave) + sizeof(dint_nzero) + sizeof(pint_power) + sizeof(dint_power) + sizeof(dint_nlarger) + sizeof(dint_nsmaller);
-
 		return sizeof(pint) + sizeof(dint_nhop) + sizeof(dint_nsave) + sizeof(dint_nzero) + sizeof(pint_power) + sizeof(dint_power);
 	}else {
 		return 0;
@@ -62,9 +59,6 @@ void IntHeader::Serialize (Buffer::Iterator start) const{
 		i.WriteU8(dint_nzero);
 		i.WriteU16(pint_power);
 		i.WriteU16(dint_power);
-		// Uncomment for recirculation fraction
-		//i.WriteU8(dint_nlarger);
-		//i.WriteU8(dint_nsmaller);
 	}
 }
 
@@ -88,9 +82,6 @@ uint32_t IntHeader::Deserialize (Buffer::Iterator start){
 		dint_nzero = i.ReadU8();
 		pint_power = i.ReadU16();
 		dint_power = i.ReadU16();
-		// Uncomment for recirculation fraction
-		//dint_nlarger = i.ReadU8();
-		//dint_nsmaller = i.ReadU8();
 	}
 	return GetStaticSize();
 }
@@ -154,20 +145,6 @@ void IntHeader::SetDintPower(uint16_t power) {
 uint16_t IntHeader::GetDintPower() {
 	return dint_power;
 }
-
-// Uncomment to calculate recirculation fraction
-/*uint8_t IntHeader::GetDintNlarger() {
-	return dint_nlarger;
-}
-void IntHeader::SetDintNlarger() {
-	dint_nlarger += 1;
-}
-uint8_t IntHeader::GetDintNsmaller() {
-	return dint_nsmaller;
-}
-void IntHeader::SetDintNsmaller() {
-	dint_nsmaller += 1;
-}*/
 
 
 // INT Header Wrap

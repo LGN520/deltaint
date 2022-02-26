@@ -445,14 +445,6 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 						curnode_cntnum += 1;
 					}
 
-					// Uncomment for recirculation fraction
-					/*if (max_power>prev_output) {
-						ih->SetDintNlarger();
-					}
-					else if (max_power<prev_output) {
-						ih->SetDintNsmaller();
-					}*/
-
 					// Judge whether to set power in INT header
 					uint16_t cur_diff = (max_power>prev_output)?(max_power-prev_output):(prev_output-max_power);
 					// printf("Switch [%d] [%ld]: prev input %d, prev output %d, max power %d, cur_diff %d\n", m_id, flowkey, cur_input, prev_output, max_power, cur_diff);

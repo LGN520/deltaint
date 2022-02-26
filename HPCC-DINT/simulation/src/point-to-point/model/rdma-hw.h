@@ -158,8 +158,6 @@ public:
 	uint32_t total_pktnum = 0;
 	uint32_t dint_pktnum = 0;
 	uint32_t zero_hopnum = 0;
-	uint32_t larger_hopnum = 0;
-	uint32_t smaller_hopnum = 0;
 	uint32_t truth_collect_cnt = 0;
 	std::map<uint64_t, uint16_t> prev_power_map;
 };
