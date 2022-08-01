@@ -382,17 +382,17 @@ for flow, seq_bwcost_map in pint_perpkt_bwcost_map.items():
 pint_avgbitcost = float(sum_pint_avgbitcost) / float(pktnum)
 
 # DeltaINT-O
-pktnum = 0
-for flow, seq_bwcost_map in dinto_perpkt_bwcost_map.items():
-    for seq, runtimes_bwcost_list in seq_bwcost_map.items():
-        for hop_bwcost_list in runtimes_bwcost_list:
-            pktnum += 1
-            tmp_hopnum = len(hop_bwcost_list)
-            tmp_bitcost = 0
-            for i in range(len(hop_bwcost_list)):
-                tmp_bitcost += hop_bwcost_list[i]
-            sum_dinto_avgbitcost += (float(tmp_bitcost) / float(tmp_hopnum))
-dinto_avgbitcost = float(sum_dinto_avgbitcost) / float(pktnum)
+#pktnum = 0
+#for flow, seq_bwcost_map in dinto_perpkt_bwcost_map.items():
+#    for seq, runtimes_bwcost_list in seq_bwcost_map.items():
+#        for hop_bwcost_list in runtimes_bwcost_list:
+#            pktnum += 1
+#            tmp_hopnum = len(hop_bwcost_list)
+#            tmp_bitcost = 0
+#            for i in range(len(hop_bwcost_list)):
+#                tmp_bitcost += hop_bwcost_list[i]
+#            sum_dinto_avgbitcost += (float(tmp_bitcost) / float(tmp_hopnum))
+#dinto_avgbitcost = float(sum_dinto_avgbitcost) / float(pktnum)
 
 # DeltaINT-E
 pktnum = 0
@@ -407,8 +407,8 @@ for flow, seq_bwcost_map in dinte_perpkt_bwcost_map.items():
             sum_dinte_avgbitcost += (float(tmp_bitcost) / float(tmp_hopnum))
 dinte_avgbitcost = float(sum_dinte_avgbitcost) / float(pktnum)
 
-print("[Average bit cost] PINT: {}, DeltaINT-O: {}, DeltaINT-E: {}".format(pint_avgbitcost, dinto_avgbitcost, dinte_avgbitcost))
+print("[Average bit cost] PINT: {}, DeltaINT-E: {}".format(pint_avgbitcost, dinte_avgbitcost))
 
-print("[Average relative error]\n PINT median list: {}\n tail list: {}\n DeltaINT-O median list: {}\n tail list: {}\n DeltaINT-E median list: {}\n tail list: {}".format(\
-        pint_median_final_avgre_list, pint_tail_final_avgre_list, dinto_median_final_avgre_list, dinto_tail_final_avgre_list, dinte_median_final_avgre_list, dinte_tail_final_avgre_list))
+print("[Average relative error]\n PINT median list: {}\n tail list: {}\n DeltaINT-E median list: {}\n tail list: {}".format(\
+        pint_median_final_avgre_list, pint_tail_final_avgre_list, dinte_median_final_avgre_list, dinte_tail_final_avgre_list))
 

@@ -184,17 +184,17 @@ for flow, seq_bwcost_map in int_perpkt_bwcost_map.items():
 int_avgbitcost = float(sum_int_avgbitcost) / float(pktnum)
 
 # DeltaINT-O
-pktnum = 0
-for flow, seq_bwcost_map in dinto_perpkt_bwcost_map.items():
-    for seq, runtimes_bwcost_list in seq_bwcost_map.items():
-        for hop_bwcost_list in runtimes_bwcost_list:
-            pktnum += 1
-            tmp_hopnum = len(hop_bwcost_list)
-            tmp_bitcost = 0
-            for i in range(len(hop_bwcost_list)):
-                tmp_bitcost += hop_bwcost_list[i]
-            sum_dinto_avgbitcost += (float(tmp_bitcost) / float(tmp_hopnum))
-dinto_avgbitcost = float(sum_dinto_avgbitcost) / float(pktnum)
+#pktnum = 0
+#for flow, seq_bwcost_map in dinto_perpkt_bwcost_map.items():
+#    for seq, runtimes_bwcost_list in seq_bwcost_map.items():
+#        for hop_bwcost_list in runtimes_bwcost_list:
+#            pktnum += 1
+#            tmp_hopnum = len(hop_bwcost_list)
+#            tmp_bitcost = 0
+#            for i in range(len(hop_bwcost_list)):
+#                tmp_bitcost += hop_bwcost_list[i]
+#            sum_dinto_avgbitcost += (float(tmp_bitcost) / float(tmp_hopnum))
+#dinto_avgbitcost = float(sum_dinto_avgbitcost) / float(pktnum)
 
 # DeltaINT-E
 pktnum = 0
@@ -209,17 +209,17 @@ for flow, seq_bwcost_map in dinte_perpkt_bwcost_map.items():
             sum_dinte_avgbitcost += (float(tmp_bitcost) / float(tmp_hopnum))
 dinte_avgbitcost = float(sum_dinte_avgbitcost) / float(pktnum)
 
-print("[Average bit cost] original INT: {}, DeltaINT-O: {}, DeltaINT-E: {}".format(int_avgbitcost, dinto_avgbitcost, dinte_avgbitcost))
+print("[Average bit cost] original INT: {}, DeltaINT-E: {}".format(int_avgbitcost, dinte_avgbitcost))
 
 int_res, dinto_res, dinte_res = [], [], []
 for i in range(len(truth)):
     int_re = get_re(truth[i], origin_int[i])
     int_res.append(int_re)
-    dinto_re = get_re(truth[i], dinto[i])
-    dinto_res.append(dinto_re)
+    #dinto_re = get_re(truth[i], dinto[i])
+    #dinto_res.append(dinto_re)
     dinte_re = get_re(truth[i], dinte[i])
     dinte_res.append(dinte_re)
 int_finalre = np.average(np.array(int_res))
-dinto_finalre = np.average(np.array(dinto_res))
+#dinto_finalre = np.average(np.array(dinto_res))
 dinte_finalre = np.average(np.array(dinte_res))
-print("[Relative error on collected INT states] original INT: {}, DeltaINT-O: {}, DeltaINT-E: {}".format(int_finalre, dinto_finalre, dinte_finalre))
+print("[Relative error on collected INT states] original INT: {}, DeltaINT-E: {}".format(int_finalre, dinte_finalre))
