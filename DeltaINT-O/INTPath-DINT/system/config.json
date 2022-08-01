@@ -1,0 +1,10 @@
+{
+	"method": "INT-Path",
+	"epoch_len": "0.01",
+	"aging_time": "2",
+	"latency_threshold": "1000",
+	"is_detect": "0",
+	"is_linkdown": "1",
+	"is_debug": "0",
+	"is_dump": "0"
+}
