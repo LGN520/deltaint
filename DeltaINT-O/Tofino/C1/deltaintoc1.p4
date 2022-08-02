@@ -9,6 +9,7 @@
 #define PROTOTYPE_UDP 0x11
 
 #define DINT_DSTPORT 1234
+#define THRESHOLD 1
 #define THRESHOLD_PLUS_ONE 2
 
 // for debug mode

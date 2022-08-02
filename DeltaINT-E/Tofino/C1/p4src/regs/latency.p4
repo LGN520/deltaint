@@ -8,8 +8,8 @@ blackbox stateful_alu update_latency_matched_alu {
 	reg: int_latency_reg;
 
 	// for absolute primitive, we can use two comparison to fix it instead of recirculation
-	condition_lo: (latency_hdr.latency - register_lo) <= 1;
-	condition_hi: (register_lo - latency_hdr.latency) <= 1;
+	condition_lo: (latency_hdr.latency - register_lo) <= THRESHOLD;
+	condition_hi: (register_lo - latency_hdr.latency) <= THRESHOLD;
 
 	update_lo_1_predicate: condition_lo and condition_hi;
 	update_lo_1_value: register_lo;

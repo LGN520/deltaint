@@ -25,6 +25,7 @@ table set_egmeta_tbl {
 		nop;
 	}
 	default_action: nop();
+	size: 1;
 }
 
 // Stage 1
