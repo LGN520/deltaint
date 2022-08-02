@@ -12,7 +12,17 @@ action ipv4_forward(port) {
 
 	modify_field(int_hdr.eport_bit, 1);
 	modify_field(eport_hdr.eport, port);
+
+	add_header(int_hdr);
+	add_header(eport_hdr);
 }
+
+#ifdef DEBUG
+counter ipv4_lpm_counter {
+	type: packets_and_bytes;
+	direct: ipv4_lpm;
+}
+#endif
 
 @pragma stage 0
 table ipv4_lpm {
@@ -39,12 +49,18 @@ action set_igmeta(deviceid) {
 	modify_field(int_hdr.latency_bit, 1);
 	modify_field(latency_hdr.latency, 0);
 	
-	add_header(eport_hdr);
 	add_header(iport_hdr);
 	add_header(deviceid_hdr);
 	add_header(latency_hdr);
 	remove_header(latency_delta_hdr);
 }
+
+#ifdef DEBUG
+counter set_igmeta_counter {
+	type: packets_and_bytes;
+	direct: set_igmeta_tbl;
+}
+#endif
 
 @pragma stage 1
 table set_igmeta_tbl {

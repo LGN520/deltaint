@@ -54,10 +54,10 @@ THRESHOLD = 1
 
 huffman_codemap = {0: 0b0, -1: 0b10, 1: 0b11}
 
-srcip_dstip_predicate_list = [5, 6, 9, 10]
-srcport_dstport_predicate_list = [5, 6, 9, 10]
+srcip_dstip_predicate_list = [1, 2, 4, 8]
+srcport_dstport_predicate_list = [1, 2, 4, 8]
 protocol_predicate_list = [1, 2]
-deviceid_iport_predicate_list = [5, 6, 9, 10]
+deviceid_iport_predicate_list = [1, 2, 4, 8]
 eport_predicate_list = [1, 2]
 ismatch_list = [0, 1]
 
@@ -201,7 +201,7 @@ class TableConfigure(pd_base_tests.ThriftInterfaceDataPlane):
                                 meta_int_srcip_dstip_predicate = tmp_srcip_dstip_predicate,
                                 meta_int_srcport_dstport_predicate = tmp_srcport_dstport_predicate,
                                 meta_int_protocol_predicate = tmp_protocol_predicate)
-                        if tmp_srcip_dstip_predicate == 10 and tmp_srcport_dstport_predicate == 10 and tmp_protocol_predicate == 2:
+                        if tmp_srcip_dstip_predicate == 8 and tmp_srcport_dstport_predicate == 8 and tmp_protocol_predicate == 2:
                             self.client.update_deviceid_iport_tbl_table_add_with_update_deviceid_iport_matched(\
                                     self.sess_hdl, self.dev_tgt, matchspec0)
                         else:
@@ -218,7 +218,7 @@ class TableConfigure(pd_base_tests.ThriftInterfaceDataPlane):
                                 meta_int_srcip_dstip_predicate = tmp_srcip_dstip_predicate,
                                 meta_int_srcport_dstport_predicate = tmp_srcport_dstport_predicate,
                                 meta_int_protocol_predicate = tmp_protocol_predicate)
-                        if tmp_srcip_dstip_predicate == 10 and tmp_srcport_dstport_predicate == 10 and tmp_protocol_predicate == 2:
+                        if tmp_srcip_dstip_predicate == 8 and tmp_srcport_dstport_predicate == 8 and tmp_protocol_predicate == 2:
                             self.client.update_eport_tbl_table_add_with_update_eport_matched(\
                                     self.sess_hdl, self.dev_tgt, matchspec0)
                         else:
@@ -235,7 +235,7 @@ class TableConfigure(pd_base_tests.ThriftInterfaceDataPlane):
                                 meta_int_srcip_dstip_predicate = tmp_srcip_dstip_predicate,
                                 meta_int_srcport_dstport_predicate = tmp_srcport_dstport_predicate,
                                 meta_int_protocol_predicate = tmp_protocol_predicate)
-                        if tmp_srcip_dstip_predicate == 10 and tmp_srcport_dstport_predicate == 10 and tmp_protocol_predicate == 2:
+                        if tmp_srcip_dstip_predicate == 8 and tmp_srcport_dstport_predicate == 8 and tmp_protocol_predicate == 2:
                             self.client.update_latency_tbl_table_add_with_update_latency_matched(\
                                     self.sess_hdl, self.dev_tgt, matchspec0)
                         else:
@@ -244,8 +244,8 @@ class TableConfigure(pd_base_tests.ThriftInterfaceDataPlane):
 
             # Table ismatch_tbl (default: notmatch; size: 1)
             matchspec0 = deltaintec1_ismatch_tbl_match_spec_t(\
-                    meta_int_srcip_dstip_predicate = 10,
-                    meta_int_srcport_dstport_predicate = 10,
+                    meta_int_srcip_dstip_predicate = 8,
+                    meta_int_srcport_dstport_predicate = 8,
                     meta_int_protocol_predicate = 2)
             self.client.ismatch_tbl_table_add_with_ismatch(\
                     self.sess_hdl, self.dev_tgt, matchspec0)
@@ -258,7 +258,7 @@ class TableConfigure(pd_base_tests.ThriftInterfaceDataPlane):
                 for tmp_deviceid_iport_predicate in deviceid_iport_predicate_list:
                     for tmp_eport_predicate in eport_predicate_list:
                         if tmp_ismatch == 1:
-                            if tmp_deviceid_iport_predicate == 10:
+                            if tmp_deviceid_iport_predicate == 8:
                                 if tmp_eport_predicate == 2:
                                     matchspec0 = deltaintec1_metadata_insert_tbl_match_spec_t(\
                                             udp_hdr_dstPort = DINT_DSTPORT,
@@ -275,7 +275,7 @@ class TableConfigure(pd_base_tests.ThriftInterfaceDataPlane):
                                             meta_int_eport_predicate = tmp_eport_predicate)
                                     self.client.metadata_insert_tbl_table_add_with_insert_eport_not_insert_deviceid_iport(\
                                             self.sess_hdl, self.dev_tgt, matchspec0)
-                            elif tmp_deviceid_iport_predicate == 9:
+                            elif tmp_deviceid_iport_predicate == 4:
                                 if tmp_eport_predicate == 2:
                                     matchspec0 = deltaintec1_metadata_insert_tbl_match_spec_t(\
                                             udp_hdr_dstPort = DINT_DSTPORT,
@@ -292,7 +292,7 @@ class TableConfigure(pd_base_tests.ThriftInterfaceDataPlane):
                                             meta_int_eport_predicate = tmp_eport_predicate)
                                     self.client.metadata_insert_tbl_table_add_with_insert_deviceid_eport_not_insert_iport(\
                                             self.sess_hdl, self.dev_tgt, matchspec0)
-                            elif tmp_deviceid_iport_predicate == 6:
+                            elif tmp_deviceid_iport_predicate == 2:
                                 if tmp_eport_predicate == 2:
                                     matchspec0 = deltaintec1_metadata_insert_tbl_match_spec_t(\
                                             udp_hdr_dstPort = DINT_DSTPORT,
@@ -309,7 +309,7 @@ class TableConfigure(pd_base_tests.ThriftInterfaceDataPlane):
                                             meta_int_eport_predicate = tmp_eport_predicate)
                                     self.client.metadata_insert_tbl_table_add_with_insert_iport_eport_not_insert_deviceid(\
                                             self.sess_hdl, self.dev_tgt, matchspec0)
-                            elif tmp_deviceid_iport_predicate == 5:
+                            elif tmp_deviceid_iport_predicate == 1:
                                 if tmp_eport_predicate == 2:
                                     matchspec0 = deltaintec1_metadata_insert_tbl_match_spec_t(\
                                             udp_hdr_dstPort = DINT_DSTPORT,

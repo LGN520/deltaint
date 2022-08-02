@@ -32,8 +32,8 @@ parser parse_udp {
 
 parser parse_int_prepare {
 	return select(ipv4_hdr.ttl) {
-		0x01 mask INGRESS_TTL_MASK: ingress;
-		0x01 mask EGRESS_TTL_MASK: parse_int;
+		INGRESS_TTL_MASK mask 0x01: ingress;
+		EGRESS_TTL_MASK mask 0x01: parse_int;
 		default: ingress;
 	}
 }

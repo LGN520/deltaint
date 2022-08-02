@@ -18,17 +18,25 @@ blackbox stateful_alu update_eport_matched_alu {
 }
 
 action update_eport_matched() {
+#ifdef DEBUG
+	update_eport_matched_alu.execute_stateful_alu(0);
+#else
 	update_eport_matched_alu.execute_stateful_alu_from_hash(hash_field_calc);
+#endif
 }
 
 blackbox stateful_alu update_eport_unmatched_alu {
 	reg: int_eport_reg;
 
-	update_lo_1_value: register_lo;
+	update_lo_1_value: eport_hdr.eport;
 }
 
 action update_eport_unmatched() {
+#ifdef DEBUG
+	update_eport_unmatched_alu.execute_stateful_alu(0);
+#else
 	update_eport_unmatched_alu.execute_stateful_alu_from_hash(hash_field_calc);
+#endif
 	modify_field(meta.int_eport_predicate, 1);
 }
 

@@ -24,17 +24,27 @@ blackbox stateful_alu update_latency_matched_alu {
 }
 
 action update_latency_matched() {
+#ifdef DEBUG
+	update_latency_matched_alu.execute_stateful_alu(0);
+#else
 	update_latency_matched_alu.execute_stateful_alu_from_hash(hash_field_calc);
+#endif
 }
 
 blackbox stateful_alu update_latency_unmatched_alu {
 	reg: int_latency_reg;
 
 	update_lo_1_value: latency_hdr.latency;
+
+	update_hi_1_value: THRESHOLD_PLUS_ONE;
 }
 
 action update_latency_unmatched() {
+#ifdef DEBUG
+	update_latency_unmatched_alu.execute_stateful_alu(0);
+#else
 	update_latency_unmatched_alu.execute_stateful_alu_from_hash(hash_field_calc);
+#endif
 	modify_field(meta.latency_delta, THRESHOLD_PLUS_ONE); // exceed the threshold to embed complete state
 }
 

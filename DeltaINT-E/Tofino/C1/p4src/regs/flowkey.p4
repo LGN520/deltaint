@@ -21,13 +21,16 @@ blackbox stateful_alu update_srcip_dstip_alu {
 	update_hi_2_predicate: not condition_lo or not condition_hi;
 	update_hi_2_value: ipv4_hdr.dstAddr;
 
-	output_value: predicate; // false: 5/6/9; true: 10
+	output_value: predicate; // false: 1/2/4; true: 8
 	output_dst: meta.int_srcip_dstip_predicate;
 }
 
 action update_srcip_dstip() {
+#ifdef DEBUG
+	update_srcip_dstip_alu.execute_stateful_alu(0);
+#else
 	update_srcip_dstip_alu.execute_stateful_alu_from_hash(hash_field_calc);
-	//update_srcip_dstip_alu.execute_stateful_alu(hashidx_hdr.hashidx);
+#endif
 }
 
 @pragma stage 0
@@ -64,12 +67,16 @@ blackbox stateful_alu update_srcport_dstport_alu {
 	update_hi_2_predicate: not condition_lo or not condition_hi;
 	update_hi_2_value: udp_hdr.dstPort;
 
-	output_value: predicate; // false: 5/6/9; true: 10
+	output_value: predicate; // false: 1/2/4; true: 8
 	output_dst: meta.int_srcport_dstport_predicate;
 }
 
 action update_srcport_dstport() {
+#ifdef DEBUG
+	update_srcport_dstport_alu.execute_stateful_alu(0);
+#else
 	update_srcport_dstport_alu.execute_stateful_alu_from_hash(hash_field_calc);
+#endif
 }
 
 @pragma stage 0
@@ -105,7 +112,11 @@ blackbox stateful_alu update_protocol_alu {
 }
 
 action update_protocol() {
+#ifdef DEBUG
+	update_protocol_alu.execute_stateful_alu(0);
+#else
 	update_protocol_alu.execute_stateful_alu_from_hash(hash_field_calc);
+#endif
 }
 
 @pragma stage 0
