@@ -11,7 +11,14 @@
 #define DINT_DSTPORT 1234
 #define THRESHOLD_PLUS_ONE 2
 
+// for debug mode
+//#define DEBUG
+
+#ifdef DEBUG
+#define BUCKET_COUNT 1
+#else
 #define BUCKET_COUNT 8192
+#endif
 
 // we can change TTL mask based on data center topology and switch location
 #define INGRESS_TTL_MASK 0

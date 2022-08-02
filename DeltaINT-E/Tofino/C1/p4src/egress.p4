@@ -8,6 +8,13 @@ action set_egmeta() {
 	modify_field(latency_hdr.latency, eg_intr_md.deq_timedelta);
 }
 
+#ifdef DEBUG
+counter set_egmeta_counter {
+	type: packets_and_bytes;
+	direct: set_egmeta_tbl;
+}
+#endif
+
 @pragma stage 0
 table set_egmeta_tbl {
 	reads {
@@ -29,6 +36,13 @@ action ismatch() {
 action notmatch() {
 	modify_field(meta.ismatch, 0);
 }
+
+#ifdef DEBUG
+counter ismatch_counter {
+	type: packets_and_bytes;
+	direct: ismatch_tbl;
+}
+#endif
 
 @pragma stage 1
 table ismatch_tbl {
@@ -151,6 +165,13 @@ action not_insert_deviceid_iport_eport() {
 	add_to_field(udp_hdr.hdrlen, 1);
 }
 
+#ifdef DEBUG
+counter metadata_insert_counter {
+	type: packets_and_bytes;
+	direct: metadata_insert_tbl;
+}
+#endif
+
 @pragma stage 2
 table metadata_insert_tbl {
 	reads {
@@ -194,6 +215,13 @@ action insert_latency_delta(encoded_delta) {
 	add_to_field(ipv4_hdr.totalLen, 1);
 	add_to_field(udp_hdr.hdrlen, 1);
 }
+
+#ifdef DEBUG
+counter latency_insert_counter {
+	type: packets_and_bytes;
+	direct: latency_insert_tbl;
+}
+#endif
 
 @pragma stage 3
 table latency_insert_tbl {

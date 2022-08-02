@@ -19,7 +19,7 @@ blackbox stateful_alu update_deviceid_iport_matched_alu {
 	update_hi_2_predicate: not condition_hi;
 	update_hi_2_value: iport_hdr.iport; 
 
-	output_value: predicate; // for deviceid, false: 5/9, true: 6/10; for iport, false: 5/6, true: 9/10
+	output_value: predicate; // for deviceid, false: 1/4, true: 2/8; for iport, false: 1/2, true: 4/8
 	output_dst: meta.int_deviceid_iport_predicate;
 }
 
@@ -27,16 +27,25 @@ blackbox stateful_alu update_deviceid_iport_unmatched_alu {
 	reg: int_deviceid_iport_reg;
 
 	update_lo_1_value: deviceid_hdr.deviceid;
-	update_lo_2_value: iport_hdr.iport;
+
+	update_hi_1_value: iport_hdr.iport;
 }
 
 action update_deviceid_iport_matched() {
+#ifdef DEBUG
+	update_deviceid_iport_matched_alu.execute_stateful_alu(0);
+#else
 	update_deviceid_iport_matched_alu.execute_stateful_alu_from_hash(hash_field_calc);
+#endif
 }
 
 action update_deviceid_iport_unmatched() {
+#ifdef DEBUG
+	update_deviceid_iport_unmatched_alu.execute_stateful_alu(0);
+#else
 	update_deviceid_iport_unmatched_alu.execute_stateful_alu_from_hash(hash_field_calc);
-	modify_field(meta.int_deviceid_iport_predicate, 5); // false for both deviceid and iport
+#endif
+	modify_field(meta.int_deviceid_iport_predicate, 1); // false for both deviceid and iport
 }
 
 @pragma stage 1

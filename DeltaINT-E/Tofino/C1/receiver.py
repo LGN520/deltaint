@@ -31,7 +31,7 @@ dst_if = "enp129s0f0"
 cnt = 0
 
 def dumpBytes(bytesdata):
-    msg = binascii.hexlify(bytearray(array_alpha))
+    msg = binascii.hexlify(bytearray(bytesdata))
     print(msg)
 
 def handlePacket(packet):
@@ -43,13 +43,28 @@ def handlePacket(packet):
         #packet.show()
         
         payload_buf = bytes(packet[Raw].load)
-        dumpBytes(payload_buf)
+        #dumpBytes(payload_buf)
         int_hdr, payload_buf = struct.unpack("!B{}s".format(len(payload_buf) - 1), payload_buf)
-        deviceid_bit = int_hdr & 0x01
-        iport_bit = int_hdr & 0x02
-        eport_bit = int_hdr & 0x04
-        latency_bit = int_hdr & 0x08
-        print(int_hdr, deviceid_bit, iport_bit, eport_bit, latency_bit)
+        deviceid_bit = ((int_hdr & 0x80) >> 7) & 0x01
+        iport_bit = ((int_hdr & 0x40) >> 6) & 0x01
+        eport_bit = ((int_hdr & 0x20) >> 5) & 0x01
+        latency_bit = ((int_hdr & 0x10) >> 4) & 0x01
+        print(deviceid_bit, iport_bit, eport_bit, latency_bit)
+        #if deviceid_bit == 1:
+        #    deviceid, payload_buf = struct.unpack("!B{}s".format(len(payload_buf) - 1), payload_buf)
+        #    print("deviceid: {}".format(deviceid))
+        #if iport_bit == 1:
+        #    iport, payload_buf = struct.unpack("!B{}s".format(len(payload_buf) - 1), payload_buf)
+        #    print("iport: {}".format(iport))
+        #if eport_bit == 1:
+        #    eport, payload_buf = struct.unpack("!B{}s".format(len(payload_buf) - 1), payload_buf)
+        #    print("eport: {}".format(eport))
+        #if latency_bit == 1:
+        #    latency = struct.unpack("!i", payload_buf)[0]
+        #    print("latency: {}".format(latency))
+        #else:
+        #    latency_delta = struct.unpack("!c", payload_buf)[0]
+        #    print("latency delta: {}".format(latency))
 
 def main():
     print("Sniff UDP packet to get result (listening)...")

@@ -86,7 +86,7 @@ header_type metadata_t {
 		int_protocol_predicate: 4;
 		int_deviceid_iport_predicate: 4;
 		int_eport_predicate: 4;
-		latency_delta: 16 (signed); // original latency delta
+		latency_delta: 32 (signed); // original latency delta
 		ismatch: 1;
 	}
 }
