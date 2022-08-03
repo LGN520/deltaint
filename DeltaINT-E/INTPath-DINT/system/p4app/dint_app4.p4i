@@ -1115,7 +1115,7 @@ control DeparserImpl(packet_out packet, in headers hdr) {
      packet.emit(hdr.intiport);
      packet.emit(hdr.inteport);
      packet.emit(hdr.inttimedelta);
-}
+ }
 }
 
 control verifyChecksum(inout headers hdr, inout metadata meta) {

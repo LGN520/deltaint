@@ -1,7 +1,7 @@
-# 1 "./dint_app.p4"
+# 1 "./dintext_app.p4"
 # 1 "<built-in>"
 # 1 "<command-line>"
-# 1 "./dint_app.p4"
+# 1 "./dintext_app.p4"
 # 1 "/usr/local/share/p4c/p4include/core.p4" 1
 /*
 Copyright 2013-present Barefoot Networks, Inc.
@@ -85,7 +85,7 @@ match_kind {
     /// Longest-prefix match.
     lpm
 }
-# 2 "./dint_app.p4" 2
+# 2 "./dintext_app.p4" 2
 # 1 "./v1model.p4" 1
 /*
 Copyright 2013-present Barefoot Networks, Inc.
@@ -864,9 +864,9 @@ package V1Switch<H, M>(Parser<H, M> p,
                        ComputeChecksum<H, M> ck,
                        Deparser<H> dep
                        );
-# 3 "./dint_app.p4" 2
+# 3 "./dintext_app.p4" 2
 
-# 1 "./dint_header.p4" 1
+# 1 "./dintext_header.p4" 1
 
 
 
@@ -965,6 +965,10 @@ header inttimedelta_t {
  bit<32> timedelta;
 }
 
+header inttimedelta_delta_t {
+ bit<8> timedelta_delta;
+}
+
 struct dint_metadata_t {
  bit<32> index;
  bit<128> register_value;
@@ -1018,9 +1022,11 @@ struct headers {
  inteport_t inteport;
  @name("inttimedelta")
  inttimedelta_t inttimedelta;
+ @name("inttimedelta_delta")
+ inttimedelta_delta_t inttimedelta_delta;
 }
-# 5 "./dint_app.p4" 2
-# 1 "./dint_parser.p4" 1
+# 5 "./dintext_app.p4" 2
+# 1 "./dintext_parser.p4" 1
 parser ParserImpl(packet_in packet, out headers hdr, inout metadata meta, inout standard_metadata_t standard_metadata) {
     @name("start")
     state start {
@@ -1075,6 +1081,7 @@ control DeparserImpl(packet_out packet, in headers hdr) {
      packet.emit(hdr.intiport);
      packet.emit(hdr.inteport);
      packet.emit(hdr.inttimedelta);
+     packet.emit(hdr.inttimedelta_delta);
  }
 }
 
@@ -1085,7 +1092,7 @@ control verifyChecksum(inout headers hdr, inout metadata meta) {
 control computeChecksum(inout headers hdr, inout metadata meta) {
  apply {}
 }
-# 6 "./dint_app.p4" 2
+# 6 "./dintext_app.p4" 2
 
 
 
@@ -1324,6 +1331,8 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 
  action do_timedelta() {
   hdr.inttimedelta.setValid();
+  hdr.inttimedelta_delta.setInvalid();
+
   hdr.inttimedelta.timedelta = standard_metadata.deq_timedelta;
   hdr.udp.len = hdr.udp.len+16w4;
   hdr.ipv4.totalLen = hdr.ipv4.totalLen+16w4;
@@ -1340,6 +1349,14 @@ control egress(inout headers hdr, inout metadata meta, inout standard_metadata_t
 
  action donot_timedelta() {
   hdr.inttimedelta.setInvalid();
+  hdr.inttimedelta_delta.setValid();
+
+  if (meta.dint_metadata.prev_timedelta >= standard_metadata.deq_timedelta) {
+   hdr.inttimedelta_delta.timedelta_delta = (bit<8>)(meta.dint_metadata.prev_timedelta - standard_metadata.deq_timedelta);
+  }
+  else {
+   hdr.inttimedelta_delta.timedelta_delta = (bit<8>)(standard_metadata.deq_timedelta - meta.dint_metadata.prev_timedelta);
+  }
  }
  table donot_timedelta_tbl {
   actions = {
