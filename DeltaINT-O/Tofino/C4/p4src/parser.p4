@@ -25,29 +25,29 @@ parser parse_ipv4 {
 parser parse_udp {
 	extract(udp_hdr);
 	return select(udp_hdr.dstPort) {
-		DINT_DSTPORT: parse_int;
+		DINT_DSTPORT: parse_int_prepare;
+		default: ingress;
+	}
+}
+
+parser parse_int_prepare {
+	return select(ipv4_hdr.ttl) {
+		INGRESS_TTL_MASK mask 0x01: ingress;
+		EGRESS_TTL_MASK mask 0x01: parse_int;
 		default: ingress;
 	}
 }
 
 parser parse_int {
 	extract(int_hdr);
-	return select(int_hdr.deviceid_bit) {
-		1: parse_deviceid_prepare;
+	return select(int_hdr.latency_bit) {
+		1: parse_latency;
 		default: ingress;
 	}
 }
 
-parser parse_deviceid_prepare {
-	return select(ipv4_hdr.ttl) {
-		INGRESS_TTL_MASK mask 0x01: ingress;
-		EGRESS_TTL_MASK mask 0x01: parse_deviceid;
-		default: ingress;
-	}
-}
-
-parser parse_deviceid {
-	extract(deviceid_hdr);
+parser parse_latency {
+	extract(latency_hdr);
 	return ingress;
 }
 
@@ -72,5 +72,5 @@ field_list_calculation hash_field_calc {
 #else
 	algorithm: random;
 #endif
-	output_width: 14;
+	output_width: 13;
 }

@@ -61,7 +61,7 @@ def handlePacket(packet):
         #    print("eport: {}".format(eport))
         #if latency_bit == 1:
         #    latency = struct.unpack("!i", payload_buf)[0]
-        #    print("latency: {}".format(latency_delta))
+        #    print("latency: {}".format(hex(latency_delta)))
 
 def main():
     print("Sniff UDP packet to get result (listening)...")
