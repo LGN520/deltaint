@@ -25,21 +25,29 @@ parser parse_ipv4 {
 parser parse_udp {
 	extract(udp_hdr);
 	return select(udp_hdr.dstPort) {
-		DINT_DSTPORT: parse_int; // overwrite bitmap&state
+		DINT_DSTPORT: parse_int;
 		default: ingress;
 	}
 }
 
 parser parse_int {
 	extract(int_hdr);
-	return select(int_hdr.power_bit) {
-		1: parse_power;
+	return select(int_hdr.deviceid_bit) {
+		1: parse_deviceid_prepare;
 		default: ingress;
 	}
 }
 
-parser parse_power {
-	extract(power_hdr);
+parser parse_deviceid_prepare {
+	return select(ipv4_hdr.ttl) {
+		INGRESS_TTL_MASK mask 0x01: ingress;
+		EGRESS_TTL_MASK mask 0x01: parse_deviceid;
+		default: ingress;
+	}
+}
+
+parser parse_deviceid {
+	extract(deviceid_hdr);
 	return ingress;
 }
 

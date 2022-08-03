@@ -21,7 +21,7 @@
 #define BUCKET_COUNT 8192
 #endif
 
-// we can change TTL mask based on data center topology and switch location
+// we can change TTL mask based on data center topology and switch location to add per-node bitmap&state dynamically
 #define INGRESS_TTL_MASK 0
 #define EGRESS_TTL_MASK 1
 

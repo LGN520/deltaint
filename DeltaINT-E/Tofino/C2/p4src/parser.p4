@@ -25,7 +25,7 @@ parser parse_ipv4 {
 parser parse_udp {
 	extract(udp_hdr);
 	return select(udp_hdr.dstPort) {
-		DINT_DSTPORT: parse_int;
+		DINT_DSTPORT: parse_int; // overwrite bitmap&state
 		default: ingress;
 	}
 }
