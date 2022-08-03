@@ -16,7 +16,7 @@
 #ifdef DEBUG
 #define BUCKET_COUNT 1
 #else
-#define BUCKET_COUNT 8192
+#define BUCKET_COUNT 16384
 #endif
 
 // we can change TTL mask based on data center topology and switch location to add state dynamically
