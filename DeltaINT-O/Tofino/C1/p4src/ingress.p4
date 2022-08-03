@@ -40,7 +40,6 @@ table ipv4_lpm {
 
 // Stage 1
 
-@pragma stage 1
 action set_igmeta(deviceid) {
 	modify_field(int_hdr.deviceid_bit, 1);
 	modify_field(deviceid_hdr.deviceid, deviceid);
