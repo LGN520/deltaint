@@ -307,7 +307,7 @@ class Ctrl(object):
             socketLink.connect((host.ovsIpAddress, self.socketPort))
             return socketLink
         except socket.error as e:
-            print('socket gen failedL {}'.format(e), host.name)
+            print('socket gen failed: {}'.format(e), host.name)
             return None
 
     def genSocketLinkToHosts(self):
