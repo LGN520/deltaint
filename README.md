@@ -25,6 +25,8 @@ DeltaINT: Toward General In-band Network Telemetry with Extremely Low Bandwidth 
 		* Mininet-DINT
 			- Source code of path tracing, latency measurement, and fine-grained monitoring
 	+ Hardware experiment
+		* Tofino
+			- P4 code of four families of in-band network telemetry on Tofino switch
 	+ NOTE: as the only difference between DeltaINT-O and DeltaINT-E is on metadata insert for negligible delta (i.e., omission or encoding), while all other operations are the same (e.g., state load, delta calculation, and state update), we dump per-node device-internal states and calculates the bandwidth cost of DeltaINT-E by software simulation in software experiments
 
 ## How to run

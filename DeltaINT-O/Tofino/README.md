@@ -17,3 +17,4 @@
 ## NOTE
 
 - C1 ~ C4 represent four families of in-band network telemetry
+- original_INT represents original in-band network telemetry, which is adjusted from basic_switch (standard P4 program provided by Tofino)
