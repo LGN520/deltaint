@@ -20,6 +20,12 @@ Please see [INTPATH_README.md](./INTPATH_README.md) for original readme of INT-P
 - Preliminaries
 	+ Ryu controller, python 3.6, p4c, bmv2 (including thrift and nanomsg), and mininet
 	+ Install redis, enable unix socket (set path as /var/run/redis/redis.sock, set unix perm as 777, and set notify-keyspace-events KEA to enable key-expire-notification) in /etc/redis/redis.conf 
+- Launch OVS and redis
+	+ `ovs-ctl start`
+		* Use `ovs-ctl stop` to stop
+		* NOTE: add /usr/share/openvswitch/scripts/ into PATH for ovs-ctl
+	+ `/etc/init.d/redis-server start`
+		* Use `/etc/init.d/redis-server stop` to stop
 - Compile p4 code
 	+ `cd p4app; bash run.sh`
 - Clean tmp directory
@@ -35,3 +41,16 @@ Please see [INTPATH_README.md](./INTPATH_README.md) for original readme of INT-P
 	+ See detector.log for detection time
 		* NOTE: link failure or heavy latency detection is irrelevant with negligible delta
 
+## NOTEs
+
+- For errno 113 when connecting localhost to mininet.host, check ryu-manager.log to see if ryu controller is launched correctly
+	+ Reason: OVS can direclty see interface of localhost, but need controller to see interface of mininet.host
+	+ For msgpack, run `pip3 install msgpack-python` and rename msgpack_python as msgpack in site-packages
+	+ For eventlet, run `pip3 install eventlet==0.30.2` to install older version
+- For errno 111 when connecting localhost to mininet.host, set is_debug = 1 in config.json, and see log files in packet/tmp
+	+ Reason: sendint.py is not launched correctly
+	+ `pip3 install bitstring; pip3 install redis; pip3 install scapy`
+- Clear environment when being interrupted by errors
+	+ `sudo mn -c`
+	+ `sudo bash clear.sh`
+- Ignore error msg of "could not open network device (no such device)" for `ovs-vsctl show`

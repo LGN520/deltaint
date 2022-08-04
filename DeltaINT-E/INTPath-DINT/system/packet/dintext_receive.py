@@ -122,7 +122,7 @@ class receive():
                             ToR_timedelta = intlist[i][3]
                         timedelta_map[tmpkey] = intlist[i][3]
                         #dint_prevbw += 33
-                    print("recovered INT data [{}]: deviceno {}, iport {}, eport {}, timedelta {}".format(i, intlist[i][0], intlist[i][1], intlist[i][2], intlist[i][3]))
+                    print("recovered INT data [{}]: deviceno {}, iport {}, eport {}, timedelta {}, timedelta_bit".format(i, intlist[i][0], intlist[i][1], intlist[i][2], intlist[i][3], timedelta_bits[i]))
                     linkdown_detection_list.append("s{}-{}-{}".format(intlist[i][0], intlist[i][1], intlist[i][2]))
                     if intlist[i][3] < latency_threshold:
                         grayfailure_detection_list.append("s{}-{}-ok".format(intlist[i][0], intlist[i][2]))
