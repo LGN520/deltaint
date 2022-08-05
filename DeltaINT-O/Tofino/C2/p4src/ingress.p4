@@ -21,7 +21,6 @@ counter ipv4_lpm_counter {
 @pragma stage 0
 table ipv4_lpm {
 	reads {
-		udp_hdr.dstPort: exact;
 		ipv4_hdr.dstAddr: lpm;
 	}
 	actions {

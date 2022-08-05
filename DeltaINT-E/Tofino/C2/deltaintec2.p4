@@ -32,25 +32,34 @@
 
 control ingress {
 	// Stage 0
-	apply(ipv4_lpm); // set egress port and ttl
+	if (udp_hdr.dstPort == DINT_DSTPORT) {
+		apply(ipv4_lpm); // set egress port and ttl
+	}
 }
 
 control egress {
 	// Stage 0
-	apply(set_egmeta_tbl); // set current power
-	apply(update_srcip_dstip_tbl);
-	apply(update_srcport_dstport_tbl);
-	apply(update_protocol_tbl);
+	if (udp_hdr.dstPort == DINT_DSTPORT) {
+		apply(set_egmeta_tbl); // set current power
+		apply(update_srcip_dstip_tbl);
+		apply(update_srcport_dstport_tbl);
+		apply(update_protocol_tbl);
+	}
 
 	// Stage 1
-	apply(update_previnput_tbl);
-	apply(ismatch_tbl);
+	if (udp_hdr.dstPort == DINT_DSTPORT) {
+		apply(update_previnput_tbl);
+	}
 
 	// Stage 2
-	apply(set_output_tbl);
+	if (udp_hdr.dstPort == DINT_DSTPORT) {
+		apply(set_output_tbl);
+	}
 
 	// Stage 3
-	apply(update_prevoutput_tbl);
+	if (udp_hdr.dstPort == DINT_DSTPORT) {
+		apply(update_prevoutput_tbl);
+	}
 
 	// Stage 4
 	if (udp_hdr.dstPort == DINT_DSTPORT) { // use gateway instead of exact matching to make such judgement, so the default action of power_insert_tbl will no be accessed by non-INT packets

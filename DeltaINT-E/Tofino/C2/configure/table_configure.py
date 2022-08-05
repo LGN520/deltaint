@@ -139,7 +139,6 @@ class TableConfigure(pd_base_tests.ThriftInterfaceDataPlane):
             # Table: ipv4_lpm (default: nop; size: 1)
             print "Configuring ipv4_lpm"
             matchspec0 = deltaintec2_ipv4_lpm_match_spec_t(\
-                    udp_hdr_dstPort = DINT_DSTPORT,
                     ipv4_hdr_dstAddr = ipv4Addr_to_i32(receiver_ip),
                     ipv4_hdr_dstAddr_prefix_length = 32)
             actnspec0 = deltaintec2_ipv4_forward_action_spec_t(self.receiver_devport)
@@ -150,33 +149,33 @@ class TableConfigure(pd_base_tests.ThriftInterfaceDataPlane):
 
             # Stage 0
 
-            # Table: set_egmeta_tbl (default: nop; size: 1)
-            print "Configuring set_egmeta_tbl"
-            matchspec0 = deltaintec2_set_egmeta_tbl_match_spec_t(\
-                    udp_hdr_dstPort = DINT_DSTPORT)
-            self.client.set_egmeta_tbl_table_add_with_set_egmeta(\
-                    self.sess_hdl, self.dev_tgt, matchspec0)
+            # Table: set_egmeta_tbl (default: set_egmeta; size: 1)
+            #print "Configuring set_egmeta_tbl"
+            #matchspec0 = deltaintec2_set_egmeta_tbl_match_spec_t(\
+            #        udp_hdr_dstPort = DINT_DSTPORT)
+            #self.client.set_egmeta_tbl_table_add_with_set_egmeta(\
+            #        self.sess_hdl, self.dev_tgt, matchspec0)
 
-            # Table: update_srcip_dstip_tbl (default: nop; size: 1)
-            print "Configuring update_srcip_dstip_tbl"
-            matchspec0 = deltaintec2_update_srcip_dstip_tbl_match_spec_t(\
-                    udp_hdr_dstPort = DINT_DSTPORT)
-            self.client.update_srcip_dstip_tbl_table_add_with_update_srcip_dstip(\
-                    self.sess_hdl, self.dev_tgt, matchspec0)
+            # Table: update_srcip_dstip_tbl (default: update_srcip_dstip(); size: 1)
+            #print "Configuring update_srcip_dstip_tbl"
+            #matchspec0 = deltaintec2_update_srcip_dstip_tbl_match_spec_t(\
+            #        udp_hdr_dstPort = DINT_DSTPORT)
+            #self.client.update_srcip_dstip_tbl_table_add_with_update_srcip_dstip(\
+            #        self.sess_hdl, self.dev_tgt, matchspec0)
 
-            # Table: update_srcport_dstport_tbl (default: nop; size: 1)
-            print "Configuring update_srcport_dstport_tbl"
-            matchspec0 = deltaintec2_update_srcport_dstport_tbl_match_spec_t(\
-                    udp_hdr_dstPort = DINT_DSTPORT)
-            self.client.update_srcport_dstport_tbl_table_add_with_update_srcport_dstport(\
-                    self.sess_hdl, self.dev_tgt, matchspec0)
+            # Table: update_srcport_dstport_tbl (default: update_srcport_dstport(); size: 1)
+            #print "Configuring update_srcport_dstport_tbl"
+            #matchspec0 = deltaintec2_update_srcport_dstport_tbl_match_spec_t(\
+            #        udp_hdr_dstPort = DINT_DSTPORT)
+            #self.client.update_srcport_dstport_tbl_table_add_with_update_srcport_dstport(\
+            #        self.sess_hdl, self.dev_tgt, matchspec0)
 
-            # Table: update_protocol_tbl (default: nop; size: 1)
-            print "Configuring update_protocol_tbl"
-            matchspec0 = deltaintec2_update_protocol_tbl_match_spec_t(\
-                    udp_hdr_dstPort = DINT_DSTPORT)
-            self.client.update_protocol_tbl_table_add_with_update_protocol(\
-                    self.sess_hdl, self.dev_tgt, matchspec0)
+            # Table: update_protocol_tbl (default: update_protocol(); size: 1)
+            #print "Configuring update_protocol_tbl"
+            #matchspec0 = deltaintec2_update_protocol_tbl_match_spec_t(\
+            #        udp_hdr_dstPort = DINT_DSTPORT)
+            #self.client.update_protocol_tbl_table_add_with_update_protocol(\
+            #        self.sess_hdl, self.dev_tgt, matchspec0)
 
             # Stage 1
 
@@ -186,7 +185,6 @@ class TableConfigure(pd_base_tests.ThriftInterfaceDataPlane):
                 for tmp_srcport_dstport_predicate in srcport_dstport_predicate_list:
                     for tmp_protocol_predicate in protocol_predicate_list:
                         matchspec0 = deltaintec2_update_previnput_tbl_match_spec_t(\
-                                udp_hdr_dstPort = DINT_DSTPORT,
                                 meta_int_srcip_dstip_predicate = tmp_srcip_dstip_predicate,
                                 meta_int_srcport_dstport_predicate = tmp_srcport_dstport_predicate,
                                 meta_int_protocol_predicate = tmp_protocol_predicate)
@@ -198,35 +196,38 @@ class TableConfigure(pd_base_tests.ThriftInterfaceDataPlane):
                                     self.sess_hdl, self.dev_tgt, matchspec0)
 
             # Table ismatch_tbl (default: notmatch; size: 1)
-            matchspec0 = deltaintec2_ismatch_tbl_match_spec_t(\
-                    meta_int_srcip_dstip_predicate = 8,
-                    meta_int_srcport_dstport_predicate = 8,
-                    meta_int_protocol_predicate = 2)
-            self.client.ismatch_tbl_table_add_with_ismatch(\
-                    self.sess_hdl, self.dev_tgt, matchspec0)
+            #matchspec0 = deltaintec2_ismatch_tbl_match_spec_t(\
+            #        meta_int_srcip_dstip_predicate = 8,
+            #        meta_int_srcport_dstport_predicate = 8,
+            #        meta_int_protocol_predicate = 2)
+            #self.client.ismatch_tbl_table_add_with_ismatch(\
+            #        self.sess_hdl, self.dev_tgt, matchspec0)
 
             # Stage 2
 
-            # Table set_output_tbl (default: nop; size: 1)
-            matchspec0 = deltaintec2_set_output_tbl_match_spec_t(\
-                    udp_hdr_dstPort = DINT_DSTPORT)
-            self.client.set_output_tbl_table_add_with_set_output(\
-                    self.sess_hdl, self.dev_tgt, matchspec0)
+            # Table set_output_tbl (default: set_output; size: 1)
+            #matchspec0 = deltaintec2_set_output_tbl_match_spec_t(\
+            #        udp_hdr_dstPort = DINT_DSTPORT)
+            #self.client.set_output_tbl_table_add_with_set_output(\
+            #        self.sess_hdl, self.dev_tgt, matchspec0)
 
             # Stage 3
 
             # Table: update_prevoutput_tbl (default: nop; size: 2)
             print "Configuring update_prevoutput_tbl"
-            for tmp_ismatch in ismatch_list:
-                matchspec0 = deltaintec2_update_prevoutput_tbl_match_spec_t(\
-                        udp_hdr_dstPort = DINT_DSTPORT,
-                        meta_ismatch = tmp_ismatch)
-                if tmp_ismatch == 1:
-                    self.client.update_prevoutput_tbl_table_add_with_update_prevoutput_matched(\
-                            self.sess_hdl, self.dev_tgt, matchspec0)
-                else:
-                    self.client.update_prevoutput_tbl_table_add_with_update_prevoutput_unmatched(\
-                            self.sess_hdl, self.dev_tgt, matchspec0)
+            for tmp_srcip_dstip_predicate in srcip_dstip_predicate_list:
+                for tmp_srcport_dstport_predicate in srcport_dstport_predicate_list:
+                    for tmp_protocol_predicate in protocol_predicate_list:
+                        matchspec0 = deltaintec2_update_prevoutput_tbl_match_spec_t(\
+                                meta_int_srcip_dstip_predicate = tmp_srcip_dstip_predicate,
+                                meta_int_srcport_dstport_predicate = tmp_srcport_dstport_predicate,
+                                meta_int_protocol_predicate = tmp_protocol_predicate)
+                        if tmp_srcip_dstip_predicate == 8 and tmp_srcport_dstport_predicate == 8 and tmp_protocol_predicate == 2:
+                            self.client.update_prevoutput_tbl_table_add_with_update_prevoutput_matched(\
+                                    self.sess_hdl, self.dev_tgt, matchspec0)
+                        else:
+                            self.client.update_prevoutput_tbl_table_add_with_update_prevoutput_unmatched(\
+                                    self.sess_hdl, self.dev_tgt, matchspec0)
 
             # Stage 4
 
@@ -234,7 +235,9 @@ class TableConfigure(pd_base_tests.ThriftInterfaceDataPlane):
             print "Configuring power_insert_tbl"
             for tmp_delta in range(-1 * THRESHOLD, THRESHOLD + 1):
                 matchspec0 = deltaintec2_power_insert_tbl_match_spec_t(\
-                        meta_ismatch = 1,
+                        meta_int_srcip_dstip_predicate = 8,
+                        meta_int_srcport_dstport_predicate = 8,
+                        meta_int_protocol_predicate = 2,
                         meta_power_delta = tmp_delta)
                 actnspec0 = deltaintec2_insert_power_delta_action_spec_t(huffman_codemap[tmp_delta])
                 self.client.power_insert_tbl_table_add_with_insert_power_delta(\

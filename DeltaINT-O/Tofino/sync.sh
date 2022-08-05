@@ -1,5 +1,5 @@
-DIRNAME="DeltaINT-O/Tofino/C1/"
-#DIRNAME="DeltaINT-O/Tofino/C2/"
+#DIRNAME="DeltaINT-O/Tofino/C1/"
+DIRNAME="DeltaINT-O/Tofino/C2/"
 #DIRNAME="DeltaINT-O/Tofino/C3/"
 #DIRNAME="DeltaINT-O/Tofino/C4/"
 

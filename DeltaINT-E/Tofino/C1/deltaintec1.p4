@@ -62,7 +62,6 @@ control egress {
 		apply(update_deviceid_iport_tbl);
 		apply(update_eport_tbl);
 		apply(update_latency_tbl);
-		apply(ismatch_tbl); // used by metadata_insert_tbl and latency_insert_tbl
 	}
 
 	// Stage 2

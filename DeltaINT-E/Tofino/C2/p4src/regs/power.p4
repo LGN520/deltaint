@@ -52,7 +52,6 @@ action update_previnput_unmatched() {
 @pragma stage 1
 table update_previnput_tbl {
 	reads {
-		udp_hdr.dstPort: exact;
 		meta.int_srcip_dstip_predicate: exact;
 		meta.int_srcport_dstport_predicate: exact;
 		meta.int_protocol_predicate: exact;
@@ -115,8 +114,9 @@ action update_prevoutput_unmatched() {
 @pragma stage 3
 table update_prevoutput_tbl {
 	reads {
-		udp_hdr.dstPort: exact;
-		meta.ismatch: exact;
+		meta.int_srcip_dstip_predicate: exact;
+		meta.int_srcport_dstport_predicate: exact;
+		meta.int_protocol_predicate: exact;
 	}
 	actions {
 		update_prevoutput_matched;
@@ -124,5 +124,5 @@ table update_prevoutput_tbl {
 		nop;
 	}
 	default_action: nop();
-	size: 2;
+	size: 32;
 }
