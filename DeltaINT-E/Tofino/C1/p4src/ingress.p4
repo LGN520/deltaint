@@ -27,7 +27,6 @@ counter ipv4_lpm_counter {
 @pragma stage 0
 table ipv4_lpm {
 	reads {
-		udp_hdr.dstPort: exact;
 		ipv4_hdr.dstAddr: lpm;
 	}
 	actions {
@@ -63,13 +62,9 @@ counter set_igmeta_counter {
 
 @pragma stage 1
 table set_igmeta_tbl {
-	reads {
-		udp_hdr.dstPort: exact;
-	}
 	actions {
 		set_igmeta;
-		nop;
 	}
-	default_action: nop();
+	default_action: set_igmeta(1);
 	size: 1;	  
 }

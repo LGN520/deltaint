@@ -43,7 +43,6 @@ action update_eport_unmatched() {
 @pragma stage 1
 table update_eport_tbl {
 	reads {
-		udp_hdr.dstPort: exact;
 		meta.int_srcip_dstip_predicate: exact;
 		meta.int_srcport_dstport_predicate: exact;
 		meta.int_protocol_predicate: exact;

@@ -17,46 +17,10 @@ counter set_egmeta_counter {
 
 @pragma stage 0
 table set_egmeta_tbl {
-	reads {
-		udp_hdr.dstPort: exact;
-	}
 	actions {
 		set_egmeta;
-		nop;
 	}
-	default_action: nop();
-	size: 1;
-}
-
-// Stage 1
-
-action ismatch() {
-	modify_field(meta.ismatch, 1);
-}
-
-action notmatch() {
-	modify_field(meta.ismatch, 0);
-}
-
-#ifdef DEBUG
-counter ismatch_counter {
-	type: packets_and_bytes;
-	direct: ismatch_tbl;
-}
-#endif
-
-@pragma stage 1
-table ismatch_tbl {
-	reads {
-		meta.int_srcip_dstip_predicate: exact;
-		meta.int_srcport_dstport_predicate: exact;
-		meta.int_protocol_predicate: exact;
-	}
-	actions {
-		ismatch;
-		notmatch;
-	}
-	default_action: notmatch();
+	default_action: set_egmeta();
 	size: 1;
 }
 
@@ -176,8 +140,9 @@ counter metadata_insert_counter {
 @pragma stage 2
 table metadata_insert_tbl {
 	reads {
-		udp_hdr.dstPort: exact;
-		meta.ismatch: exact;
+		meta.int_srcip_dstip_predicate: exact;
+		meta.int_srcport_dstport_predicate: exact;
+		meta.int_protocol_predicate: exact;
 		meta.int_deviceid_iport_predicate: exact;
 		meta.int_eport_predicate: exact;
 	}
@@ -193,7 +158,7 @@ table metadata_insert_tbl {
 		nop;
 	}
 	default_action: nop();
-	size: 16;
+	size: 256;
 }
 
 action insert_latency() {
@@ -227,7 +192,9 @@ counter latency_insert_counter {
 @pragma stage 3
 table latency_insert_tbl {
 	reads {
-		meta.ismatch: exact;
+		meta.int_srcip_dstip_predicate: exact;
+		meta.int_srcport_dstport_predicate: exact;
+		meta.int_protocol_predicate: exact;
 		//meta.latency_delta: range; // if in [-1, 1] insert delta; otherwise, insert complete state (default action)
 		meta.latency_delta: exact; // insert delta only if delta in [-1, 1]
 	}
