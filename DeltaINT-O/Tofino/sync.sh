@@ -1,7 +1,7 @@
 #DIRNAME="DeltaINT-O/Tofino/C1/"
-DIRNAME="DeltaINT-O/Tofino/C2/"
+#DIRNAME="DeltaINT-O/Tofino/C2/"
 #DIRNAME="DeltaINT-O/Tofino/C3/"
-#DIRNAME="DeltaINT-O/Tofino/C4/"
+DIRNAME="DeltaINT-O/Tofino/C4/"
 
 ssh ssy@bf1 "rm -rf deltaint/$DIRNAME"
 ssh ssy@dl13 "rm -rf projects/deltaint/$DIRNAME"
