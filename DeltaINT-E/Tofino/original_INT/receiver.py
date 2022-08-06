@@ -46,8 +46,10 @@ def handlePacket(packet):
         #dumpBytes(payload_buf)
         _, int_len, _, payload_buf = struct.unpack("!BHB{}s".format(len(payload_buf) - 4), payload_buf)
         print(int_len)
-        deviceid, iport, eport, latency = struct.unpack("!BBBI", payload_buf)
-        print(deviceid, iport, eport, latency)
+        power = struct.unpack("!B", payload_buf)
+        print(power)
+        #deviceid, iport, eport, latency = struct.unpack("!BBBI", payload_buf)
+        #print(deviceid, iport, eport, latency)
 
 def main():
     print("Sniff UDP packet to get result (listening)...")

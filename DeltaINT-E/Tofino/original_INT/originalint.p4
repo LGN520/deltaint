@@ -43,13 +43,13 @@ action nop() {
 control ingress {
 	// Stage 0
 	if (ipv4.diffserv == IP_DIFFSERV_INT) {
-		apply(ipv4_lpm); // set egress port, ttl, and int.eport
+		apply(ipv4_lpm); // set egress port and ttl // set eport
 	}
 
 	// Stage 1
 	if (ipv4.diffserv == IP_DIFFSERV_INT) {
-		apply(int_set_header_0_tbl);
-		apply(int_set_header_1_tbl);
+		//apply(int_set_header_0_tbl); // set switchid
+		//apply(int_set_header_1_tbl); // set iport
 		apply(int_set_intl45_head_header_tbl);
 	}
 }
@@ -57,6 +57,6 @@ control ingress {
 control egress {
 	// Stage 0
 	if (ipv4.diffserv == IP_DIFFSERV_INT) {
-		apply(int_set_header_2_tbl);
+		apply(int_set_header_2_tbl); // set hop latency
 	}
 }

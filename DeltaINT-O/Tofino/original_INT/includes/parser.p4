@@ -95,13 +95,13 @@ header udp_t udp;
 header intl45_head_header_t intl45_head_header;
 //header int_header_t int_header;
 // NOTE: int stack header for C1
-header int_switch_id_header_t int_switch_id_header;
+/*header int_switch_id_header_t int_switch_id_header;
 @pragma pa_solitary ingress int_ingress_port_id_header.ingress_port_id
 @pragma pa_solitary egress int_ingress_port_id_header.ingress_port_id
 header int_ingress_port_id_header_t int_ingress_port_id_header;
 @pragma pa_solitary ingress int_egress_port_id_header.egress_port_id
 @pragma pa_solitary egress int_egress_port_id_header.egress_port_id
-header int_egress_port_id_header_t int_egress_port_id_header;
+header int_egress_port_id_header_t int_egress_port_id_header;*/
 header int_hop_latency_header_t int_hop_latency_header;
 
 parser parse_intl45_ipv4{
@@ -150,7 +150,8 @@ parser parse_intl45_head_header{
 
 parser parse_int_stack {
     return select(intl45_head_header.len) {
-        0x01 mask 0x01    : parse_int_stack_L2_1; // NOTE: consider one hop here for fair comparison
+        //0x01 mask 0x01    : parse_int_stack_L2_1; // NOTE: consider one hop here for fair comparison
+        0x01 mask 0x01    : parse_int_hop_latency; // NOTE: consider one hop here for fair comparison
         // intl45_head_header.len is in word length
         // len is always >=3 because head and int_header are 3 words
         // In case 8B probe marker is used, len is always >= 5 words.
@@ -158,7 +159,7 @@ parser parse_int_stack {
     }
 }
 
-parser parse_int_stack_L2_1{
+/*parser parse_int_stack_L2_1{
 	extract(int_switch_id_header);
     return parse_int_ingress_port_id;
 }
@@ -171,7 +172,7 @@ parser parse_int_ingress_port_id {
 parser parse_int_egress_port_id {
 	extract(int_egress_port_id_header);
 	return parse_int_hop_latency;
-}
+}*/
 
 parser parse_int_hop_latency {
 	extract(int_hop_latency_header);

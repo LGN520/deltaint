@@ -83,7 +83,7 @@ header_type intl45_head_header_t {
     }
 }*/
 
-header_type int_switch_id_header_t {
+/*header_type int_switch_id_header_t {
 	fields {
 		switch_id: 8;
 	}
@@ -99,10 +99,10 @@ header_type int_egress_port_id_header_t {
 	fields {
 		egress_port_id: 8;
 	}
-}
+}*/
 
 header_type int_hop_latency_header_t {
 	fields {
-		hop_latency: 32 (signed);
+		hop_latency: 8 (signed);
 	}
 }

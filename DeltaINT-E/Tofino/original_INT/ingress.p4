@@ -4,8 +4,8 @@ action ipv4_forward(port) {
 	modify_field(ig_intr_md_for_tm.ucast_egress_port, port);
 	add_to_field(ipv4.ttl, -1);
 
-    add_header(int_egress_port_id_header);
-    modify_field(int_egress_port_id_header.egress_port_id, port);
+    //add_header(int_egress_port_id_header);
+    //modify_field(int_egress_port_id_header.egress_port_id, port);
 }
 
 #ifdef DEBUG
@@ -30,7 +30,7 @@ table ipv4_lpm {
 
 // Stage 1
 
-action int_set_header_0(switch_id) {
+/*action int_set_header_0(switch_id) {
     add_header(int_switch_id_header);
     modify_field(int_switch_id_header.switch_id, switch_id);
 }
@@ -57,7 +57,7 @@ table int_set_header_1_tbl {
 	}
 	default_action: int_set_header_1();
 	size: 1;
-}
+}*/
 
 action int_set_intl45_head_header() {
 	add_header(int_hop_latency_header);
@@ -65,8 +65,9 @@ action int_set_intl45_head_header() {
 
 	add_to_field(intl45_head_header.len, 1);
 
-	add_to_field(ipv4.totalLen, 3);
-	add_to_field(udp.length_, 3);
+	// switchid, iport, and eport
+	//add_to_field(ipv4.totalLen, 3);
+	//add_to_field(udp.length_, 3);
 }
 
 @pragma stage 1

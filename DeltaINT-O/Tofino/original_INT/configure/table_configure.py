@@ -138,11 +138,11 @@ class TableConfigure(pd_base_tests.ThriftInterfaceDataPlane):
             # Stage 1
 
             # Table: int_set_header_0_tbl (size: 1)
-            print "Configuring int_set_header_0_tbl"
-            deviceid = 1
-            actnspec0 = originalint_int_set_header_0_action_spec_t(deviceid)
-            self.client.int_set_header_0_tbl_set_default_action_int_set_header_0(\
-                    self.sess_hdl, self.dev_tgt, actnspec0)
+            #print "Configuring int_set_header_0_tbl"
+            #deviceid = 1
+            #actnspec0 = originalint_int_set_header_0_action_spec_t(deviceid)
+            #self.client.int_set_header_0_tbl_set_default_action_int_set_header_0(\
+            #        self.sess_hdl, self.dev_tgt, actnspec0)
 
             # Egress pipeline
 
