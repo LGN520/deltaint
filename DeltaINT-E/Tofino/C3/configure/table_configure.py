@@ -137,7 +137,6 @@ class TableConfigure(pd_base_tests.ThriftInterfaceDataPlane):
             # Table: ipv4_lpm (default: nop; size: 1)
             print "Configuring ipv4_lpm"
             matchspec0 = deltaintec3_ipv4_lpm_match_spec_t(\
-                    udp_hdr_dstPort = DINT_DSTPORT,
                     ipv4_hdr_dstAddr = ipv4Addr_to_i32(receiver_ip),
                     ipv4_hdr_dstAddr_prefix_length = 32)
             actnspec0 = deltaintec3_ipv4_forward_action_spec_t(self.receiver_devport)
@@ -148,35 +147,33 @@ class TableConfigure(pd_base_tests.ThriftInterfaceDataPlane):
 
             # Stage 0
 
-            # Table: set_egmeta_tbl (default: nop; size: 1)
+            # Table: set_egmeta_tbl (default: set_egmeta(1); size: 1)
             print "Configuring set_egmeta_tbl"
-            matchspec0 = deltaintec3_set_egmeta_tbl_match_spec_t(\
-                    udp_hdr_dstPort = DINT_DSTPORT)
             deviceid = 1
             actnspec0 = deltaintec3_set_egmeta_action_spec_t(deviceid)
-            self.client.set_egmeta_tbl_table_add_with_set_egmeta(\
-                    self.sess_hdl, self.dev_tgt, matchspec0, actnspec0)
+            self.client.set_egmeta_tbl_set_default_action_set_egmeta(\
+                    self.sess_hdl, self.dev_tgt, actnspec0)
 
-            # Table: update_srcip_dstip_tbl (default: nop; size: 1)
-            print "Configuring update_srcip_dstip_tbl"
-            matchspec0 = deltaintec3_update_srcip_dstip_tbl_match_spec_t(\
-                    udp_hdr_dstPort = DINT_DSTPORT)
-            self.client.update_srcip_dstip_tbl_table_add_with_update_srcip_dstip(\
-                    self.sess_hdl, self.dev_tgt, matchspec0)
+            # Table: update_srcip_dstip_tbl (default: update_srcip_dstip; size: 1)
+            #print "Configuring update_srcip_dstip_tbl"
+            #matchspec0 = deltaintec3_update_srcip_dstip_tbl_match_spec_t(\
+            #        udp_hdr_dstPort = DINT_DSTPORT)
+            #self.client.update_srcip_dstip_tbl_table_add_with_update_srcip_dstip(\
+            #        self.sess_hdl, self.dev_tgt, matchspec0)
 
-            # Table: update_srcport_dstport_tbl (default: nop; size: 1)
-            print "Configuring update_srcport_dstport_tbl"
-            matchspec0 = deltaintec3_update_srcport_dstport_tbl_match_spec_t(\
-                    udp_hdr_dstPort = DINT_DSTPORT)
-            self.client.update_srcport_dstport_tbl_table_add_with_update_srcport_dstport(\
-                    self.sess_hdl, self.dev_tgt, matchspec0)
+            # Table: update_srcport_dstport_tbl (default: update_srcport_dstport; size: 1)
+            #print "Configuring update_srcport_dstport_tbl"
+            #matchspec0 = deltaintec3_update_srcport_dstport_tbl_match_spec_t(\
+            #        udp_hdr_dstPort = DINT_DSTPORT)
+            #self.client.update_srcport_dstport_tbl_table_add_with_update_srcport_dstport(\
+            #        self.sess_hdl, self.dev_tgt, matchspec0)
 
-            # Table: update_protocol_tbl (default: nop; size: 1)
-            print "Configuring update_protocol_tbl"
-            matchspec0 = deltaintec3_update_protocol_tbl_match_spec_t(\
-                    udp_hdr_dstPort = DINT_DSTPORT)
-            self.client.update_protocol_tbl_table_add_with_update_protocol(\
-                    self.sess_hdl, self.dev_tgt, matchspec0)
+            # Table: update_protocol_tbl (default: update_protocol; size: 1)
+            #print "Configuring update_protocol_tbl"
+            #matchspec0 = deltaintec3_update_protocol_tbl_match_spec_t(\
+            #        udp_hdr_dstPort = DINT_DSTPORT)
+            #self.client.update_protocol_tbl_table_add_with_update_protocol(\
+            #        self.sess_hdl, self.dev_tgt, matchspec0)
 
             # Stage 1
 
@@ -186,7 +183,6 @@ class TableConfigure(pd_base_tests.ThriftInterfaceDataPlane):
                 for tmp_srcport_dstport_predicate in srcport_dstport_predicate_list:
                     for tmp_protocol_predicate in protocol_predicate_list:
                         matchspec0 = deltaintec3_set_deviceid_bit_tbl_match_spec_t(\
-                                udp_hdr_dstPort = DINT_DSTPORT,
                                 meta_int_srcip_dstip_predicate = tmp_srcip_dstip_predicate,
                                 meta_int_srcport_dstport_predicate = tmp_srcport_dstport_predicate,
                                 meta_int_protocol_predicate = tmp_protocol_predicate)
@@ -201,7 +197,6 @@ class TableConfigure(pd_base_tests.ThriftInterfaceDataPlane):
             print "Configuring set_deviceid_tbl"
             for tmp_deviceid_bit in deviceid_bit_list:
                 matchspec0 = deltaintec3_set_deviceid_tbl_match_spec_t(\
-                        udp_hdr_dstPort = DINT_DSTPORT,
                         int_hdr_deviceid_bit = tmp_deviceid_bit)
                 if tmp_deviceid_bit == 0:
                     self.client.set_deviceid_tbl_table_add_with_reset_deviceid(\

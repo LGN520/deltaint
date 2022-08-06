@@ -36,19 +36,24 @@
 
 control ingress {
 	// Stage 0
-	apply(ipv4_lpm); // set egress port
+	if (udp_hdr.dstPort == DINT_DSTPORT) {
+		apply(ipv4_lpm); // set egress port
+	}
 }
 
 control egress {
 	// Stage 0
-	apply(set_egmeta_tbl); // set current latency and ttl
-	apply(update_srcip_dstip_tbl);
-	apply(update_srcport_dstport_tbl);
-	apply(update_protocol_tbl);
+	if (udp_hdr.dstPort == DINT_DSTPORT) {
+		apply(set_egmeta_tbl); // set current latency and ttl
+		apply(update_srcip_dstip_tbl);
+		apply(update_srcport_dstport_tbl);
+		apply(update_protocol_tbl);
+	}
 
 	// Stage 1
-	apply(update_latency_tbl);
-	apply(ismatch_tbl); // used by metadata_insert_tbl and latency_insert_tbl
+	if (udp_hdr.dstPort == DINT_DSTPORT) {
+		apply(update_latency_tbl);
+	}
 
 	// Stage 2
 	if (udp_hdr.dstPort == DINT_DSTPORT) { // use gateway instead of exact matching to make such judgement, so the default action of latency_insert_tbl will no be accessed by non-INT packets

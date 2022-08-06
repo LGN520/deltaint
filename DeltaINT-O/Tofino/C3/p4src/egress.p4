@@ -17,14 +17,10 @@ counter set_igmeta_counter {
 
 @pragma stage 0
 table set_egmeta_tbl {
-	reads {
-		udp_hdr.dstPort: exact;
-	}
 	actions {
 		set_egmeta;
-		nop;
 	}
-	default_action: nop();
+	default_action: set_egmeta(1);
 	size: 1;	  
 }
 
@@ -50,7 +46,6 @@ action reset_deviceid_bit() {
 @pragma stage 1
 table set_deviceid_bit_tbl {
 	reads {
-		udp_hdr.dstPort: exact;
 		meta.int_srcip_dstip_predicate: exact;
 		meta.int_srcport_dstport_predicate: exact;
 		meta.int_protocol_predicate: exact;
@@ -82,7 +77,6 @@ action reset_deviceid() {
 @pragma stage 1
 table set_deviceid_tbl {
 	reads {
-		udp_hdr.dstPort: exact;
 		int_hdr.deviceid_bit: exact;
 	}
 	actions {

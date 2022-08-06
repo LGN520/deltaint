@@ -33,23 +33,29 @@
 
 control ingress {
 	// Stage 0
-	apply(ipv4_lpm); // set egress port
+	if (udp_hdr.dstPort == DINT_DSTPORT) {
+		apply(ipv4_lpm); // set egress port
+	}
 }
 
 control egress {
 	// Stage 0
-	apply(set_egmeta_tbl); // set device id
-	if (ipv4_hdr.ttl == 64) {
-		apply(update_srcip_dstip_tbl);
-		apply(update_srcport_dstport_tbl);
-		apply(update_protocol_tbl);
+	if (udp_hdr.dstPort == DINT_DSTPORT) {
+		apply(set_egmeta_tbl); // set device id
+		if (ipv4_hdr.ttl == 64) {
+			apply(update_srcip_dstip_tbl);
+			apply(update_srcport_dstport_tbl);
+			apply(update_protocol_tbl);
+		}
 	}
 
 	// Stage 1
-	if (ipv4_hdr.ttl == 64) {
-		apply(set_deviceid_bit_tbl); // set ttl; may change int_hdr.deviceid_bit
-	}
-	else {
-		apply(set_deviceid_tbl); // set ttl
+	if (udp_hdr.dstPort == DINT_DSTPORT) {
+		if (ipv4_hdr.ttl == 64) {
+			apply(set_deviceid_bit_tbl); // set ttl; may change int_hdr.deviceid_bit
+		}
+		else {
+			apply(set_deviceid_tbl); // set ttl
+		}
 	}
 }

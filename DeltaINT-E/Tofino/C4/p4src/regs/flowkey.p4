@@ -35,14 +35,10 @@ action update_srcip_dstip() {
 
 @pragma stage 0
 table update_srcip_dstip_tbl {
-	reads {
-		udp_hdr.dstPort: exact;
-	}
 	actions {
 		update_srcip_dstip;
-		nop;
 	}
-	default_action: nop();
+	default_action: update_srcip_dstip();
 	size: 1;
 }
 
@@ -81,14 +77,10 @@ action update_srcport_dstport() {
 
 @pragma stage 0
 table update_srcport_dstport_tbl {
-	reads {
-		udp_hdr.dstPort: exact;
-	}
 	actions {
 		update_srcport_dstport;
-		nop;
 	}
-	default_action: nop();
+	default_action: update_srcport_dstport();
 	size: 1;
 }
 
@@ -121,13 +113,9 @@ action update_protocol() {
 
 @pragma stage 0
 table update_protocol_tbl {
-	reads {
-		udp_hdr.dstPort: exact;
-	}
 	actions {
 		update_protocol;
-		nop;
 	}
-	default_action: nop();
+	default_action: update_protocol();
 	size: 1;
 }

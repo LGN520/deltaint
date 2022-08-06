@@ -51,7 +51,6 @@ action update_latency_unmatched() {
 @pragma stage 1
 table update_latency_tbl {
 	reads {
-		udp_hdr.dstPort: exact;
 		meta.int_srcip_dstip_predicate: exact;
 		meta.int_srcport_dstport_predicate: exact;
 		meta.int_protocol_predicate: exact;
