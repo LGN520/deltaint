@@ -18,7 +18,8 @@
 #ifdef DEBUG
 #define BUCKET_COUNT 1
 #else
-#define BUCKET_COUNT 8192
+//#define BUCKET_COUNT 8192
+#define BUCKET_COUNT 32768
 #endif
 
 // we can change TTL mask based on data center topology and switch location to add per-node bitmap&state dynamically

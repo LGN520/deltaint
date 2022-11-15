@@ -49,7 +49,7 @@ action update_previnput_unmatched() {
 #endif
 }
 
-@pragma stage 1
+@pragma stage 2
 table update_previnput_tbl {
 	reads {
 		meta.int_srcip_dstip_predicate: exact;
@@ -111,7 +111,7 @@ action update_prevoutput_unmatched() {
 	modify_field(meta.power_delta, THRESHOLD_PLUS_ONE);
 }
 
-@pragma stage 3
+@pragma stage 4
 table update_prevoutput_tbl {
 	reads {
 		meta.int_srcip_dstip_predicate: exact;

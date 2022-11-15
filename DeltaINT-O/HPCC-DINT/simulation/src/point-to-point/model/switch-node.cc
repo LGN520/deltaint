@@ -218,6 +218,86 @@ uint32_t SwitchNode::EcmpHash(const uint8_t* key, size_t len, uint32_t seed) {
   return h;
 }
 
+/*** START: mmh3 for DINT ***/
+
+// NOTE: refer to https://github.com/aappleby/smhasher/blob/master/src/MurmurHash3.cpp
+
+uint32_t SwitchNode::getblock32(const uint32_t * p, int i)
+{
+  return p[i];
+}
+
+uint32_t SwitchNode::ROTL32(uint32_t x, int8_t r)
+{
+  return (x << r) | (x >> (32 - r));
+}
+
+uint32_t SwitchNode::fmix32(uint32_t h)
+{
+  h ^= h >> 16;
+  h *= 0x85ebca6b;
+  h ^= h >> 13;
+  h *= 0xc2b2ae35;
+  h ^= h >> 16;
+
+  return h;
+}
+
+uint32_t SwitchNode::mmh3(const uint8_t * key, size_t len, uint32_t seed)
+{
+  const uint8_t * data = key;
+  const int nblocks = int(len) / 4;
+
+  uint32_t h1 = seed;
+
+  const uint32_t c1 = 0xcc9e2d51;
+  const uint32_t c2 = 0x1b873593;
+
+  //----------
+  // body
+
+  const uint32_t * blocks = (const uint32_t *)(data + nblocks*4);
+
+  for(int i = -nblocks; i; i++)
+  {
+    uint32_t k1 = getblock32(blocks,i);
+
+    k1 *= c1;
+    k1 = ROTL32(k1,15);
+    k1 *= c2;
+    
+    h1 ^= k1;
+    h1 = ROTL32(h1,13); 
+    h1 = h1*5+0xe6546b64;
+  }
+
+  //----------
+  // tail
+
+  const uint8_t * tail = (const uint8_t*)(data + nblocks*4);
+
+  uint32_t k1 = 0;
+
+  switch(int(len) & 3)
+  {
+  case 3: k1 ^= tail[2] << 16;
+  case 2: k1 ^= tail[1] << 8;
+  case 1: k1 ^= tail[0];
+          k1 *= c1; k1 = ROTL32(k1,15); k1 *= c2; h1 ^= k1;
+  };
+
+  //----------
+  // finalization
+
+  h1 ^= int(len);
+
+  h1 = fmix32(h1);
+
+  return h1;
+}
+
+/*** END: mmh3 for DINT ***/
+
 void SwitchNode::SetEcmpSeed(uint32_t seed){
 	m_ecmpSeed = seed;
 }
@@ -383,7 +463,12 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 					uint8_t tmpbytes[13];
 					flowkey.GetBytes(tmpbytes);
 					for (uint32_t i = 0; i < SwitchNode::DINT_hashnum; i++) {
-						hashidx[i] = EcmpHash(tmpbytes, 13, i) % (prev_inputs.size() / SwitchNode::DINT_hashnum);	
+						//hashidx[i] = EcmpHash(tmpbytes, 13, i) % (prev_inputs.size() / SwitchNode::DINT_hashnum);	
+
+						// Pass compilation -> NOTE: does NOT affect results of NS3 (software-based switch calculator instead of switch simulator), which calculates results instead of simulation by CPU
+						hashidx[i] = mmh3(tmpbytes, 13, i) % (prev_inputs.size() / SwitchNode::DINT_hashnum);	
+						//printf("mmh3 hashidx[%d]: %d\n", i, hashidx[i]);
+						//fflush(stdout);
 					}
 
 					// Get cur input

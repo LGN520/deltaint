@@ -24,7 +24,7 @@ table set_egmeta_tbl {
 	size: 1;	  
 }
 
-// Stage 1
+// Stage 2
 
 action set_deviceid_bit() {
 	add_to_field(ipv4_hdr.ttl, -1);
@@ -43,7 +43,7 @@ action reset_deviceid_bit() {
 	remove_header(deviceid_hdr);
 }
 
-@pragma stage 1
+@pragma stage 2
 table set_deviceid_bit_tbl {
 	reads {
 		meta.int_srcip_dstip_predicate: exact;
@@ -74,7 +74,7 @@ action reset_deviceid() {
 	remove_header(deviceid_hdr);
 }
 
-@pragma stage 1
+@pragma stage 2
 table set_deviceid_tbl {
 	reads {
 		int_hdr.deviceid_bit: exact;

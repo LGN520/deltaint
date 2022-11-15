@@ -24,13 +24,13 @@ table set_egmeta_tbl {
 	size: 1;
 }
 
-// Stage 2
+// Stage 3
 
 action set_output() {
 	max(power_hdr.power, meta.curinput, meta.latency);
 }
 
-@pragma stage 2
+@pragma stage 3
 table set_output_tbl {
 	actions {
 		set_output;
@@ -39,7 +39,7 @@ table set_output_tbl {
 	size: 1;
 }
 
-// Stage 4
+// Stage 5
 
 action insert_power() {
 	modify_field(int_hdr.power_bit, 1);
@@ -60,7 +60,7 @@ counter power_insert_counter {
 }
 #endif
 
-@pragma stage 4
+@pragma stage 5
 table power_insert_tbl {
 	reads {
 		meta.int_srcip_dstip_predicate: exact;

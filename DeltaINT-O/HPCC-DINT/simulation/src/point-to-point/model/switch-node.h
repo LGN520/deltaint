@@ -33,7 +33,8 @@ class SwitchNode : public Node{
 	static const uint32_t qCnt = 8;	// Number of queues/priorities used
 
 	// Written by Siyuan Sheng
-	static const uint32_t DINT_sketch_bytes = 256 * 1024; // 1 MB 
+	//static const uint32_t DINT_sketch_bytes = 256 * 1024; // 256 KB
+	static const uint32_t DINT_sketch_bytes = 1024 * 1024; // 1 MB 
 	static const uint32_t DINT_diff = 1; // Delta threshold
 	//static const uint32_t DINT_diff = 5; // Delta threshold
 	//static const uint32_t DINT_diff = 10; // Delta threshold
@@ -72,6 +73,12 @@ private:
 	int GetOutDev(Ptr<const Packet>, CustomHeader &ch);
 	void SendToDev(Ptr<Packet>p, CustomHeader &ch);
 	static uint32_t EcmpHash(const uint8_t* key, size_t len, uint32_t seed);
+	// START: mmh3 for DINT
+	static uint32_t getblock32(const uint32_t * p, int i);
+	static uint32_t ROTL32(uint32_t x, int8_t r);
+	static uint32_t fmix32(uint32_t h);
+	static uint32_t mmh3(const uint8_t* key, size_t len, uint32_t seed);
+	// END: mmh3 for DINT
 	void CheckAndSendPfc(uint32_t inDev, uint32_t qIndex);
 	void CheckAndSendResume(uint32_t inDev, uint32_t qIndex);
 public:

@@ -77,5 +77,6 @@ field_list_calculation hash_field_calc {
 #else
 	algorithm: random;
 #endif
-	output_width: 13;
+	//output_width: 13;
+	output_width: 15;
 }

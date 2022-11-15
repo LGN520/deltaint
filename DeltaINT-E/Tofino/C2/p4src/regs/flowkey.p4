@@ -75,7 +75,7 @@ action update_srcport_dstport() {
 #endif
 }
 
-@pragma stage 0
+@pragma stage 1
 table update_srcport_dstport_tbl {
 	actions {
 		update_srcport_dstport;

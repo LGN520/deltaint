@@ -16,7 +16,8 @@
 #ifdef DEBUG
 #define BUCKET_COUNT 1
 #else
-#define BUCKET_COUNT 16384
+//#define BUCKET_COUNT 16384
+#define BUCKET_COUNT 65536
 #endif
 
 // we can change TTL mask based on data center topology and switch location to add state dynamically
@@ -44,12 +45,18 @@ control egress {
 		apply(set_egmeta_tbl); // set device id
 		if (ipv4_hdr.ttl == 64) {
 			apply(update_srcip_dstip_tbl);
-			apply(update_srcport_dstport_tbl);
 			apply(update_protocol_tbl);
 		}
 	}
 
 	// Stage 1
+	if (udp_hdr.dstPort == DINT_DSTPORT) {
+		if (ipv4_hdr.ttl == 64) {
+			apply(update_srcport_dstport_tbl);
+		}
+	}
+
+	// Stage 2
 	if (udp_hdr.dstPort == DINT_DSTPORT) {
 		if (ipv4_hdr.ttl == 64) {
 			apply(set_deviceid_bit_tbl); // set ttl; may change int_hdr.deviceid_bit
