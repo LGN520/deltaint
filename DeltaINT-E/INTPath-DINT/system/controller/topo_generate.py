@@ -98,7 +98,7 @@ def calOddNum(topoMatrix, sNum):
     return count
 
 if __name__ == '__main__':
-    k = int(sys.argv[1])
+    k = int(sys.argv[1]) # k: spine switch num
     #topoList1, hostList1 = genFatTree(10) #maxSNum must be larger than 10
     #print(topoList1)
     #print(hostList1)
