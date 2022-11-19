@@ -99,7 +99,7 @@ def genSpineLeafs(leafLayerNum):  # leafLayerNum must >= 1
     L2 = L1*2
 
     totalSwnum = L1 + L2 * leafLayerNum
-    print "totalSwnum for 1 spine layer + {} leaf layers: {}".format(leafLayerNum, totalSwnum)
+    print("totalSwnum for 1 spine layer + {} leaf layers: {}".format(leafLayerNum, totalSwnum))
 
     topoList = [[0 for i in range(totalSwnum)] for i in range(totalSwnum)]
     hostList = [0 for i in range(totalSwnum)]
@@ -112,7 +112,8 @@ def genSpineLeafs(leafLayerNum):  # leafLayerNum must >= 1
     for leafLayerIdx in range(leafLayerNum-1): # leafLayerIdx-th leaf layer <-> (leafLayerIdx+1)-th leaf layer
         tmpStartSwidx = L1 + leafLayerIdx * L2
         tmpStartSwidxNextLayer = tmpStartSwidx + L2
-        for pairIdx in range(L2/2): # L1 pairs
+        #for pairIdx in range(L2/2): # L1 pairs
+        for pairIdx in range(L1): # L1 pairs
             for i in range(tmpStartSwidx + 2*pairIdx, tmpStartSwidx + 2*(pairIdx + 1)):
                 for j in range(tmpStartSwidxNextLayer + 2*pairIdx, tmpStartSwidxNextLayer + 2*(pairIdx + 1)):
                     topoList[i][j] = 1
@@ -126,7 +127,7 @@ def genSpineLeafs(leafLayerNum):  # leafLayerNum must >= 1
     pathList = []
     i = totalSwnum - L2
     if L1 != 2:
-        print "[ERROR] cannot provide non-overlappig path for L1 = {} != 2, as only hosts can be the start nodes".format(L1)
+        print("[ERROR] cannot provide non-overlappig path for L1 = {} != 2, as only hosts can be the start nodes".format(L1))
         exit(-1)
     isMultiLeafLayer = False
     if leafLayerNum > 1:
@@ -175,7 +176,7 @@ def genSpineLeafs(leafLayerNum):  # leafLayerNum must >= 1
                         path.append(i + 1 - L2 * tmpDeltaLayerNum)
                     tmpLeafLayerIdx += 1
             else:
-                print "[ERROR] invalid j {}".format(j)
+                print("[ERROR] invalid j {}".format(j))
                 exit(-1)
             path.append(i + 1)
             pathList.append(path)

@@ -26,12 +26,16 @@ Please see [INTPATH_README.md](./INTPATH_README.md) for original readme of INT-P
 		* NOTE: add /usr/share/openvswitch/scripts/ into PATH for ovs-ctl
 	+ `/etc/init.d/redis-server start`
 		* Use `/etc/init.d/redis-server stop` to stop
+- Path change
+	+ Change `sys.path`, `bmv2_path`, and `switch_path` in controller/app.py accordingly
+	+ Change `ryu path` in controller/topoMaker.py accordingly
 - Compile p4 code
 	+ `cd p4app; bash run.sh`
 - Clean tmp directory
 	+ `sudo rm -r packet/tmp`
 - Generate topology
-	+ `cd conroller; python3 topo_generate k`, where k is the scale of network like 3
+	+ For single leaf layer, use `cd conroller; python3 topo_generate.py k`, where k is the scale of network like 2
+	+ For multiple leaf layers, use `cd conroller; python3 topo_generate_multilayer.py k`, where k is the number of leaf layers like 2
 - Run (must clean tmp directory before running and evaluating)
 	+ Set is_detect = 0 in config.json
 	+ `cd controller; sudo python3 app.py`
@@ -40,6 +44,9 @@ Please see [INTPATH_README.md](./INTPATH_README.md) for original readme of INT-P
 	+ `cd controller; sudo python3 app.py`
 	+ See detector.log for detection time
 		* NOTE: link failure or heavy latency detection is irrelevant with negligible delta
+	+ NOTE for INT-Path
+		* For gray failure detection time, as it is runtime statistics, use method = INT-Path in config.json
+		* For BW cost, as INT-Path BW is constantly determined by path length, we do not dump BW.txt for INT-Path individually; instead, we calculate both the BW cost of INT-Path and DeltaINT simultaneously (i.e., use method = DeltaINT in config.json)
 
 ## NOTEs
 

@@ -3,8 +3,10 @@
 
 import os
 import sys
-sys.path.append("/home/ssy/behavioral-model/tools")
-sys.path.append("/home/ssy/behavioral-model/targets/simple_switch")
+#sys.path.append("/home/ssy/behavioral-model/tools")
+#sys.path.append("/home/ssy/behavioral-model/targets/simple_switch")
+sys.path.append("/home/sysheng/behavioral-model/tools")
+sys.path.append("/home/sysheng/behavioral-model/targets/simple_switch")
 
 from device import Switch, Host
 #from routeFinding import RouteFinding
@@ -23,7 +25,8 @@ from mininet.cli import CLI
 
 _ = float('inf')
 
-bmv2_path = "/home/ssy/behavioral-model/targets/simple_switch"
+#bmv2_path = "/home/ssy/behavioral-model/targets/simple_switch"
+bmv2_path = "/home/sysheng/behavioral-model/targets/simple_switch"
 
 with open("../config.json", "r") as f:
     app_config = json.load(f)
@@ -272,7 +275,8 @@ class Ctrl(object):
         """
         curdir = os.path.dirname(os.path.abspath(__file__))
         sysdir = os.path.dirname(curdir)
-        switchPath = '/home/ssy/behavioral-model/targets/simple_switch/simple_switch'
+        #switchPath = '/home/ssy/behavioral-model/targets/simple_switch/simple_switch'
+        switchPath = '/home/sysheng/behavioral-model/targets/simple_switch/simple_switch'
         if app_config["is_dump"] == "1":
             jsonPath = "{}/p4app/dump_app.json".format(sysdir)
         elif app_config["method"] == "INT-Path":

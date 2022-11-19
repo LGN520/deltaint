@@ -1,5 +1,5 @@
 - Explanation
-	+ method: INT-Path or DeltaINT
+	+ method: INT-Path or DeltaINT or DeltaINT-Ext
 	+ epoch_len: s
 	+ aging_time: s
 	+ latency_threshold: ms
